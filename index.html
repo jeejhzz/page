@@ -1,0 +1,1079 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 주소창 위 탭에 표시되는 문구 -->
+    <title>디노티시아 R&D 채용</title>
+    
+    <!-- ✨ 브라우저 탭 아이콘을 깃허브의 logo.png 파일로 연결 -->
+    <link rel="icon" href="logo.png" type="image/png">
+
+    <!-- Tailwind CSS 표준 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-navy: #001529;
+            --brand-orange: #FF6B00;
+            --brand-orange-light: #FF8533;
+            --kakao-yellow: #FEE500;
+        }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--brand-navy);
+            color: #f8fafc;
+        }
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y proximity;
+            scroll-padding-top: 2rem;
+        }
+        .top-hero,
+        .max-w-4xl > header,
+        .max-w-4xl > section,
+        .max-w-4xl > .grid {
+            scroll-snap-align: start;
+            scroll-snap-stop: normal;
+        }
+        .text-orange { color: var(--brand-orange); }
+        .bg-orange { background-color: var(--brand-orange); }
+        
+        /* 로고 타이포그래피 */
+        .logo-text {
+            font-family: 'Pretendard', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            display: block;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .job-category-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 4px solid var(--brand-orange);
+            transition: all 0.3s ease;
+        }
+        .job-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 107, 0, 0.05);
+            border: 1px solid rgba(255, 107, 0, 0.15);
+            padding: 0.85rem 1.25rem;
+            border-radius: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .job-link:hover {
+            background: rgba(255, 107, 0, 0.2);
+            border-color: var(--brand-orange);
+            transform: translateX(6px);
+            color: white;
+        }
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--brand-orange), transparent);
+            border-radius: 2px;
+        }
+        .news-link {
+            color: var(--brand-orange);
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-decoration-color: rgba(255, 107, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+        .news-link:hover {
+            text-decoration-color: var(--brand-orange);
+            background: rgba(255, 107, 0, 0.1);
+            border-radius: 4px;
+        }
+        /* Video Container for 16:9 ratio */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #000;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        /* Badge Modules */
+        .badge-module {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.375rem 1.25rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-radius: 9999px;
+            transition: all 0.2s ease;
+        }
+        .top-hero {
+            position: relative;
+            min-height: 92vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            isolation: isolate;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--brand-navy);
+        }
+        .top-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.026) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.026) 1px, transparent 1px);
+            background-size: 68px 68px;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,0.72), transparent 84%);
+            z-index: -2;
+        }
+        .top-hero::after {
+            content: '';
+            position: absolute;
+            inset: auto -12% -36% -12%;
+            height: 56%;
+            background: radial-gradient(ellipse at center, rgba(255, 107, 0, 0.11), transparent 68%);
+            filter: blur(18px);
+            z-index: -1;
+        }
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            color: #ffb27a;
+            border: 1px solid rgba(255, 107, 0, 0.30);
+            background: rgba(255, 107, 0, 0.07);
+            padding: 0.55rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .hero-kicker::before {
+            content: '';
+            width: 0.48rem;
+            height: 0.48rem;
+            border-radius: 9999px;
+            background: var(--brand-orange);
+            box-shadow: 0 0 16px rgba(255, 107, 0, 0.8);
+        }
+        .semiconductor-stage {
+            position: relative;
+            min-height: 420px;
+            display: grid;
+            place-items: center;
+            perspective: 1200px;
+        }
+        .chip-orbit {
+            position: absolute;
+            width: min(86vw, 540px);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.07);
+            box-shadow: inset 0 0 76px rgba(255,107,0,0.07);
+            animation: heroPulse 5.5s ease-in-out infinite;
+        }
+        .chip-visual {
+            position: relative;
+            width: min(78vw, 460px);
+            aspect-ratio: 1.18;
+            transform: rotateX(58deg) rotateZ(-24deg) translateY(0);
+            transform-style: preserve-3d;
+            animation: chipFloat 6.5s ease-in-out infinite;
+            filter: drop-shadow(0 34px 42px rgba(0,0,0,0.46));
+        }
+        .chip-board {
+            position: absolute;
+            inset: 9% 2%;
+            border-radius: 2rem;
+            background:
+                linear-gradient(90deg, transparent 0 8%, rgba(255,107,0,0.44) 8.4% 8.9%, transparent 9.3% 20%, rgba(255,255,255,0.14) 20.3% 20.7%, transparent 21% 100%),
+                linear-gradient(0deg, transparent 0 13%, rgba(255,107,0,0.34) 13.3% 13.8%, transparent 14.2% 37%, rgba(255,255,255,0.13) 37.4% 37.8%, transparent 38.2% 100%),
+                linear-gradient(145deg, rgba(8,26,42,0.98), rgba(0,13,26,0.98));
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: inset 0 0 35px rgba(255,255,255,0.035), 0 0 70px rgba(255,107,0,0.13);
+        }
+        .chip-core {
+            position: absolute;
+            inset: 25% 27%;
+            border-radius: 1.2rem;
+            background:
+                radial-gradient(circle at 34% 28%, rgba(255,255,255,0.82), transparent 2.5%),
+                linear-gradient(135deg, rgba(255,118,28,0.9), rgba(255,255,255,0.22) 46%, rgba(10,23,38,0.95));
+            border: 1px solid rgba(255,255,255,0.24);
+            box-shadow: 0 0 38px rgba(255,107,0,0.48), inset 0 0 24px rgba(255,255,255,0.14);
+            transform: translateZ(42px);
+            overflow: hidden;
+        }
+        .chip-core::before {
+            content: '';
+            position: absolute;
+            inset: -40%;
+            background: linear-gradient(110deg, transparent 28%, rgba(255,255,255,0.62) 48%, transparent 64%);
+            animation: chipGleam 4.8s ease-in-out infinite;
+        }
+        .chip-pins span {
+            position: absolute;
+            width: 0.58rem;
+            height: 2.35rem;
+            border-radius: 9999px;
+            background: linear-gradient(#ffb27a, #ff6b00);
+            box-shadow: 0 0 12px rgba(255,107,0,0.44);
+            transform: translateZ(20px);
+        }
+        .chip-pins span:nth-child(1) { left: 14%; top: 11%; }
+        .chip-pins span:nth-child(2) { left: 27%; top: 7%; }
+        .chip-pins span:nth-child(3) { left: 54%; top: 8%; }
+        .chip-pins span:nth-child(4) { left: 75%; top: 13%; }
+        .chip-pins span:nth-child(5) { right: 9%; top: 36%; transform: translateZ(20px) rotate(90deg); }
+        .chip-pins span:nth-child(6) { right: 8%; top: 61%; transform: translateZ(20px) rotate(90deg); }
+        .chip-pins span:nth-child(7) { left: 21%; bottom: 8%; }
+        .chip-pins span:nth-child(8) { left: 66%; bottom: 9%; }
+        .role-intro {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 4.5rem 0 5rem;
+        }
+        .role-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+        }
+        .role-tab {
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #bfdbfe;
+            padding: 0.55rem 1.05rem;
+            border-radius: 9999px;
+            font-size: 0.86rem;
+            font-weight: 800;
+            transition: all 0.2s ease;
+        }
+        .role-tab:hover {
+            border-color: rgba(124, 140, 255, 0.36);
+            color: white;
+            background: rgba(124, 140, 255, 0.12);
+        }
+        .role-tab.is-active {
+            color: white;
+            background: linear-gradient(135deg, #6856ff, #4936df);
+            border-color: rgba(255, 255, 255, 0.16);
+            box-shadow: 0 12px 28px rgba(73, 54, 223, 0.3);
+        }
+        .role-empty-message {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            color: #cbd5e1;
+            font-weight: 700;
+            text-align: center;
+        }
+        .role-empty-message.is-visible {
+            display: block;
+        }
+        .role-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            background: #0f1a2c;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+            flex: 0 0 min(100%, 420px);
+            scroll-snap-align: start;
+        }
+        .role-card[data-interview-id] {
+            cursor: pointer;
+        }
+        .role-card[data-interview-id]:hover {
+            border-color: rgba(124, 140, 255, 0.34);
+            transform: translateY(-3px);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .role-card-grid {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            padding: 0.15rem 0.1rem 0.5rem;
+        }
+        .role-card-grid::-webkit-scrollbar {
+            display: none;
+        }
+        .role-card-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.65rem;
+            margin-bottom: 1rem;
+        }
+        .role-card-control {
+            width: 2.7rem;
+            height: 2.7rem;
+            display: inline-grid;
+            place-items: center;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .role-card-control:hover {
+            border-color: rgba(255, 107, 0, 0.35);
+            background: rgba(255, 107, 0, 0.12);
+        }
+        .role-card-image {
+            position: relative;
+            min-height: 300px;
+            background: #091527;
+        }
+        .role-card-image.is-empty {
+            background:
+                linear-gradient(135deg, rgba(255, 107, 0, 0.08), transparent 34%),
+                radial-gradient(circle at 78% 16%, rgba(124, 140, 255, 0.18), transparent 30%),
+                linear-gradient(145deg, #111c30, #071225);
+        }
+        .role-card-image.is-empty::before {
+            content: '';
+            position: absolute;
+            inset: 1.1rem;
+            border-radius: 0.85rem;
+            border: 1px dashed rgba(255, 255, 255, 0.12);
+            background:
+                linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.45;
+        }
+        .role-card-image img {
+            width: 100%;
+            height: 100%;
+            min-height: 300px;
+            object-fit: cover;
+            object-position: center 24%;
+            display: block;
+            filter: saturate(0.96) contrast(1.02);
+        }
+        .role-card-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to bottom, rgba(0, 21, 41, 0.04), rgba(0, 21, 41, 0.36) 48%, rgba(0, 21, 41, 0.95)),
+                linear-gradient(to right, rgba(0, 21, 41, 0.42), transparent 44%);
+        }
+        .role-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 0.45rem;
+            background: linear-gradient(135deg, #6856ff, #4936df);
+            color: white;
+            padding: 0.34rem 0.65rem;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            box-shadow: 0 10px 24px rgba(73, 54, 223, 0.28);
+        }
+        .role-card-copy {
+            position: absolute;
+            left: 1.25rem;
+            right: 1.25rem;
+            bottom: 1.35rem;
+            z-index: 2;
+        }
+        .role-card-title {
+            color: #7c8cff;
+            font-size: 0.88rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .role-card-name {
+            display: flex;
+            align-items: baseline;
+            gap: 0.55rem;
+            margin-top: 0.35rem;
+            flex-wrap: wrap;
+        }
+        .role-card-name strong {
+            color: white;
+            font-size: 1.45rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+        }
+        .role-card-name span {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .role-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.4rem 1.5rem;
+            background: #111c30;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .role-card-quote {
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.55;
+        }
+        .role-card-link {
+            color: #7c8cff;
+            font-size: 0.86rem;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+        .interview-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background: rgba(0, 8, 18, 0.76);
+            backdrop-filter: blur(10px);
+        }
+        .interview-modal.is-open {
+            display: flex;
+        }
+        .interview-dialog {
+            width: min(100%, 920px);
+            max-height: min(84vh, 860px);
+            overflow: hidden;
+            border-radius: 1.25rem;
+            background: #0f1a2c;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 32px 90px rgba(0, 0, 0, 0.48);
+        }
+        .interview-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1.5rem;
+            padding: 1.6rem 1.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.10), rgba(124, 140, 255, 0.08));
+        }
+        .interview-kicker {
+            color: var(--brand-orange);
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .interview-title {
+            color: white;
+            margin-top: 0.35rem;
+            font-size: clamp(1.55rem, 4vw, 2.4rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+        }
+        .interview-close {
+            flex: 0 0 auto;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: grid;
+            place-items: center;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+            font-size: 1.35rem;
+            cursor: pointer;
+        }
+        .interview-body {
+            max-height: calc(min(84vh, 860px) - 124px);
+            overflow-y: auto;
+            padding: 1.75rem;
+        }
+        .interview-item {
+            padding: 1.35rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .interview-item:first-child {
+            padding-top: 0;
+        }
+        .interview-item:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+        .interview-question {
+            color: white;
+            font-size: 1.05rem;
+            font-weight: 900;
+            line-height: 1.55;
+        }
+        .interview-answer {
+            margin-top: 0.85rem;
+            color: #cbd5e1;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.85;
+        }
+        .interview-more {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            padding-top: 1.5rem;
+            margin-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .interview-more-button,
+        .interview-apply-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            min-height: 3rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 107, 0, 0.35);
+            background: rgba(255, 107, 0, 0.12);
+            color: white;
+            padding: 0.8rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .interview-apply-button {
+            background: var(--brand-orange);
+            border-color: rgba(255, 107, 0, 0.72);
+            box-shadow: 0 14px 34px rgba(255, 107, 0, 0.18);
+        }
+        .interview-more-button:hover {
+            background: var(--brand-orange);
+            box-shadow: 0 14px 34px rgba(255, 107, 0, 0.24);
+            transform: translateY(-1px);
+        }
+        .interview-apply-button:hover {
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+        }
+        @keyframes chipFloat {
+            0%, 100% { transform: rotateX(58deg) rotateZ(-24deg) translateY(0); }
+            50% { transform: rotateX(56deg) rotateZ(-22deg) translateY(-10px); }
+        }
+        @keyframes chipGleam {
+            0%, 18% { transform: translateX(-55%) rotate(8deg); opacity: 0; }
+            42% { opacity: 0.82; }
+            62%, 100% { transform: translateX(58%) rotate(8deg); opacity: 0; }
+        }
+        @keyframes heroPulse {
+            0%, 100% { transform: scale(0.96); opacity: 0.54; }
+            50% { transform: scale(1.02); opacity: 0.9; }
+        }
+        @media (max-width: 767px) {
+            .top-hero { min-height: 86vh; padding-top: 3rem; }
+            .semiconductor-stage { min-height: 310px; }
+            .chip-visual { width: min(86vw, 360px); }
+            .role-intro { padding: 3.5rem 0 4rem; }
+            .role-tabs { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 0.35rem; }
+            .role-tab { flex: 0 0 auto; }
+            .role-card { flex-basis: 88vw; }
+            .role-card-controls { justify-content: flex-start; }
+            .role-card-image,
+            .role-card-image img { min-height: 380px; }
+            .role-card-footer { align-items: flex-start; flex-direction: column; }
+            .role-card-name { flex-direction: column; align-items: flex-start; gap: 0.12rem; }
+            .interview-modal { padding: 0.75rem; }
+            .interview-header,
+            .interview-body { padding: 1.25rem; }
+        }
+    </style>
+</head>
+<body class="selection:bg-orange-500/30">
+
+    <section class="top-hero px-6 py-16 md:py-24">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-[0.95fr_1.05fr] gap-10 md:gap-14 items-center w-full">
+            <div>
+                <div class="hero-kicker mb-7">Full Stack AI Infra Company</div>
+                <h1 class="text-5xl md:text-7xl font-black leading-tight tracking-tight text-white">
+                    디노티시아<br>
+                    <span class="text-orange">R&amp;D 집중 채용</span>
+                </h1>
+            </div>
+            <div class="semiconductor-stage" aria-label="glowing semiconductor image">
+                <div class="chip-orbit"></div>
+                <div class="chip-visual" role="img" aria-label="빛나는 반도체 칩 이미지">
+                    <div class="chip-board"></div>
+                    <div class="chip-core"></div>
+                    <div class="chip-pins" aria-hidden="true">
+                        <span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="max-w-4xl mx-auto px-6 py-12 md:py-24">
+        
+        <!-- Header Section -->
+        <header class="text-center mb-24">
+            <div class="mb-10">
+                <span class="logo-text text-6xl md:text-7xl text-white">Dnotitia</span>
+            </div>
+            
+            <!-- 인증 및 투자 정보 모듈 -->
+            <div class="flex flex-wrap justify-center gap-3 mb-8">
+                <a href="https://it.donga.com/107569/" target="_blank" class="badge-module text-orange-400 bg-orange-900/20 border border-orange-500/30 hover:bg-orange-500/10">
+                    CB Insights 'Global AI Agent 유망 기업' 선정
+                </a>
+                <a href="https://zdnet.co.kr/view/?no=20260421140808" target="_blank" class="badge-module text-white bg-orange border border-orange-500/50 hover:brightness-110 shadow-lg shadow-orange-600/20">
+                    900억 원 규모 Series A 투자 유치
+                </a>
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+                <span class="text-orange">장기기억 AI</span>를 향한 위대한 여정
+            </h1>
+            <p class="text-white text-2xl md:text-3xl font-bold opacity-90">디노티시아와 함께합시다</p>
+        </header>
+
+        <!-- Role Introduction -->
+        <section class="role-intro mb-24">
+            <div class="role-tabs" aria-label="직무소개 그룹 필터">
+                <button type="button" class="role-tab is-active" data-role-filter="all" aria-pressed="true">전체보기</button>
+                <button type="button" class="role-tab" data-role-filter="soc" aria-pressed="false">SoC그룹</button>
+                <button type="button" class="role-tab" data-role-filter="sw" aria-pressed="false">SW그룹</button>
+                <button type="button" class="role-tab" data-role-filter="data" aria-pressed="false">Data그룹</button>
+                <button type="button" class="role-tab" data-role-filter="core" aria-pressed="false">Core그룹</button>
+            </div>
+            <div class="role-card-controls" aria-label="직무소개 카드 넘기기">
+                <button type="button" class="role-card-control" data-role-carousel="prev" aria-label="이전 직무소개">‹</button>
+                <button type="button" class="role-card-control" data-role-carousel="next" aria-label="다음 직무소개">›</button>
+            </div>
+
+            <div class="role-card-grid" aria-live="polite">
+                <div class="role-card" data-role-group="soc" data-interview-id="design-verification-engineer"><div class="role-card-image"><img src="son-hyunwook-soc-dv-engineer.png" alt="Design Verification Engineer 직무 담당자 손현욱님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">Design Verification Engineer</p><div class="role-card-name"><strong>손현욱</strong><span>SoC Verification</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"복잡한 칩 설계를 끝까지 검증하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="soc" data-interview-id="soc-rtl-design-engineer"><div class="role-card-image"><img src="ham-eunkyung-soc-rtl-design-engineer.png" alt="SoC / RTL Design Engineer 직무 담당자 함은경님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">SoC / RTL Design Engineer</p><div class="role-card-name"><strong>함은경</strong><span>RTL Design</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI 인프라를 움직이는 하드웨어 구조를 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="soc" data-interview-id="soc-pkg-board-hardware-engineer"><div class="role-card-image"><img src="ahn-woojin-soc-pkg-board-hardware-engineer.png" alt="SoC PKG / Board Hardware Engineer 직무 담당자 안우진님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">SoC PKG / Board Hardware Engineer</p><div class="role-card-name"><strong>안우진</strong><span>Board Hardware</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"실리콘 칩에 생명을 불어넣는 옷과 무대"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="soc" data-interview-id="soc-firmware-engineer"><div class="role-card-image"><img src="kim-youngil-soc-firmware-engineer.png" alt="SoC Firmware Engineer 직무 담당자 김영일님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">SoC Firmware Engineer</p><div class="role-card-name"><strong>김영일</strong><span>Firmware</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"칩과 시스템이 만나는 지점을 설계하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="sw" data-interview-id="device-driver-software-engineer"><div class="role-card-image"><img src="kim-sunghee-device-driver-software-engineer.png" alt="Device Driver Software Engineer 직무 담당자 김성희님"><span class="role-badge">SW그룹</span><div class="role-card-copy"><p class="role-card-title">Device Driver Software Engineer</p><div class="role-card-name"><strong>김성희</strong><span>System SW</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"하드웨어와 OS 사이의 통로를 여는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="sw" data-interview-id="firmware-software-engineer"><div class="role-card-image"><img src="lee-jongsung-firmware-software-engineer.png" alt="Firmware Software Engineer 직무 담당자 이종성님"><span class="role-badge">SW그룹</span><div class="role-card-copy"><p class="role-card-title">Firmware Software Engineer</p><div class="role-card-name"><strong>이종성</strong><span>System SW</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"제한된 공간에서 성능을 끌어내는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="sw" data-interview-id="vector-library-engineer"><div class="role-card-image"><img src="kim-yuchan-vector-library-engineer.png" alt="Vector Library Engineer 직무 담당자 김유찬님"><span class="role-badge">SW그룹</span><div class="role-card-copy"><p class="role-card-title">Vector Library Engineer</p><div class="role-card-name"><strong>김유찬</strong><span>HPC Library</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"수학 연산을 빠른 실행 코드로 바꾸는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="data" data-interview-id="vector-database-engineer"><div class="role-card-image"><img src="jung-juhyun-vector-database-engineer.png" alt="Vector Database Engineer 직무 담당자 정주현님"><span class="role-badge">Data그룹</span><div class="role-card-copy"><p class="role-card-title">Vector Database Engineer</p><div class="role-card-name"><strong>정주현</strong><span>Database</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI의 장기 기억 장치를 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="data" data-interview-id="storage-system-software-engineer"><div class="role-card-image"><img src="lim-geunwoo-storage-system-software-engineer.png" alt="Storage System Software Engineer 직무 담당자 임근우님"><span class="role-badge">Data그룹</span><div class="role-card-copy"><p class="role-card-title">Storage System Software Engineer</p><div class="role-card-name"><strong>임근우</strong><span>Storage</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"데이터 흐름의 기반을 단단하게 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="core" data-interview-id="optimization-engineer"><div class="role-card-image"><img src="jang-suhyung-optimization-engineer.png" alt="Optimization Engineer 직무 담당자 장수형님"><span class="role-badge">Core그룹</span><div class="role-card-copy"><p class="role-card-title">Optimization Engineer</p><div class="role-card-name"><strong>장수형</strong><span>Optimization</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"모델과 시스템의 성능 한계를 밀어붙이는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="core" data-interview-id="system-architect"><div class="role-card-image"><img src="baek-jinhwan-system-architect.png" alt="System Architect 직무 담당자 백진환님"><span class="role-badge">Core그룹</span><div class="role-card-copy"><p class="role-card-title">System Architect</p><div class="role-card-name"><strong>백진환</strong><span>System Architect</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI 인프라의 구조를 설계하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+            </div>
+            <div class="role-empty-message" aria-live="polite">현재 선택한 그룹에는 공개된 직무소개 카드가 없습니다.</div>
+        </section>
+        <!-- Recruitment Positions -->
+        <section class="mb-24">
+            <div class="flex items-center justify-center mb-16"><h2 class="section-title text-3xl font-black tracking-tight text-white">모집 직무</h2></div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">01</span> SoC그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/196737" target="_blank" rel="noopener" class="job-link" data-open-interview="design-verification-engineer">Design Verification Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/196734" target="_blank" rel="noopener" class="job-link" data-open-interview="soc-rtl-design-engineer">SoC / RTL Design Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/203022" target="_blank" rel="noopener" class="job-link" data-open-interview="soc-pkg-board-hardware-engineer">SoC PKG / Board Hardware Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/203021" target="_blank" rel="noopener" class="job-link" data-open-interview="soc-firmware-engineer">SoC Firmware Engineer →</a></div></div>
+                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">02</span> SW그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/198745" target="_blank" rel="noopener" class="job-link" data-open-interview="device-driver-software-engineer">Device Driver Software Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/198793" target="_blank" rel="noopener" class="job-link" data-open-interview="firmware-software-engineer">Firmware Software Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/199727" target="_blank" rel="noopener" class="job-link" data-open-interview="vector-library-engineer">Vector Library Engineer →</a></div></div>
+                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">03</span> Data그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/200913" target="_blank" rel="noopener" class="job-link" data-open-interview="vector-database-engineer">Vector Database Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/198903" target="_blank" rel="noopener" class="job-link" data-open-interview="storage-system-software-engineer">Storage System Software Engineer →</a></div></div>
+                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">04</span> Core그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/198531" target="_blank" rel="noopener" class="job-link" data-open-interview="optimization-engineer">Optimization Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/206229" target="_blank" rel="noopener" class="job-link" data-open-interview="system-architect">System Architect →</a></div></div>
+            </div>
+        </section>
+        <!-- About Dnotitia Section (With Videos Inside) -->
+        <section class="glass-card rounded-3xl p-10 md:p-14 mb-24">
+            <h2 class="text-3xl font-bold mb-8 italic text-orange border-b border-white/10 pb-4">About Dnotitia</h2>
+            <div class="text-slate-300 leading-relaxed space-y-6 text-lg mb-12">
+                <p>디노티시아는 AI와 데이터 시스템의 융합을 통해 혁신적인 가치를 창출하는 <a href="https://www.koit.co.kr/news/articleView.html?idxno=205883" target="_blank" class="news-link">장기기억 인공지능 전문기업</a>으로, CB Insights의 <a href="https://zdnet.co.kr/view/?no=20250425111526" target="_blank" class="news-link">‘2025 글로벌 AI 100’</a>에 선정되며 기술력을 인정받았습니다.</p>
+                <p>디노티시아는 세계 최초로 개발한 벡터 데이터 연산 가속기 <a href="https://www.epnc.co.kr/news/articleView.html?idxno=328142" target="_blank" class="news-link">'VDPU'</a>를 기반으로 고성능 벡터 데이터베이스 <a href="https://www.etnews.com/20260324000436" target="_blank" class="news-link">‘SEAHORSE(씨홀스)’</a>를 선보이고 있으며, 이를 통해 생성형 인공지능의 핵심 기술인 RAG 솔루션을 구현하고 있습니다.</p>
+                <p>또한 독자적으로 개발한 LLM 파운데이션 모델 <a href="https://www.digitaltoday.co.kr/news/articleView.html?idxno=580007" target="_blank" class="news-link">'DNA'</a>를 활용한 엣지 디바이스 <a href="http://www.itdaily.kr/news/articleView.html?idxno=237265" target="_blank" class="news-link">‘MNEMOS(니모스)’</a>를 통해 개인화된 AI 경험을 제공하고 있습니다.</p>
+            </div>
+
+            <!-- YouTube Video Grid Inside About Section -->
+            <div class="grid md:grid-cols-2 gap-8 border-t border-white/10 pt-10">
+                <!-- Video 1 -->
+                <div class="space-y-3">
+                    <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
+                        <iframe src="https://www.youtube.com/embed/_V_CGUpwKJ8?rel=0" title="Dnotitia Vision Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">디노티시아가 여는 새로운 AI 시대</p>
+                </div>
+                <!-- Video 2 -->
+                <div class="space-y-3">
+                    <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
+                        <iframe src="https://www.youtube.com/embed/xPEdPYyrbwk?rel=0" title="Dnotitia Technology Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">장기기억 AI 기술의 혁신과 비전</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <div class="grid md:grid-cols-2 gap-8 mb-24">
+            <div class="p-10 border border-white/10 rounded-3xl bg-white/[0.01]">
+                <h3 class="text-xl font-bold mb-8 text-orange">근무 조건</h3>
+                <div class="space-y-6 text-lg">
+                    <div class="border-b border-white/5 pb-4">
+                        <p class="text-slate-500 text-sm block mb-1">근무 형태</p>
+                        <p class="font-bold">정규직 / 인턴 (3개월 후 전환 가능)</p>
+                    </div>
+                    <div>
+                        <p class="text-slate-500 text-sm block mb-1">근무지</p>
+                        <p class="font-bold">서울시 강남구 (유연근무 & 재택근무 가능)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card rounded-3xl p-10 flex flex-col justify-center text-center">
+                <p class="text-xl font-bold mb-8">디노티시아 채용이 궁금하신가요?</p>
+                <div class="flex flex-col gap-4">
+                    <a href="https://forms.gle/yBkLR8Vp8tf61Lh46" target="_blank" class="bg-orange px-8 py-4 rounded-2xl font-bold text-center text-white shadow-xl shadow-orange-600/30 hover:brightness-110 transition-all text-lg">커피챗 신청하기</a>
+                    <a href="https://open.kakao.com/o/sw3Shdqi" target="_blank" class="btn-kakao px-8 py-4 rounded-2xl font-bold shadow-lg transition-all flex items-center justify-center text-lg bg-[#FEE500] text-[#371d1e]">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.134-9 7 0 2.39 1.55 4.496 3.94 5.75-.145.54-.52 1.94-.596 2.22-.09.333.11.328.232.247.095-.064 1.514-.94 2.115-1.32.417.1.848.153 1.309.153 4.97 0 9-3.134 9-7s-4.03-7-9-7z"/></svg> 카카오톡 실시간 상담
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer class="pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-sm text-slate-400 gap-6">
+            <div class="flex items-center">
+                <span class="bg-orange/10 text-orange font-bold px-3 py-1 rounded-md mr-4">문의</span>
+                <a href="mailto:journey.z@dnotitia.com" class="hover:text-white transition-colors border-b border-white/10">journey.z@dnotitia.com</a>
+            </div>
+            <p class="opacity-60 text-xs">© 2025 Dnotitia Inc. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <div class="interview-modal" role="dialog" aria-modal="true" aria-labelledby="interview-title">
+        <div class="interview-dialog">
+            <div class="interview-header">
+                <div>
+                    <p class="interview-kicker" id="interview-group"></p>
+                    <h2 class="interview-title" id="interview-title"></h2>
+                </div>
+                <button type="button" class="interview-close" aria-label="직무소개 인터뷰 닫기">×</button>
+            </div>
+            <div class="interview-body" id="interview-body"></div>
+        </div>
+    </div>
+
+    <script>
+        const roleInterviews = {
+            'design-verification-engineer': {
+                group: 'SoC그룹',
+                title: 'Design Verification Engineer',
+                items: [
+                    ['Design Verification Engineer 직무는 어떤 일을 하나요?', '이 직무는 디노티시아의 AI 인프라를 실제 제품과 서비스로 연결하기 위해 핵심 기술을 설계하고 구현하는 역할입니다. 각자의 전문 영역에서 하드웨어, 소프트웨어, 데이터, 모델 팀과 긴밀하게 협업합니다.'],
+                    ['함께 일하는 방식은 어떤가요?', '직급보다 문제의 본질과 근거를 중요하게 봅니다. 빠르게 실험하고, 데이터를 기준으로 논의하며, 서로의 전문성을 존중하면서 더 나은 결정을 만드는 문화를 지향합니다.'],
+                    ['어떤 분과 잘 맞을까요?', '깊이 있는 기술 문제를 끝까지 파고드는 것을 좋아하고, 혼자만의 성과보다 팀 전체의 결과물을 함께 키우는 데 보람을 느끼는 분이라면 잘 맞습니다.']
+                ]
+            },
+            'soc-rtl-design-engineer': {
+                group: 'SoC그룹',
+                title: 'SoC / RTL Design Engineer',
+                items: [
+                    ['SoC / RTL Design Engineer 직무는 어떤 일을 하나요?', '이 직무는 디노티시아의 AI 인프라를 실제 제품과 서비스로 연결하기 위해 핵심 기술을 설계하고 구현하는 역할입니다. 각자의 전문 영역에서 하드웨어, 소프트웨어, 데이터, 모델 팀과 긴밀하게 협업합니다.'],
+                    ['함께 일하는 방식은 어떤가요?', '직급보다 문제의 본질과 근거를 중요하게 봅니다. 빠르게 실험하고, 데이터를 기준으로 논의하며, 서로의 전문성을 존중하면서 더 나은 결정을 만드는 문화를 지향합니다.'],
+                    ['어떤 분과 잘 맞을까요?', '깊이 있는 기술 문제를 끝까지 파고드는 것을 좋아하고, 혼자만의 성과보다 팀 전체의 결과물을 함께 키우는 데 보람을 느끼는 분이라면 잘 맞습니다.']
+                ]
+            },
+            'soc-pkg-board-hardware-engineer': {
+                group: 'SoC그룹',
+                title: 'SoC PKG / Board Hardware Engineer',
+                items: [
+                    ['SoC PKG / Board Hardware Engineer 직무는 어떤 일을 하나요?', '이 직무는 디노티시아의 AI 인프라를 실제 제품과 서비스로 연결하기 위해 핵심 기술을 설계하고 구현하는 역할입니다. 각자의 전문 영역에서 하드웨어, 소프트웨어, 데이터, 모델 팀과 긴밀하게 협업합니다.'],
+                    ['함께 일하는 방식은 어떤가요?', '직급보다 문제의 본질과 근거를 중요하게 봅니다. 빠르게 실험하고, 데이터를 기준으로 논의하며, 서로의 전문성을 존중하면서 더 나은 결정을 만드는 문화를 지향합니다.'],
+                    ['어떤 분과 잘 맞을까요?', '깊이 있는 기술 문제를 끝까지 파고드는 것을 좋아하고, 혼자만의 성과보다 팀 전체의 결과물을 함께 키우는 데 보람을 느끼는 분이라면 잘 맞습니다.']
+                ]
+            },
+            'soc-firmware-engineer': {
+                group: 'SoC그룹',
+                title: 'SoC Firmware Engineer',
+                items: [
+                    ['SoC Firmware Engineer 직무는 어떤 일을 하나요?', '이 직무는 디노티시아의 AI 인프라를 실제 제품과 서비스로 연결하기 위해 핵심 기술을 설계하고 구현하는 역할입니다. 각자의 전문 영역에서 하드웨어, 소프트웨어, 데이터, 모델 팀과 긴밀하게 협업합니다.'],
+                    ['함께 일하는 방식은 어떤가요?', '직급보다 문제의 본질과 근거를 중요하게 봅니다. 빠르게 실험하고, 데이터를 기준으로 논의하며, 서로의 전문성을 존중하면서 더 나은 결정을 만드는 문화를 지향합니다.'],
+                    ['어떤 분과 잘 맞을까요?', '깊이 있는 기술 문제를 끝까지 파고드는 것을 좋아하고, 혼자만의 성과보다 팀 전체의 결과물을 함께 키우는 데 보람을 느끼는 분이라면 잘 맞습니다.']
+                ]
+            },
+            'device-driver-software-engineer': {
+                group: 'SW그룹',
+                title: 'Device Driver Software Engineer',
+                items: [
+                    ['Device Driver Software Engineer 직무는 어떤 일을 하나요?', '이 직무는 디노티시아의 AI 인프라를 실제 제품과 서비스로 연결하기 위해 핵심 기술을 설계하고 구현하는 역할입니다. 각자의 전문 영역에서 하드웨어, 소프트웨어, 데이터, 모델 팀과 긴밀하게 협업합니다.'],
+                    ['함께 일하는 방식은 어떤가요?', '직급보다 문제의 본질과 근거를 중요하게 봅니다. 빠르게 실험하고, 데이터를 기준으로 논의하며, 서로의 전문성을 존중하면서 더 나은 결정을 만드는 문화를 지향합니다.'],
+                    ['어떤 분과 잘 맞을까요?', '깊이 있는 기술 문제를 끝까지 파고드는 것을 좋아하고, 혼자만의 성과보다 팀 전체의 결과물을 함께 키우는 데 보람을 느끼는 분이라면 잘 맞습니다.']
+                ]
+            },
+            'firmware-software-engineer': {
+                group: 'SW그룹',
+                title: 'Firmware Software Engineer',
+                items: [
+                    ['Firmware Software Engineer 직무는 어떤 일을 하나요?', '이 직무는 디노티시아의 AI 인프라를 실제 제품과 서비스로 연결하기 위해 핵심 기술을 설계하고 구현하는 역할입니다. 각자의 전문 영역에서 하드웨어, 소프트웨어, 데이터, 모델 팀과 긴밀하게 협업합니다.'],
+                    ['함께 일하는 방식은 어떤가요?', '직급보다 문제의 본질과 근거를 중요하게 봅니다. 빠르게 실험하고, 데이터를 기준으로 논의하며, 서로의 전문성을 존중하면서 더 나은 결정을 만드는 문화를 지향합니다.'],
+                    ['어떤 분과 잘 맞을까요?', '깊이 있는 기술 문제를 끝까지 파고드는 것을 좋아하고, 혼자만의 성과보다 팀 전체의 결과물을 함께 키우는 데 보람을 느끼는 분이라면 잘 맞습니다.']
+                ]
+            },
+            'vector-library-engineer': {
+                group: 'SW그룹',
+                title: 'Vector Library Engineer',
+                items: [
+                    ['자기소개 및 팀 소개', '안녕하세요. Vector Platform 팀에서 Vector Library Engineer로 일하고 있는 김유찬이라고 합니다. Vector Platform 팀은 디노티시아의 핵심 제품 중 하나인 VDPU가 모든 벡터 데이터베이스에서 사용될 수 있도록 SDK를 개발하고, VDPU의 성능을 극대화하는 알고리즘을 연구하는 역할을 수행합니다. VDPU가 가진 성능을 소프트웨어로 온전히 끌어내는 것이 팀의 목표입니다.'],
+                    ['Vector Library Engineer는 어떤 일을 하나요?', 'Vector Library Engineer는 SDK와 라이브러리를 직접 설계하고 구현하는 일을 맡습니다. VDPU의 핵심 메소드를 기반으로 ANN/KNN 등의 벡터 검색 알고리즘을 VDPU 위에서 구현하고, 어떤 시스템에서도 쉽게 연동할 수 있는 형태로 제공합니다.'],
+                    ['일반적인 라이브러리 개발과 Vector Library 개발은 무엇이 다른가요?', 'Vector Library Engineer는 일반적인 라이브러리 개발과 다르게, VDPU를 효과적으로 사용하는 방법을 고민하며 문제를 해결해 나갑니다. CPU 혹은 GPU를 전제로 만들어진 기존 벡터 검색 알고리즘을 그대로 옮기는 것이 아니라, VDPU라는 하드웨어의 특성에 맞게 알고리즘 자체를 다시 설계한다는 점이 가장 큰 차이입니다. 단순히 "동작하는" 라이브러리를 넘어, 하드웨어를 최대한 활용해 최고의 성능을 끌어내는 것을 목표로 합니다. 동시에 어떤 벡터 데이터베이스에서도 사용할 수 있도록 깨끗한 코드를 작성하기 위해 노력합니다.'],
+                    ['Vector Platform 팀은 어떤 동료와 함께 일하고 싶어 하나요?', 'Vector Platform 팀은 모르는 것에 대해 명확하게 소통하고, 판단을 신뢰할 수 있으며, 하나의 팀으로 문제를 끝까지 해결할 수 있는 동료와 함께 일하고 싶습니다. 아직 아무도 풀지 않은 문제를 먼저 찾아내고 함께 해결해 나갈 수 있으면 좋겠습니다.'],
+                    ['Vector Library Engineer가 되려면 어떤 연구 또는 개발 경험이 필요한가요?', '기본적으로 시스템 프로그래밍에 대한 이해가 필요합니다. 메모리 관리, 운영체제와의 상호작용, 병렬 프로그래밍 등의 역량과 함께, 데이터 기반으로 성능을 분석하고 최적화할 수 있어야 하며, 이를 C++로 구현할 수 있어야 합니다. 또한 VDPU의 동작을 잘 이해해야 하므로 하드웨어에 대한 이해가 필요합니다. 마지막으로 vector indexing algorithm에 대한 이해가 있으면 업무에 큰 도움이 됩니다.'],
+                    ['Vector Library Engineer로서 가장 보람 있었던 경험은 무엇이었나요?', 'VDPU를 이용하면 성능이 많이 느려지던 알고리즘을 개선해 성능을 크게 끌어올렸던 경험이 기억에 남습니다. 기존 알고리즘의 문법을 따르지 않고, VDPU만을 위한 알고리즘을 설계해냈다는 점에서, 또한 그 변경이 실제로 큰 효과를 보았다는 점에서 많은 보람을 느꼈습니다.'],
+                    ['앞으로의 커리어 목표가 있나요?', '하드웨어부터 벡터 데이터베이스까지, 커널 레벨부터 응용 레벨까지를 모두 잘 이해하고 개발하는 엔지니어가 되고 싶습니다. 그래서 어느 레이어에 대해서도 소통할 수 있는 사람이 되어서 더 좋은 라이브러리를 만들어낼 수 있는 사람이 되고 싶습니다.']
+                ]
+            },
+            'vector-database-engineer': {
+                group: 'Data그룹',
+                title: 'Vector Database Engineer',
+                items: [
+                    ['Vector Database Engineer 직무는 어떤 일을 하나요?', '이 직무는 디노티시아의 AI 인프라를 실제 제품과 서비스로 연결하기 위해 핵심 기술을 설계하고 구현하는 역할입니다. 각자의 전문 영역에서 하드웨어, 소프트웨어, 데이터, 모델 팀과 긴밀하게 협업합니다.'],
+                    ['함께 일하는 방식은 어떤가요?', '직급보다 문제의 본질과 근거를 중요하게 봅니다. 빠르게 실험하고, 데이터를 기준으로 논의하며, 서로의 전문성을 존중하면서 더 나은 결정을 만드는 문화를 지향합니다.'],
+                    ['어떤 분과 잘 맞을까요?', '깊이 있는 기술 문제를 끝까지 파고드는 것을 좋아하고, 혼자만의 성과보다 팀 전체의 결과물을 함께 키우는 데 보람을 느끼는 분이라면 잘 맞습니다.']
+                ]
+            },
+            'storage-system-software-engineer': {
+                group: 'Data그룹',
+                title: 'Storage System Software Engineer',
+                items: [
+                    ['Storage System Software Engineer 직무는 어떤 일을 하나요?', '이 직무는 디노티시아의 AI 인프라를 실제 제품과 서비스로 연결하기 위해 핵심 기술을 설계하고 구현하는 역할입니다. 각자의 전문 영역에서 하드웨어, 소프트웨어, 데이터, 모델 팀과 긴밀하게 협업합니다.'],
+                    ['함께 일하는 방식은 어떤가요?', '직급보다 문제의 본질과 근거를 중요하게 봅니다. 빠르게 실험하고, 데이터를 기준으로 논의하며, 서로의 전문성을 존중하면서 더 나은 결정을 만드는 문화를 지향합니다.'],
+                    ['어떤 분과 잘 맞을까요?', '깊이 있는 기술 문제를 끝까지 파고드는 것을 좋아하고, 혼자만의 성과보다 팀 전체의 결과물을 함께 키우는 데 보람을 느끼는 분이라면 잘 맞습니다.']
+                ]
+            },
+            'optimization-engineer': {
+                group: 'Core그룹',
+                title: 'Optimization Engineer',
+                items: [
+                    ['Optimization Engineer 직무는 어떤 일을 하나요?', '이 직무는 디노티시아의 AI 인프라를 실제 제품과 서비스로 연결하기 위해 핵심 기술을 설계하고 구현하는 역할입니다. 각자의 전문 영역에서 하드웨어, 소프트웨어, 데이터, 모델 팀과 긴밀하게 협업합니다.'],
+                    ['함께 일하는 방식은 어떤가요?', '직급보다 문제의 본질과 근거를 중요하게 봅니다. 빠르게 실험하고, 데이터를 기준으로 논의하며, 서로의 전문성을 존중하면서 더 나은 결정을 만드는 문화를 지향합니다.'],
+                    ['어떤 분과 잘 맞을까요?', '깊이 있는 기술 문제를 끝까지 파고드는 것을 좋아하고, 혼자만의 성과보다 팀 전체의 결과물을 함께 키우는 데 보람을 느끼는 분이라면 잘 맞습니다.']
+                ]
+            },
+            'system-architect': {
+                group: 'Core그룹',
+                title: 'System Architect',
+                items: [
+                    ['자기소개 부탁드립니다.', '저는 2026년 올 해 초에 디노티시아의 System architecture team에 합류한 백진환 입니다.'],
+                    ['System Architect가 하는 일을 한 마디로 정의하면 어떻게 말할 수 있을까요?', '제가 생각하는 System Architect는, 먼저 이해관계자들의 요구를 정확히 파악하고, 서로 상충하는 요구사항과 제약 조건들 사이에서 가장 균형 잡힌 최적의 해답을 찾아내는 사람이라고 생각합니다.'],
+                    ['System Architect는 HW, SW, 알고리즘을 아우르는 아키텍쳐를 설계한다고 들었습니다. 다른 부서와 협업할 일도 많이 있으시겠네요?', '네, 정말 많은 부서와 협업을 합니다. HW, SW, 알고리즘 같은 개발 부서뿐만 아니라, 회사 운영과 전략을 담당하는 조직, 나아가 특허 검토를 위한 법률팀까지 다양한 부서와 함께 일하고 있습니다.'],
+                    ['다른 부서와 협업하면서 겪는 어려움도 꽤 있을 것 같습니다. 어떤 점이 어렵고, 어떻게 해결하시나요?', '아키텍처팀은 여러 부서와 협업하면서 각 부서의 요구사항을 조율하는 역할을 합니다. 그러다 보면 부서마다의 요구사항이 서로 상충할 때가 종종 있는데, 솔직히 그럴 때가 가장 난감합니다. 이럴 때 저는 우선 그 요구사항이 왜, 어떤 상황에서 나오게 됐는지를 이해하려고 노력합니다. 그렇게 배경을 들여다보면 뜻하지 않은 해결의 실마리가 보이기도 합니다. 예를 들어 알고 보니 단순한 오해에서 비롯된 문제였거나, 다른 부서에서 아주 간단한 대안을 제시해 줘서 애초에 고민할 필요가 없는 사안이었던 경우도 있거든요.'],
+                    ['최근 AI 업계가 굉장히 빠르게 변화하고 있는데 System Architect 관점에서 가장 눈여겨보고 있는 기술적인 트렌드는 무엇인가요?', '가장 눈여겨보고 있는 건 보안의 중요성이 갈수록 커지고 있다는 점입니다. AI가 발전하면서, 연산을 자체 장비인 온프레미스 환경에서만 처리하던 방식에서 벗어나 클라우드 같은 외부 인프라를 활용하는 경우가 늘고 있는데요. 이는 곧 내가 소유한 장비가 아니라 외부 기관의 인프라에서 내 데이터가 처리된다는 것을 의미합니다. 그러다 보니 데이터를 어떻게 안전하게 지킬 것인가 하는 보안 이슈가 그 어느 때보다 중요해지고 있습니다. 그리고 이러한 보안 요구사항은 이제 SoC 아키텍처를 설계하는 단계에까지 영향을 미치고 있습니다. 그래서 저는 이와 맞닿아 있는 Confidential Computing이라는 기술 트렌드에 가장 관심을 갖고 있습니다.'],
+                    ['System Architect가 되기 위해 필수적으로 알아야 할 기술적인 지식은 무엇인가요?', '기본적으로 컴퓨터 구조에 대한 이해가 바탕이 되어야 한다고 생각합니다. 프로그램 코드에서 시작해 운영체제와 드라이버를 거치고, 명령어를 fetch하고 decode한 뒤, 메모리에서 데이터를 읽어와 실행하기까지, 이 일련의 과정이 어떻게 동작하는지를 이해하는 것이 필수적입니다. 그리고 그 위에 자신이 다루는 특정 분야의 도메인 지식을 더해 나가야 한다고 봅니다.'],
+                    ['System Architect가 되기 위해서는 어떤 방법으로 학습해야 할까요?', 'System Architect가 되기 위해서는 시스템의 복잡한 연결 관계를 이해하는 능력이 중요하고, 그 바탕에는 논리적 사고가 있어야 한다고 생각합니다. 어떤 분야의 지식을 배우든, 논리적으로 원인과 결과를 따져 보며 그 사이의 인과 관계를 짚어 나가다 보면, 개별 지식들이 서로 어떻게 연결되는지가 보이기 시작합니다. 이렇게 쌓인 사고의 습관이 결국 시스템 전체를 조망하는 능력으로 이어진다고 봅니다.'],
+                    ['디노티시아의 System Architect로서 이루어내고 싶은 목표는 무엇인가요?', '현재 개발 중인 VDPU를 잘 마무리해서 상용화까지 이뤄내고 싶습니다. 제가 개발에 참여한 제품이 실제 데이터센터에 도입되고, 많은 분들이 사용하게 된다면 정말 뜻깊을 것 같습니다.'],
+                    ['디노티시아의 System Architect로 입사하면 어떤 방향으로 커리어를 성장해나갈 수 있을까요?', '디노티시아는 벡터 데이터베이스 가속이라는 분야에서 세계적으로도 독창적인 위치에 있는 회사라고 생각합니다. 단순히 소프트웨어 차원의 최적화에 그치지 않고, VDPU라는 전용 칩을 직접 설계해 하드웨어 단까지 가속을 구현한다는 점이 가장 큰 차별점입니다. 이런 환경에서 System Architect로 커리어를 쌓는다면, 알고리즘과 소프트웨어부터 칩 아키텍처까지 전 계층을 아우르는, 흔치 않은 풀스택 시스템 역량을 갖춘 아키텍트로 성장할 수 있다고 봅니다. 처음에는 특정 영역의 아키텍처 설계에 깊이 관여하다가, 점차 제품 전체의 시스템 방향성을 정의하고 기술적 의사결정을 이끄는 역할로 확장해 나갈 수 있을 것입니다. 더 나아가 5년에서 10년 뒤에는, 벡터 데이터 처리에 특화된 전용 하드웨어라는 새로운 영역을 직접 개척해 나가는 경험까지 쌓을 수 있다는 점이 디노티시아만의 특별한 성장 기회라고 생각합니다.'],
+                    ['디노티시아 Architecture팀에는 어떤 계기로 합류하게 되셨나요?', '언론을 통해 접한 디노티시아의 비전에 깊이 공감하면서 합류하게 되었습니다. 디노티시아가 목표로 하는 비정형 데이터의 처리가 앞으로 점점 더 중요해질 것이라고 생각했거든요. 예를 들어, 이제는 파일을 찾을 때 예전처럼 어느 폴더에 넣어 뒀는지 일일이 기억하지 않아도 되잖아요. 정확한 파일명이나 키워드를 몰라도, ‘작년 여름에 정리한 자료’처럼 떠오르는 의미만으로 검색해서 원하는 데이터를 찾아내죠. 이렇게 데이터를 다루는 방식 자체가 정형화된 틀에서 의미 기반으로 옮겨가고 있고, 디노티시아가 바로 그 변화의 흐름 위에서 미래를 준비하고 있다는 점이 무척 매력적으로 다가왔습니다.'],
+                    ['Architecture팀은 어떤 동료와 함께 일하고 싶어하나요?', '저희 Architecture팀은 디노티시아의 비전을 가장 먼저 구체적인 형태로 만들어내는, 그 첫 단계에 있는 팀입니다. 디노티시아가 개척하려는 길은 솔직히 아직 다 닦이지 않은 영역이라고 생각합니다. 정해진 정답도, 따라갈 선례도 많지 않은 곳이죠. 그래서 저희는 이 길을 함께 만들어 나갈 동료를 찾고 있습니다. 특정 기술 하나에만 머무르지 않고 시스템 전체를 큰 그림으로 바라보려는 분, 그리고 처음 마주하는 문제 앞에서도 논리적으로 파고들며 그 과정을 즐길 수 있는 분이라면 정말 잘 맞을 것 같습니다. 솔직하게 말씀드리면, 일은 많습니다. 아직 아무도 만들지 않은 것을 만드는 일이니까요. 하지만 그만큼 우리가 만든 것이 곧 기준이 되는, 흔치 않은 경험을 할 수 있습니다. 그 길을 함께 즐기면서 같이 성장해 나갈 동료를 기다리고 있겠습니다.']
+                ]
+            }
+        };
+        const roleApplyLinks = {
+            'design-verification-engineer': 'https://dno.career.greetinghr.com/ko/o/196737',
+            'soc-rtl-design-engineer': 'https://dno.career.greetinghr.com/ko/o/196734',
+            'soc-pkg-board-hardware-engineer': 'https://dno.career.greetinghr.com/ko/o/203022',
+            'soc-firmware-engineer': 'https://dno.career.greetinghr.com/ko/o/203021',
+            'device-driver-software-engineer': 'https://dno.career.greetinghr.com/ko/o/198745',
+            'firmware-software-engineer': 'https://dno.career.greetinghr.com/ko/o/198793',
+            'vector-library-engineer': 'https://dno.career.greetinghr.com/ko/o/199727',
+            'vector-database-engineer': 'https://dno.career.greetinghr.com/ko/o/200913',
+            'storage-system-software-engineer': 'https://dno.career.greetinghr.com/ko/o/198903',
+            'optimization-engineer': 'https://dno.career.greetinghr.com/ko/o/198531',
+            'system-architect': 'https://dno.career.greetinghr.com/ko/o/206229'
+        };
+        const roleTabs = document.querySelectorAll('[data-role-filter]');
+        const roleCards = document.querySelectorAll('[data-role-group]');
+        const roleCardGrid = document.querySelector('.role-card-grid');
+        const roleCarouselButtons = document.querySelectorAll('[data-role-carousel]');
+        const roleEmptyMessage = document.querySelector('.role-empty-message');
+        const interviewModal = document.querySelector('.interview-modal');
+        const interviewGroup = document.querySelector('#interview-group');
+        const interviewTitle = document.querySelector('#interview-title');
+        const interviewBody = document.querySelector('#interview-body');
+        const interviewClose = document.querySelector('.interview-close');
+        let activeRoleIndex = 0;
+        let roleCarouselTimer;
+
+        const getRoleCards = () => Array.from(roleCards);
+
+        const setActiveRoleTab = (group) => {
+            roleTabs.forEach((item) => {
+                const isActive = item.dataset.roleFilter === group;
+                item.classList.toggle('is-active', isActive);
+                item.setAttribute('aria-pressed', String(isActive));
+            });
+        };
+
+        const updateActiveRoleTabByCard = () => {
+            const cards = getRoleCards();
+            const activeCard = cards[activeRoleIndex];
+            if (!activeCard) return;
+            setActiveRoleTab(activeCard.dataset.roleGroup);
+        };
+
+        const moveRoleCarousel = (direction) => {
+            const cards = getRoleCards();
+            if (!cards.length) return;
+
+            activeRoleIndex = (activeRoleIndex + direction + cards.length) % cards.length;
+            cards[activeRoleIndex].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'start'
+            });
+            roleEmptyMessage.classList.remove('is-visible');
+            updateActiveRoleTabByCard();
+        };
+
+        const resetRoleCarousel = () => {
+            activeRoleIndex = 0;
+            roleCardGrid.scrollTo({ left: 0, behavior: 'smooth' });
+            updateActiveRoleTabByCard();
+        };
+
+        const startRoleCarousel = () => {
+            window.clearInterval(roleCarouselTimer);
+            roleCarouselTimer = window.setInterval(() => {
+                moveRoleCarousel(1);
+            }, 10000);
+        };
+
+        roleCarouselButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                moveRoleCarousel(button.dataset.roleCarousel === 'next' ? 1 : -1);
+                startRoleCarousel();
+            });
+        });
+
+        const openInterview = (interviewId) => {
+            const interview = roleInterviews[interviewId];
+            if (!interview) return;
+            const applyUrl = roleApplyLinks[interviewId];
+
+            window.clearInterval(roleCarouselTimer);
+            interviewGroup.textContent = interview.group;
+            interviewTitle.textContent = interview.title;
+            interviewBody.innerHTML = interview.items.map(([question, answer]) => `
+                <article class="interview-item">
+                    <h3 class="interview-question">${question}</h3>
+                    <p class="interview-answer">${answer}</p>
+                </article>
+            `).join('') + `
+                <div class="interview-more">
+                    <button type="button" class="interview-more-button">다른 직무 더 알아보기 →</button>
+                    <a href="${applyUrl}" target="_blank" rel="noopener" class="interview-apply-button">채용 공고 바로가기 →</a>
+                </div>
+            `;
+            interviewModal.classList.add('is-open');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeInterview = () => {
+            interviewModal.classList.remove('is-open');
+            document.body.style.overflow = '';
+            startRoleCarousel();
+        };
+
+        roleCards.forEach((card) => {
+            card.addEventListener('click', (event) => {
+                if (event.target.closest('a')) return;
+                openInterview(card.dataset.interviewId);
+            });
+        });
+
+        interviewClose.addEventListener('click', closeInterview);
+        interviewModal.addEventListener('click', (event) => {
+            if (event.target === interviewModal) closeInterview();
+        });
+        interviewBody.addEventListener('click', (event) => {
+            if (!event.target.closest('.interview-more-button')) return;
+            closeInterview();
+            window.setTimeout(() => moveRoleCarousel(1), 120);
+        });
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && interviewModal.classList.contains('is-open')) {
+                closeInterview();
+            }
+        });
+
+        roleTabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+                const selectedGroup = tab.dataset.roleFilter;
+                const cards = getRoleCards();
+
+                if (selectedGroup === 'all') {
+                    roleEmptyMessage.classList.remove('is-visible');
+                    resetRoleCarousel();
+                    startRoleCarousel();
+                    return;
+                }
+
+                const targetIndex = cards.findIndex((card) => card.dataset.roleGroup === selectedGroup);
+
+                roleEmptyMessage.classList.toggle('is-visible', targetIndex === -1);
+                if (targetIndex === -1) {
+                    setActiveRoleTab(selectedGroup);
+                    startRoleCarousel();
+                    return;
+                }
+
+                activeRoleIndex = targetIndex;
+                cards[activeRoleIndex].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'start'
+                });
+                setActiveRoleTab(selectedGroup);
+                startRoleCarousel();
+            });
+        });
+
+        roleCardGrid.addEventListener('pointerdown', startRoleCarousel);
+        startRoleCarousel();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
