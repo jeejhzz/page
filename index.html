@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -310,7 +310,9 @@
             background: #0f1a2c;
             border: 1px solid rgba(255, 255, 255, 0.09);
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
-            flex: 0 0 min(100%, 420px);
+            flex: 0 0 calc((100% - 1.5rem) / 2);
+            display: flex;
+            flex-direction: column;
             scroll-snap-align: start;
         }
         .role-card[data-interview-id] {
@@ -359,7 +361,8 @@
         }
         .role-card-image {
             position: relative;
-            min-height: 300px;
+            aspect-ratio: 4 / 3;
+            min-height: 0;
             background: #091527;
         }
         .role-card-image.is-empty {
@@ -383,7 +386,6 @@
         .role-card-image img {
             width: 100%;
             height: 100%;
-            min-height: 300px;
             object-fit: cover;
             object-position: center 24%;
             display: block;
@@ -450,6 +452,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
+            min-height: 118px;
             padding: 1.4rem 1.5rem;
             background: #111c30;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -617,8 +620,7 @@
             .role-tab { flex: 0 0 auto; }
             .role-card { flex-basis: 88vw; }
             .role-card-controls { justify-content: flex-start; }
-            .role-card-image,
-            .role-card-image img { min-height: 380px; }
+            .role-card-image { aspect-ratio: 3 / 4; }
             .role-card-footer { align-items: flex-start; flex-direction: column; }
             .role-card-name { flex-direction: column; align-items: flex-start; gap: 0.12rem; }
             .interview-modal { padding: 0.75rem; }
