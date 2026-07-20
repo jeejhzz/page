@@ -692,6 +692,95 @@
         .layer-desc { color: #94a3b8; line-height: 1.7; font-size: 0.96rem; }
         .layer-desc b { color: #e2e8f0; font-weight: 600; }
 
+        /* ===== Hero actions ===== */
+        .hero-sub {
+            margin-top: 1.6rem;
+            max-width: 30rem;
+            color: #b9c6d6;
+            font-size: 1.02rem;
+            font-weight: 500;
+            line-height: 1.7;
+        }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 2.1rem; }
+        .hero-btn-primary, .hero-btn-ghost {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            padding: 0.95rem 1.6rem; border-radius: 9999px;
+            font-size: 0.98rem; font-weight: 800; letter-spacing: -0.01em;
+            transition: transform 0.2s ease, filter 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+        .hero-btn-primary {
+            background: var(--brand-orange); color: #fff;
+            box-shadow: 0 16px 38px rgba(255, 107, 0, 0.32);
+        }
+        .hero-btn-primary:hover { filter: brightness(1.08); transform: translateY(-2px); }
+        .hero-btn-ghost {
+            color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .hero-btn-ghost:hover { border-color: rgba(255, 107, 0, 0.5); background: rgba(255, 107, 0, 0.08); color: #fff; }
+
+        /* ===== Product architecture map ===== */
+        .archmap { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; }
+        .archmap-axis { display: flex; flex-direction: column; align-items: center; padding: 1.2rem 0; }
+        .archmap-axis span { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em; color: #7d8ba0; }
+        .archmap-axis .rail { flex: 1; width: 2px; margin: 0.6rem 0; border-radius: 2px; background: linear-gradient(to bottom, #8b96ff, #34d3bf 48%, var(--brand-orange)); }
+        .archmap-body {
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 1.4rem;
+            overflow: hidden;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.014) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px),
+                rgba(255, 255, 255, 0.008);
+            background-size: 42px 42px, 42px 42px, auto;
+        }
+        .zone {
+            position: relative;
+            display: grid;
+            grid-template-columns: 15rem 1fr;
+            gap: 1.75rem;
+            padding: 1.9rem 2rem 1.9rem 2.1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .zone:first-child { border-top: 0; }
+        .zone::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 3px; background: var(--z); opacity: 0.9;
+        }
+        .zone-tag { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #64748b; }
+        .zone-name { margin-top: 0.5rem; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.035em; color: #fff; }
+        .zone-name span { font-size: 0.8rem; font-weight: 600; color: #94a3b8; margin-left: 0.35rem; letter-spacing: 0; }
+        .zone-desc { margin-top: 0.7rem; font-size: 0.88rem; line-height: 1.65; color: #94a3b8; }
+        .zone-team {
+            display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 1.05rem;
+            font-size: 0.72rem; font-weight: 800;
+            color: var(--z);
+            border: 1px solid color-mix(in srgb, var(--z) 42%, transparent);
+            background: color-mix(in srgb, var(--z) 13%, transparent);
+            padding: 0.32rem 0.72rem; border-radius: 9999px;
+        }
+        .zone-team::before { content: ''; width: 0.45rem; height: 0.45rem; border-radius: 9999px; background: var(--z); }
+        .zone-people { display: flex; flex-wrap: wrap; gap: 0.75rem; align-content: center; }
+        .mnode {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.55rem 1rem 0.55rem 0.55rem;
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.9rem;
+            background: rgba(255, 255, 255, 0.022);
+            cursor: pointer; text-align: left; font: inherit; color: inherit;
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+        .mnode:hover { border-color: color-mix(in srgb, var(--z) 55%, transparent); background: color-mix(in srgb, var(--z) 9%, transparent); transform: translateY(-2px); }
+        .mnode:focus-visible { outline: 2px solid var(--z); outline-offset: 2px; }
+        .mnode-ava { flex: 0 0 auto; width: 3rem; height: 3rem; border-radius: 9999px; overflow: hidden; border: 1.5px solid color-mix(in srgb, var(--z) 45%, rgba(255, 255, 255, 0.22)); background: #0b1728; }
+        .mnode-ava img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
+        .mnode-info { display: flex; flex-direction: column; gap: 0.08rem; }
+        .mnode-name { font-size: 0.98rem; font-weight: 800; color: #fff; letter-spacing: -0.01em; }
+        .mnode-role { font-size: 0.75rem; color: #94a3b8; font-weight: 500; }
+        .mnode-hiring { display: inline-flex; align-items: center; margin-top: 0.28rem; font-size: 0.7rem; font-weight: 800; color: var(--z); width: fit-content; }
+        .mnode-hiring::before { content: ''; width: 0.35rem; height: 0.35rem; border-radius: 9999px; background: var(--z); margin-right: 0.35rem; box-shadow: 0 0 0 3px color-mix(in srgb, var(--z) 22%, transparent); }
+        .mnode-hiring:hover { text-decoration: underline; }
+
         /* ===== Culture values ===== */
         .value-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: #fff; }
         .value-desc { margin-top: 0.95rem; color: #94a3b8; line-height: 1.85; font-size: 1rem; }
@@ -756,6 +845,13 @@
             .stack { grid-template-columns: 1fr; }
             .stack-axis { display: none; }
             .layer { grid-template-columns: 1fr; gap: 0.5rem; padding: 1.4rem 1.35rem; }
+            .archmap { grid-template-columns: 1fr; }
+            .archmap-axis { display: none; }
+            .zone { grid-template-columns: 1fr; gap: 1.1rem; padding: 1.5rem 1.35rem; }
+            .zone-people { gap: 0.6rem; }
+            .mnode { width: 100%; }
+            .hero-actions { width: 100%; }
+            .hero-btn-primary, .hero-btn-ghost { flex: 1 1 auto; justify-content: center; }
             .proc { grid-template-columns: 1fr; gap: 0; }
             .proc::before { top: 1.35rem; bottom: 1.35rem; left: 1.35rem; right: auto; width: 2px; height: auto; }
             .proc-step { text-align: left; display: grid; grid-template-columns: auto 1fr; column-gap: 1.2rem; padding: 0.75rem 0; align-items: center; }
@@ -790,6 +886,11 @@
                     디노티시아<br>
                     <span class="text-orange">R&amp;D 집중 채용</span>
                 </h1>
+                <p class="hero-sub">반도체 칩부터 AI 모델까지 — 장기기억 AI를 함께 만들 동료를 찾습니다.</p>
+                <div class="hero-actions">
+                    <a href="https://dno.career.greetinghr.com/ko" target="_blank" rel="noopener" class="hero-btn-primary">디노티시아 채용 바로가기 →</a>
+                    <a href="#archmap" class="hero-btn-ghost">직무 지도 살펴보기</a>
+                </div>
             </div>
             <div class="semiconductor-stage" aria-label="glowing semiconductor image">
                 <div class="chip-orbit"></div>
@@ -828,44 +929,113 @@
             <p class="text-white text-2xl md:text-3xl font-bold opacity-90">디노티시아와 함께합시다</p>
         </header>
 
-        <!-- Role Introduction -->
-        <section class="role-intro mb-24">
-            <div class="role-tabs" aria-label="직무소개 그룹 필터">
-                <button type="button" class="role-tab is-active" data-role-filter="all" aria-pressed="true">전체보기</button>
-                <button type="button" class="role-tab" data-role-filter="soc" aria-pressed="false">SoC그룹</button>
-                <button type="button" class="role-tab" data-role-filter="sw" aria-pressed="false">SW그룹</button>
-                <button type="button" class="role-tab" data-role-filter="data" aria-pressed="false">Data그룹</button>
-                <button type="button" class="role-tab" data-role-filter="core" aria-pressed="false">Core그룹</button>
-            </div>
-            <div class="role-card-controls" aria-label="직무소개 카드 넘기기">
-                <button type="button" class="role-card-control" data-role-carousel="prev" aria-label="이전 직무소개">‹</button>
-                <button type="button" class="role-card-control" data-role-carousel="next" aria-label="다음 직무소개">›</button>
+        <!-- Product × Team × People Map -->
+        <section id="archmap" class="mb-24">
+            <div class="sec-head">
+                <span class="eyebrow">Product · Team · People</span>
+                <h2 class="sec-title">우리 제품은,<br>이 사람들이 만듭니다</h2>
+                <p class="sec-lede">제품 스택의 각 계층을 <b>어느 팀이 맡고, 지금 어떤 자리를 채우고 있는지</b> 한 장의 지도에 담았습니다.<br class="hidden md:block"><b>사람을 누르면</b> 직무 인터뷰가, <b>채용중을 누르면</b> 지원 페이지가 열립니다.</p>
             </div>
 
-            <div class="role-card-grid" aria-live="polite">
-                <div class="role-card" data-role-group="soc" data-interview-id="design-verification-engineer"><div class="role-card-image"><img src="son-hyunwook-soc-dv-engineer.png" alt="Design Verification Engineer 직무 담당자 손현욱님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">Design Verification Engineer</p><div class="role-card-name"><strong>손현욱</strong><span>SoC Verification</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"복잡한 칩 설계를 끝까지 검증하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="soc" data-interview-id="soc-rtl-design-engineer"><div class="role-card-image"><img src="ham-eunkyung-soc-rtl-design-engineer.png" alt="SoC / RTL Design Engineer 직무 담당자 함은경님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">SoC / RTL Design Engineer</p><div class="role-card-name"><strong>함은경</strong><span>RTL Design</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI 인프라를 움직이는 하드웨어 구조를 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="soc" data-interview-id="soc-pkg-board-hardware-engineer"><div class="role-card-image"><img src="ahn-woojin-soc-pkg-board-hardware-engineer.png" alt="SoC PKG / Board Hardware Engineer 직무 담당자 안우진님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">SoC PKG / Board Hardware Engineer</p><div class="role-card-name"><strong>안우진</strong><span>Board Hardware</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"실리콘 칩에 생명을 불어넣는 옷과 무대"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="soc" data-interview-id="soc-firmware-engineer"><div class="role-card-image"><img src="kim-youngil-soc-firmware-engineer.png" alt="SoC Firmware Engineer 직무 담당자 김영일님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">SoC Firmware Engineer</p><div class="role-card-name"><strong>김영일</strong><span>Firmware</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"칩과 시스템이 만나는 지점을 설계하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="sw" data-interview-id="device-driver-software-engineer"><div class="role-card-image"><img src="kim-sunghee-device-driver-software-engineer.png" alt="Device Driver Software Engineer 직무 담당자 김성희님"><span class="role-badge">SW그룹</span><div class="role-card-copy"><p class="role-card-title">Device Driver Software Engineer</p><div class="role-card-name"><strong>김성희</strong><span>System SW</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"하드웨어와 OS 사이의 통로를 여는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="sw" data-interview-id="firmware-software-engineer"><div class="role-card-image"><img src="lee-jongsung-firmware-software-engineer.png" alt="Firmware Software Engineer 직무 담당자 이종성님"><span class="role-badge">SW그룹</span><div class="role-card-copy"><p class="role-card-title">Firmware Software Engineer</p><div class="role-card-name"><strong>이종성</strong><span>System SW</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"제한된 공간에서 성능을 끌어내는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="sw" data-interview-id="vector-library-engineer"><div class="role-card-image"><img src="kim-yuchan-vector-library-engineer.png" alt="Vector Library Engineer 직무 담당자 김유찬님"><span class="role-badge">SW그룹</span><div class="role-card-copy"><p class="role-card-title">Vector Library Engineer</p><div class="role-card-name"><strong>김유찬</strong><span>HPC Library</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"수학 연산을 빠른 실행 코드로 바꾸는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="data" data-interview-id="vector-database-engineer"><div class="role-card-image"><img src="jung-juhyun-vector-database-engineer.png" alt="Vector Database Engineer 직무 담당자 정주현님"><span class="role-badge">Data그룹</span><div class="role-card-copy"><p class="role-card-title">Vector Database Engineer</p><div class="role-card-name"><strong>정주현</strong><span>Database</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI의 장기 기억 장치를 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="data" data-interview-id="storage-system-software-engineer"><div class="role-card-image"><img src="lim-geunwoo-storage-system-software-engineer.png" alt="Storage System Software Engineer 직무 담당자 임근우님"><span class="role-badge">Data그룹</span><div class="role-card-copy"><p class="role-card-title">Storage System Software Engineer</p><div class="role-card-name"><strong>임근우</strong><span>Storage</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"데이터 흐름의 기반을 단단하게 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="core" data-interview-id="optimization-engineer"><div class="role-card-image"><img src="jang-suhyung-optimization-engineer.png" alt="Optimization Engineer 직무 담당자 장수형님"><span class="role-badge">Core그룹</span><div class="role-card-copy"><p class="role-card-title">Optimization Engineer</p><div class="role-card-name"><strong>장수형</strong><span>Optimization</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"모델과 시스템의 성능 한계를 밀어붙이는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="core" data-interview-id="system-architect"><div class="role-card-image"><img src="baek-jinhwan-system-architect.png" alt="System Architect 직무 담당자 백진환님"><span class="role-badge">Core그룹</span><div class="role-card-copy"><p class="role-card-title">System Architect</p><div class="role-card-name"><strong>백진환</strong><span>System Architect</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI 인프라의 구조를 설계하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+            <div class="archmap">
+                <div class="archmap-axis" aria-hidden="true">
+                    <span>SW</span>
+                    <div class="rail"></div>
+                    <span>HW</span>
+                </div>
+                <div class="archmap-body">
+
+                    <div class="zone" style="--z:#8b96ff">
+                        <div class="zone-head">
+                            <p class="zone-tag">On-Device AI</p>
+                            <h3 class="zone-name">MNEMOS <span>니모스</span></h3>
+                            <p class="zone-desc">DNA 모델을 탑재한 엣지 디바이스. 개인화된, 기억하는 AI 경험을 만듭니다.</p>
+                            <span class="zone-team">SW그룹</span>
+                        </div>
+                        <div class="zone-people">
+                            <div class="mnode" data-interview-id="device-driver-software-engineer" role="button" tabindex="0" aria-label="김성희 Device Driver Software Engineer 인터뷰 보기">
+                                <span class="mnode-ava"><img src="kim-sunghee-device-driver-software-engineer.png" alt="김성희"></span>
+                                <span class="mnode-info"><span class="mnode-name">김성희</span><span class="mnode-role">Device Driver SW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198745" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                            <div class="mnode" data-interview-id="firmware-software-engineer" role="button" tabindex="0" aria-label="이종성 Firmware Software Engineer 인터뷰 보기">
+                                <span class="mnode-ava"><img src="lee-jongsung-firmware-software-engineer.png" alt="이종성"></span>
+                                <span class="mnode-info"><span class="mnode-name">이종성</span><span class="mnode-role">Firmware SW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198793" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="zone" style="--z:#a78bfa">
+                        <div class="zone-head">
+                            <p class="zone-tag">Foundation Model</p>
+                            <h3 class="zone-name">DNA</h3>
+                            <p class="zone-desc">온디바이스까지 겨냥한 자체 개발 LLM. 개인화 AI의 두뇌 역할을 합니다.</p>
+                            <span class="zone-team">Core그룹</span>
+                        </div>
+                        <div class="zone-people">
+                            <div class="mnode" data-interview-id="optimization-engineer" role="button" tabindex="0" aria-label="장수형 Optimization Engineer 인터뷰 보기">
+                                <span class="mnode-ava"><img src="jang-suhyung-optimization-engineer.png" alt="장수형"></span>
+                                <span class="mnode-info"><span class="mnode-name">장수형</span><span class="mnode-role">Optimization Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198531" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                            <div class="mnode" data-interview-id="system-architect" role="button" tabindex="0" aria-label="백진환 System Architect 인터뷰 보기">
+                                <span class="mnode-ava"><img src="baek-jinhwan-system-architect.png" alt="백진환"></span>
+                                <span class="mnode-info"><span class="mnode-name">백진환</span><span class="mnode-role">System Architect</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/206229" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="zone" style="--z:#34d3bf">
+                        <div class="zone-head">
+                            <p class="zone-tag">Vector Database</p>
+                            <h3 class="zone-name">SEAHORSE <span>씨홀스</span></h3>
+                            <p class="zone-desc">VDPU로 가속하는 고성능 벡터 데이터베이스. 생성형 AI의 RAG를 책임집니다.</p>
+                            <span class="zone-team">Data그룹</span>
+                        </div>
+                        <div class="zone-people">
+                            <div class="mnode" data-interview-id="vector-database-engineer" role="button" tabindex="0" aria-label="정주현 Vector Database Engineer 인터뷰 보기">
+                                <span class="mnode-ava"><img src="jung-juhyun-vector-database-engineer.png" alt="정주현"></span>
+                                <span class="mnode-info"><span class="mnode-name">정주현</span><span class="mnode-role">Vector Database Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/200913" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                            <div class="mnode" data-interview-id="storage-system-software-engineer" role="button" tabindex="0" aria-label="임근우 Storage System Software Engineer 인터뷰 보기">
+                                <span class="mnode-ava"><img src="lim-geunwoo-storage-system-software-engineer.png" alt="임근우"></span>
+                                <span class="mnode-info"><span class="mnode-name">임근우</span><span class="mnode-role">Storage System SW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198903" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="zone" style="--z:#ff7a2f">
+                        <div class="zone-head">
+                            <p class="zone-tag">Hardware Accelerator</p>
+                            <h3 class="zone-name">VDPU</h3>
+                            <p class="zone-desc">세계 최초 벡터 데이터 연산 가속기. 스택 전체의 성능을 밑에서 떠받치는 실리콘입니다.</p>
+                            <span class="zone-team">SoC그룹</span>
+                        </div>
+                        <div class="zone-people">
+                            <div class="mnode" data-interview-id="soc-rtl-design-engineer" role="button" tabindex="0" aria-label="함은경 SoC / RTL Design Engineer 인터뷰 보기">
+                                <span class="mnode-ava"><img src="ham-eunkyung-soc-rtl-design-engineer.png" alt="함은경"></span>
+                                <span class="mnode-info"><span class="mnode-name">함은경</span><span class="mnode-role">SoC / RTL Design Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/196734" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                            <div class="mnode" data-interview-id="design-verification-engineer" role="button" tabindex="0" aria-label="손현욱 Design Verification Engineer 인터뷰 보기">
+                                <span class="mnode-ava"><img src="son-hyunwook-soc-dv-engineer.png" alt="손현욱"></span>
+                                <span class="mnode-info"><span class="mnode-name">손현욱</span><span class="mnode-role">Design Verification Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/196737" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                            <div class="mnode" data-interview-id="soc-pkg-board-hardware-engineer" role="button" tabindex="0" aria-label="안우진 SoC PKG / Board Hardware Engineer 인터뷰 보기">
+                                <span class="mnode-ava"><img src="ahn-woojin-soc-pkg-board-hardware-engineer.png" alt="안우진"></span>
+                                <span class="mnode-info"><span class="mnode-name">안우진</span><span class="mnode-role">SoC PKG / Board HW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/203022" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                            <div class="mnode" data-interview-id="soc-firmware-engineer" role="button" tabindex="0" aria-label="김영일 SoC Firmware Engineer 인터뷰 보기">
+                                <span class="mnode-ava"><img src="kim-youngil-soc-firmware-engineer.png" alt="김영일"></span>
+                                <span class="mnode-info"><span class="mnode-name">김영일</span><span class="mnode-role">SoC Firmware Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/203021" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                            <div class="mnode" data-interview-id="vector-library-engineer" role="button" tabindex="0" aria-label="김유찬 Vector Library Engineer 인터뷰 보기">
+                                <span class="mnode-ava"><img src="kim-yuchan-vector-library-engineer.png" alt="김유찬"></span>
+                                <span class="mnode-info"><span class="mnode-name">김유찬</span><span class="mnode-role">Vector Library Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/199727" target="_blank" rel="noopener">채용중</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="role-empty-message" aria-live="polite">현재 선택한 그룹에는 공개된 직무소개 카드가 없습니다.</div>
-        </section>
-        <!-- Recruitment Positions -->
-        <section class="mb-24">
-            <div class="flex items-center justify-center mb-16"><h2 class="section-title text-3xl font-black tracking-tight text-white">모집 직무</h2></div>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">01</span> SoC그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/196737" target="_blank" rel="noopener" class="job-link" data-open-interview="design-verification-engineer">Design Verification Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/196734" target="_blank" rel="noopener" class="job-link" data-open-interview="soc-rtl-design-engineer">SoC / RTL Design Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/203022" target="_blank" rel="noopener" class="job-link" data-open-interview="soc-pkg-board-hardware-engineer">SoC PKG / Board Hardware Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/203021" target="_blank" rel="noopener" class="job-link" data-open-interview="soc-firmware-engineer">SoC Firmware Engineer →</a></div></div>
-                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">02</span> SW그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/198745" target="_blank" rel="noopener" class="job-link" data-open-interview="device-driver-software-engineer">Device Driver Software Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/198793" target="_blank" rel="noopener" class="job-link" data-open-interview="firmware-software-engineer">Firmware Software Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/199727" target="_blank" rel="noopener" class="job-link" data-open-interview="vector-library-engineer">Vector Library Engineer →</a></div></div>
-                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">03</span> Data그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/200913" target="_blank" rel="noopener" class="job-link" data-open-interview="vector-database-engineer">Vector Database Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/198903" target="_blank" rel="noopener" class="job-link" data-open-interview="storage-system-software-engineer">Storage System Software Engineer →</a></div></div>
-                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">04</span> Core그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/198531" target="_blank" rel="noopener" class="job-link" data-open-interview="optimization-engineer">Optimization Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/206229" target="_blank" rel="noopener" class="job-link" data-open-interview="system-architect">System Architect →</a></div></div>
-            </div>
+            <p class="text-slate-500 text-xs mt-5">* 왼쪽 축은 소프트웨어(위)–하드웨어(아래) 계층을, 색은 담당 그룹을 나타냅니다.</p>
         </section>
         <!-- About Dnotitia Section (With Videos Inside) -->
         <section class="glass-card rounded-3xl p-10 md:p-14 mb-24">
@@ -891,52 +1061,6 @@
                         <iframe src="https://www.youtube.com/embed/xPEdPYyrbwk?rel=0" title="Dnotitia Technology Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
                     <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">장기기억 AI 기술의 혁신과 비전</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Technology & Products -->
-        <section class="mb-24">
-            <div class="sec-head">
-                <span class="eyebrow">Full Stack AI Infra</span>
-                <h2 class="sec-title">하드웨어부터 소프트웨어까지,<br>한 팀이 직접 만듭니다</h2>
-                <p class="sec-lede">칩(HW)부터 데이터베이스, 파운데이션 모델, 온디바이스(SW)까지 —<br class="hidden md:block">AI 인프라의 <b>모든 계층</b>을 자체 기술로 쌓아 올립니다.</p>
-            </div>
-            <div class="stack">
-                <div class="stack-axis" aria-hidden="true">
-                    <span>SW</span>
-                    <div class="rail"></div>
-                    <span>HW</span>
-                </div>
-                <div class="stack-layers">
-                    <div class="layer">
-                        <div class="layer-head">
-                            <p class="layer-cat">On-Device AI</p>
-                            <h3 class="layer-name">MNEMOS <span>니모스</span></h3>
-                        </div>
-                        <p class="layer-desc">DNA 모델을 탑재한 <b>엣지 디바이스</b>. 클라우드 없이 개인화된, 기억하는 AI 경험을 제공합니다.</p>
-                    </div>
-                    <div class="layer">
-                        <div class="layer-head">
-                            <p class="layer-cat">Foundation Model</p>
-                            <h3 class="layer-name">DNA</h3>
-                        </div>
-                        <p class="layer-desc">온디바이스까지 겨냥해 <b>자체 개발한 LLM 파운데이션 모델</b>. 개인화 AI의 두뇌 역할을 합니다.</p>
-                    </div>
-                    <div class="layer">
-                        <div class="layer-head">
-                            <p class="layer-cat">Vector Database</p>
-                            <h3 class="layer-name">SEAHORSE <span>씨홀스</span></h3>
-                        </div>
-                        <p class="layer-desc">VDPU로 가속하는 <b>고성능 벡터 데이터베이스</b>. 생성형 AI의 핵심 기술인 RAG를 책임집니다.</p>
-                    </div>
-                    <div class="layer">
-                        <div class="layer-head">
-                            <p class="layer-cat">Hardware Accelerator</p>
-                            <h3 class="layer-name">VDPU</h3>
-                        </div>
-                        <p class="layer-desc">세계 최초로 개발한 <b>벡터 데이터 연산 가속기</b>. 스택 전체의 성능을 밑에서 떠받칩니다.</p>
-                    </div>
                 </div>
             </div>
         </section>
@@ -1240,76 +1364,17 @@
             'optimization-engineer': 'https://dno.career.greetinghr.com/ko/o/198531',
             'system-architect': 'https://dno.career.greetinghr.com/ko/o/206229'
         };
-        const roleTabs = document.querySelectorAll('[data-role-filter]');
-        const roleCards = document.querySelectorAll('[data-role-group]');
-        const roleCardGrid = document.querySelector('.role-card-grid');
-        const roleCarouselButtons = document.querySelectorAll('[data-role-carousel]');
-        const roleEmptyMessage = document.querySelector('.role-empty-message');
         const interviewModal = document.querySelector('.interview-modal');
         const interviewGroup = document.querySelector('#interview-group');
         const interviewTitle = document.querySelector('#interview-title');
         const interviewBody = document.querySelector('#interview-body');
         const interviewClose = document.querySelector('.interview-close');
-        let activeRoleIndex = 0;
-        let roleCarouselTimer;
-
-        const getRoleCards = () => Array.from(roleCards);
-
-        const setActiveRoleTab = (group) => {
-            roleTabs.forEach((item) => {
-                const isActive = item.dataset.roleFilter === group;
-                item.classList.toggle('is-active', isActive);
-                item.setAttribute('aria-pressed', String(isActive));
-            });
-        };
-
-        const updateActiveRoleTabByCard = () => {
-            const cards = getRoleCards();
-            const activeCard = cards[activeRoleIndex];
-            if (!activeCard) return;
-            setActiveRoleTab(activeCard.dataset.roleGroup);
-        };
-
-        const moveRoleCarousel = (direction) => {
-            const cards = getRoleCards();
-            if (!cards.length) return;
-
-            activeRoleIndex = (activeRoleIndex + direction + cards.length) % cards.length;
-            cards[activeRoleIndex].scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'start'
-            });
-            roleEmptyMessage.classList.remove('is-visible');
-            updateActiveRoleTabByCard();
-        };
-
-        const resetRoleCarousel = () => {
-            activeRoleIndex = 0;
-            roleCardGrid.scrollTo({ left: 0, behavior: 'smooth' });
-            updateActiveRoleTabByCard();
-        };
-
-        const startRoleCarousel = () => {
-            window.clearInterval(roleCarouselTimer);
-            roleCarouselTimer = window.setInterval(() => {
-                moveRoleCarousel(1);
-            }, 10000);
-        };
-
-        roleCarouselButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-                moveRoleCarousel(button.dataset.roleCarousel === 'next' ? 1 : -1);
-                startRoleCarousel();
-            });
-        });
 
         const openInterview = (interviewId) => {
             const interview = roleInterviews[interviewId];
             if (!interview) return;
             const applyUrl = roleApplyLinks[interviewId];
 
-            window.clearInterval(roleCarouselTimer);
             interviewGroup.textContent = interview.group;
             interviewTitle.textContent = interview.title;
             interviewBody.innerHTML = interview.items.map(([question, answer]) => `
@@ -1319,7 +1384,7 @@
                 </article>
             `).join('') + `
                 <div class="interview-more">
-                    <button type="button" class="interview-more-button">다른 직무 더 알아보기 →</button>
+                    <button type="button" class="interview-more-button">지도로 돌아가기</button>
                     <a href="${applyUrl}" target="_blank" rel="noopener" class="interview-apply-button">채용 공고 바로가기 →</a>
                 </div>
             `;
@@ -1330,13 +1395,18 @@
         const closeInterview = () => {
             interviewModal.classList.remove('is-open');
             document.body.style.overflow = '';
-            startRoleCarousel();
         };
 
-        roleCards.forEach((card) => {
-            card.addEventListener('click', (event) => {
+        document.querySelectorAll('.mnode').forEach((node) => {
+            node.addEventListener('click', (event) => {
                 if (event.target.closest('a')) return;
-                openInterview(card.dataset.interviewId);
+                openInterview(node.dataset.interviewId);
+            });
+            node.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openInterview(node.dataset.interviewId);
+                }
             });
         });
 
@@ -1347,48 +1417,12 @@
         interviewBody.addEventListener('click', (event) => {
             if (!event.target.closest('.interview-more-button')) return;
             closeInterview();
-            window.setTimeout(() => moveRoleCarousel(1), 120);
         });
         window.addEventListener('keydown', (event) => {
             if (event.key === 'Escape' && interviewModal.classList.contains('is-open')) {
                 closeInterview();
             }
         });
-
-        roleTabs.forEach((tab) => {
-            tab.addEventListener('click', () => {
-                const selectedGroup = tab.dataset.roleFilter;
-                const cards = getRoleCards();
-
-                if (selectedGroup === 'all') {
-                    roleEmptyMessage.classList.remove('is-visible');
-                    resetRoleCarousel();
-                    startRoleCarousel();
-                    return;
-                }
-
-                const targetIndex = cards.findIndex((card) => card.dataset.roleGroup === selectedGroup);
-
-                roleEmptyMessage.classList.toggle('is-visible', targetIndex === -1);
-                if (targetIndex === -1) {
-                    setActiveRoleTab(selectedGroup);
-                    startRoleCarousel();
-                    return;
-                }
-
-                activeRoleIndex = targetIndex;
-                cards[activeRoleIndex].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'start'
-                });
-                setActiveRoleTab(selectedGroup);
-                startRoleCarousel();
-            });
-        });
-
-        roleCardGrid.addEventListener('pointerdown', startRoleCarousel);
-        startRoleCarousel();
     </script>
 </body>
 </html>
