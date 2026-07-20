@@ -611,6 +611,138 @@
             0%, 100% { transform: scale(0.96); opacity: 0.54; }
             50% { transform: scale(1.02); opacity: 0.9; }
         }
+
+        /* ===== Stats band ===== */
+        .stat-cell {
+            text-align: center;
+            padding: 1.75rem 1rem;
+            border-radius: 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+        }
+        .stat-cell:hover {
+            border-color: rgba(255, 107, 0, 0.35);
+            background: rgba(255, 107, 0, 0.04);
+            transform: translateY(-3px);
+        }
+        .stat-num {
+            font-size: clamp(1.9rem, 5vw, 3rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            color: var(--brand-orange);
+        }
+        .stat-num small { font-size: 0.55em; font-weight: 800; }
+        .stat-label { margin-top: 0.6rem; font-size: 0.85rem; font-weight: 700; color: #cbd5e1; }
+
+        /* ===== Feature / product / value cards ===== */
+        .feature-card {
+            position: relative;
+            border-radius: 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.9rem;
+            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+            height: 100%;
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 107, 0, 0.35);
+            background: rgba(255, 107, 0, 0.045);
+        }
+        .mono-badge {
+            display: inline-grid;
+            place-items: center;
+            width: 3.1rem;
+            height: 3.1rem;
+            border-radius: 0.9rem;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.22), rgba(255, 107, 0, 0.06));
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            color: var(--brand-orange);
+            font-weight: 900;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+        }
+        .product-tag {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #7c8cff;
+            background: rgba(124, 140, 255, 0.12);
+            border: 1px solid rgba(124, 140, 255, 0.25);
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+        }
+
+        /* ===== Benefits ===== */
+        .benefit-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 1.4rem 1.5rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: border-color 0.25s ease, background 0.25s ease;
+        }
+        .benefit-item:hover {
+            border-color: rgba(255, 107, 0, 0.3);
+            background: rgba(255, 107, 0, 0.04);
+        }
+        .benefit-ico {
+            flex: 0 0 auto;
+            width: 2.6rem;
+            height: 2.6rem;
+            display: grid;
+            place-items: center;
+            border-radius: 0.75rem;
+            background: rgba(255, 107, 0, 0.1);
+            border: 1px solid rgba(255, 107, 0, 0.22);
+            font-size: 1.3rem;
+        }
+
+        /* ===== Recruitment process ===== */
+        .process-track {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            counter-reset: step;
+        }
+        .process-step {
+            position: relative;
+            text-align: center;
+            padding: 1.6rem 0.85rem;
+            border-radius: 1.1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .process-step::before {
+            counter-increment: step;
+            content: counter(step, decimal-leading-zero);
+            display: inline-grid;
+            place-items: center;
+            width: 2.7rem;
+            height: 2.7rem;
+            margin: 0 auto 0.9rem;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, var(--brand-orange), #ff8a3d);
+            color: #001529;
+            font-weight: 900;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 24px rgba(255, 107, 0, 0.28);
+        }
+        .process-step h4 { color: white; font-weight: 800; font-size: 1rem; }
+        .process-step p { margin-top: 0.45rem; color: #94a3b8; font-size: 0.8rem; line-height: 1.5; }
+
+        @media (max-width: 767px) {
+            .process-track { grid-template-columns: 1fr; gap: 0.75rem; }
+            .process-step { display: flex; align-items: center; text-align: left; gap: 1rem; padding: 1.1rem 1.25rem; }
+            .process-step::before { margin: 0; }
+            .stat-num { font-size: clamp(1.7rem, 8vw, 2.4rem); }
+        }
         @media (max-width: 767px) {
             .top-hero { min-height: 86vh; padding-top: 3rem; }
             .semiconductor-stage { min-height: 310px; }
@@ -677,6 +809,28 @@
             <p class="text-white text-2xl md:text-3xl font-bold opacity-90">디노티시아와 함께합시다</p>
         </header>
 
+        <!-- Key Metrics Band -->
+        <section class="mb-24" aria-label="디노티시아 주요 성과">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+                <div class="stat-cell">
+                    <p class="stat-num">900<small>억 원</small></p>
+                    <p class="stat-label">Series A 투자 유치</p>
+                </div>
+                <div class="stat-cell">
+                    <p class="stat-num">TOP 100</p>
+                    <p class="stat-label">CB Insights 글로벌 AI 100 선정</p>
+                </div>
+                <div class="stat-cell">
+                    <p class="stat-num">세계 <small>최초</small></p>
+                    <p class="stat-label">벡터 데이터 연산 가속기 VDPU</p>
+                </div>
+                <div class="stat-cell">
+                    <p class="stat-num">4<small>대</small></p>
+                    <p class="stat-label">칩부터 모델까지 자체 핵심기술</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Role Introduction -->
         <section class="role-intro mb-24">
             <div class="role-tabs" aria-label="직무소개 그룹 필터">
@@ -742,6 +896,146 @@
                     <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">장기기억 AI 기술의 혁신과 비전</p>
                 </div>
             </div>
+        </section>
+
+        <!-- Technology & Products -->
+        <section class="mb-24">
+            <div class="flex items-center justify-center mb-6"><h2 class="section-title text-3xl font-black tracking-tight text-white">핵심 기술 &amp; 제품</h2></div>
+            <p class="text-center text-slate-400 max-w-2xl mx-auto mb-16 leading-relaxed">칩(Chip)부터 소프트웨어, 데이터베이스, 파운데이션 모델까지 —<br class="hidden md:block">AI 인프라의 전 계층을 직접 설계하는 <span class="text-orange font-bold">Full Stack AI Infra</span> 기업입니다.</p>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="feature-card">
+                    <div class="flex items-center justify-between mb-5">
+                        <span class="mono-badge">VDPU</span>
+                        <span class="product-tag">Hardware</span>
+                    </div>
+                    <h3 class="text-white text-xl font-black mb-2">VDPU</h3>
+                    <p class="text-slate-400 leading-relaxed">세계 최초로 개발한 <span class="text-slate-200 font-semibold">벡터 데이터 연산 가속기</span>. 벡터 연산을 하드웨어 레벨에서 가속해 AI 인프라의 성능 한계를 끌어올립니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="flex items-center justify-between mb-5">
+                        <span class="mono-badge">SH</span>
+                        <span class="product-tag">Database</span>
+                    </div>
+                    <h3 class="text-white text-xl font-black mb-2">SEAHORSE <span class="text-slate-400 text-base font-semibold">씨홀스</span></h3>
+                    <p class="text-slate-400 leading-relaxed">VDPU 기반의 <span class="text-slate-200 font-semibold">고성능 벡터 데이터베이스</span>. 생성형 AI의 핵심인 RAG를 위한 대규모 검색·저장을 책임집니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="flex items-center justify-between mb-5">
+                        <span class="mono-badge">DNA</span>
+                        <span class="product-tag">LLM</span>
+                    </div>
+                    <h3 class="text-white text-xl font-black mb-2">DNA</h3>
+                    <p class="text-slate-400 leading-relaxed">독자적으로 개발한 <span class="text-slate-200 font-semibold">LLM 파운데이션 모델</span>. 온디바이스 환경까지 겨냥한 효율적인 언어모델로 개인화 AI의 두뇌 역할을 합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="flex items-center justify-between mb-5">
+                        <span class="mono-badge">MN</span>
+                        <span class="product-tag">On-Device</span>
+                    </div>
+                    <h3 class="text-white text-xl font-black mb-2">MNEMOS <span class="text-slate-400 text-base font-semibold">니모스</span></h3>
+                    <p class="text-slate-400 leading-relaxed">DNA 모델을 탑재한 <span class="text-slate-200 font-semibold">엣지 디바이스</span>. 클라우드 없이도 개인화된, 기억하는 AI 경험을 제공합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Culture & Core Values -->
+        <section class="mb-24">
+            <div class="flex items-center justify-center mb-16"><h2 class="section-title text-3xl font-black tracking-tight text-white">일하는 문화</h2></div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="feature-card">
+                    <span class="mono-badge mb-5">01</span>
+                    <h3 class="text-white text-lg font-black mb-2">본질에 집중합니다</h3>
+                    <p class="text-slate-400 leading-relaxed">직급보다 문제의 본질과 근거를 봅니다. 가장 좋은 아이디어가 이기는 자리를 만듭니다.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="mono-badge mb-5">02</span>
+                    <h3 class="text-white text-lg font-black mb-2">빠르게 실험합니다</h3>
+                    <p class="text-slate-400 leading-relaxed">완벽한 계획보다 빠른 시도를 택합니다. 데이터를 기준으로 논의하고 방향을 잡습니다.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="mono-badge mb-5">03</span>
+                    <h3 class="text-white text-lg font-black mb-2">전문성을 존중합니다</h3>
+                    <p class="text-slate-400 leading-relaxed">서로의 전문 영역을 신뢰하고, 팀 전체의 결과물을 함께 키워가는 협업을 지향합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits -->
+        <section class="mb-24">
+            <div class="flex items-center justify-center mb-16"><h2 class="section-title text-3xl font-black tracking-tight text-white">성장과 복지</h2></div>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="benefit-item">
+                    <span class="benefit-ico">🧭</span>
+                    <div>
+                        <h4 class="text-white font-bold mb-1">유연근무 &amp; 재택근무</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">몰입할 수 있는 시간과 공간을 스스로 설계합니다.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-ico">💻</span>
+                    <div>
+                        <h4 class="text-white font-bold mb-1">최고 사양의 장비</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">업무 몰입을 위한 최상의 개발 환경과 장비를 지원합니다.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-ico">📈</span>
+                    <div>
+                        <h4 class="text-white font-bold mb-1">성장 지원</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">도서·교육·컨퍼런스 등 배움과 성장에 필요한 것을 함께합니다.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-ico">🍽️</span>
+                    <div>
+                        <h4 class="text-white font-bold mb-1">식사 &amp; 간식 지원</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">잘 먹고 일할 수 있도록 식사와 간식·음료를 챙깁니다.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-ico">🏥</span>
+                    <div>
+                        <h4 class="text-white font-bold mb-1">건강 관리</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">건강검진 등 구성원의 건강한 일상을 지원합니다.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-ico">🚀</span>
+                    <div>
+                        <h4 class="text-white font-bold mb-1">함께 성장하는 보상</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">회사의 성장을 구성원과 함께 나누는 보상 체계를 지향합니다.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-slate-500 text-xs mt-6">* 세부 복지 항목은 직무·고용형태에 따라 달라질 수 있습니다.</p>
+        </section>
+
+        <!-- Recruitment Process -->
+        <section class="mb-24">
+            <div class="flex items-center justify-center mb-16"><h2 class="section-title text-3xl font-black tracking-tight text-white">채용 프로세스</h2></div>
+            <div class="process-track">
+                <div class="process-step">
+                    <h4>서류 전형</h4>
+                    <p>지원서와 이력을 통해 함께할 여정을 확인합니다.</p>
+                </div>
+                <div class="process-step">
+                    <h4>실무 인터뷰</h4>
+                    <p>전문 영역에 대해 깊이 있게 대화합니다.</p>
+                </div>
+                <div class="process-step">
+                    <h4>컬처핏 인터뷰</h4>
+                    <p>일하는 방식과 방향이 서로 맞는지 나눕니다.</p>
+                </div>
+                <div class="process-step">
+                    <h4>처우 협의</h4>
+                    <p>합류 조건을 투명하게 논의합니다.</p>
+                </div>
+                <div class="process-step">
+                    <h4>최종 합류</h4>
+                    <p>디노티시아의 여정에 함께합니다.</p>
+                </div>
+            </div>
+            <p class="text-center text-slate-500 text-xs mt-6">* 전형 절차는 직무에 따라 일부 달라질 수 있습니다.</p>
         </section>
 
         <!-- CTA Section -->
