@@ -647,90 +647,72 @@
         }
         .sec-lede b { color: #e2e8f0; font-weight: 600; }
 
-        /* ===== Metrics strip ===== */
-        .metric-strip {
+        /* ===== Metrics panel ===== */
+        .metric-panel {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            border-top: 1px solid rgba(255, 255, 255, 0.12);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.5rem;
+            background: rgba(255, 255, 255, 0.018);
         }
         .metric {
-            padding: 2.4rem 1.6rem;
-            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 2.1rem 1.7rem;
+            border-left: 1px solid rgba(255, 255, 255, 0.06);
         }
         .metric:first-child { border-left: 0; }
         .metric-num {
-            font-size: clamp(1.85rem, 4vw, 2.7rem);
-            font-weight: 900;
-            letter-spacing: -0.045em;
-            line-height: 1;
-            color: #fff;
+            font-size: clamp(1.45rem, 2.6vw, 1.95rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            color: #eef2f7;
             font-variant-numeric: tabular-nums;
         }
-        .metric-num small { font-size: 0.44em; font-weight: 800; color: #94a3b8; margin-left: 0.15em; letter-spacing: 0; }
-        .metric-num sup { font-size: 0.4em; font-weight: 800; color: var(--brand-orange); letter-spacing: 0.08em; vertical-align: 0.9em; margin-right: 0.25em; }
-        .metric-label { margin-top: 1rem; font-size: 0.82rem; color: #94a3b8; font-weight: 600; line-height: 1.55; }
+        .metric-num small { font-size: 0.6em; font-weight: 700; color: #8595ab; margin-left: 0.15em; letter-spacing: 0; }
+        .metric-num sup { font-size: 0.5em; font-weight: 800; color: var(--brand-orange); letter-spacing: 0.06em; vertical-align: 0.75em; margin-right: 0.2em; }
+        .metric-label { margin-top: 0.85rem; font-size: 0.8rem; color: #7d8ba0; font-weight: 600; line-height: 1.55; }
 
-        /* ===== Technology cards ===== */
-        .tech-card {
+        /* ===== Full-stack layers ===== */
+        .stack { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1.1rem; }
+        .stack-axis { display: flex; flex-direction: column; align-items: center; padding: 0.3rem 0; }
+        .stack-axis span { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; color: #7d8ba0; }
+        .stack-axis .rail { flex: 1; width: 2px; margin: 0.65rem 0; border-radius: 2px; background: linear-gradient(to bottom, rgba(124, 140, 255, 0.55), var(--brand-orange)); }
+        .stack-layers {
             position: relative;
-            overflow: hidden;
-            padding: 2.2rem;
             border: 1px solid rgba(255, 255, 255, 0.09);
-            border-radius: 1.1rem;
-            background: rgba(255, 255, 255, 0.012);
-            transition: border-color 0.35s ease, background 0.35s ease;
+            border-radius: 1.25rem;
+            overflow: hidden;
         }
-        .tech-card:hover { border-color: rgba(255, 107, 0, 0.4); background: rgba(255, 107, 0, 0.025); }
-        .tech-idx {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            font-size: 3.6rem;
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -0.05em;
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
-            pointer-events: none;
-        }
-        .tech-cat {
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: #64748b;
-        }
-        .tech-name {
-            margin-top: 0.75rem;
-            font-size: 1.55rem;
-            font-weight: 900;
-            letter-spacing: -0.035em;
-            color: #fff;
-        }
-        .tech-name span { font-size: 0.9rem; font-weight: 600; color: #94a3b8; margin-left: 0.45rem; letter-spacing: 0; }
-        .tech-rule { height: 1px; background: rgba(255, 255, 255, 0.09); margin: 1.35rem 0; }
-        .tech-desc { color: #94a3b8; line-height: 1.8; font-size: 0.96rem; }
-        .tech-desc b { color: #e2e8f0; font-weight: 600; }
-
-        /* ===== Culture values ===== */
-        .value-col {
-            position: relative;
-            padding-top: 2.1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.14);
-        }
-        .value-col::before {
+        .stack-layers::before {
             content: '';
             position: absolute;
-            top: -1px;
             left: 0;
-            width: 2.4rem;
-            height: 2px;
-            background: var(--brand-orange);
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, rgba(124, 140, 255, 0.55), var(--brand-orange));
         }
-        .value-num { font-size: 0.95rem; font-weight: 800; color: var(--brand-orange); letter-spacing: 0.05em; font-variant-numeric: tabular-nums; }
-        .value-title { margin-top: 1.5rem; font-size: 1.35rem; font-weight: 800; letter-spacing: -0.025em; color: #fff; }
-        .value-desc { margin-top: 0.85rem; color: #94a3b8; line-height: 1.85; font-size: 0.97rem; }
+        .layer {
+            display: grid;
+            grid-template-columns: 13.5rem 1fr;
+            gap: 1.75rem;
+            align-items: center;
+            padding: 1.7rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            transition: background 0.3s ease;
+        }
+        .layer:first-child { border-top: 0; }
+        .layer:hover { background: rgba(255, 107, 0, 0.035); }
+        .layer-head { display: flex; flex-direction: column; gap: 0.45rem; }
+        .layer-cat { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #64748b; }
+        .layer-name { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.035em; color: #fff; }
+        .layer-name span { font-size: 0.82rem; font-weight: 600; color: #94a3b8; margin-left: 0.4rem; letter-spacing: 0; }
+        .layer-desc { color: #94a3b8; line-height: 1.7; font-size: 0.96rem; }
+        .layer-desc b { color: #e2e8f0; font-weight: 600; }
+
+        /* ===== Culture values ===== */
+        .value-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: #fff; }
+        .value-desc { margin-top: 0.95rem; color: #94a3b8; line-height: 1.85; font-size: 1rem; }
 
         /* ===== Benefits list ===== */
         .benefit {
@@ -750,53 +732,57 @@
             position: relative;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 1.25rem;
+            gap: 1.5rem;
         }
         .proc::before {
             content: '';
             position: absolute;
-            top: 1.15rem;
-            left: 9%;
-            right: 9%;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.14);
+            top: 1.35rem;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.16);
         }
         .proc-step { position: relative; text-align: center; }
         .proc-node {
             position: relative;
             z-index: 1;
-            width: 2.3rem;
-            height: 2.3rem;
-            margin: 0 auto 1.35rem;
+            width: 2.7rem;
+            height: 2.7rem;
+            margin: 0 auto 1.4rem;
             display: grid;
             place-items: center;
             border-radius: 9999px;
-            background: var(--brand-navy);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            color: #cbd5e1;
+            background: #0f1f34;
+            border: 1.5px solid rgba(255, 255, 255, 0.22);
+            color: #e2e8f0;
             font-weight: 800;
-            font-size: 0.78rem;
+            font-size: 0.9rem;
             font-variant-numeric: tabular-nums;
         }
         .proc-step:last-child .proc-node {
             border-color: var(--brand-orange);
             background: var(--brand-orange);
             color: var(--brand-navy);
+            box-shadow: 0 8px 22px rgba(255, 107, 0, 0.32);
         }
-        .proc-step h4 { color: #fff; font-weight: 700; font-size: 0.98rem; letter-spacing: -0.01em; }
-        .proc-step p { margin-top: 0.5rem; color: #64748b; font-size: 0.8rem; line-height: 1.6; }
+        .proc-step h4 { color: #fff; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+        .proc-step p { margin-top: 0.5rem; color: #9aa8bd; font-size: 0.88rem; line-height: 1.55; }
 
         @media (max-width: 767px) {
             .sec-head { margin-bottom: 2.5rem; }
-            .metric-strip { grid-template-columns: repeat(2, 1fr); }
-            .metric { padding: 1.7rem 1.2rem; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+            .metric-panel { grid-template-columns: repeat(2, 1fr); }
+            .metric { padding: 1.6rem 1.2rem; border-top: 1px solid rgba(255, 255, 255, 0.06); }
             .metric:nth-child(1), .metric:nth-child(2) { border-top: 0; }
             .metric:nth-child(odd) { border-left: 0; }
+            .stack { grid-template-columns: 1fr; }
+            .stack-axis { display: none; }
+            .layer { grid-template-columns: 1fr; gap: 0.5rem; padding: 1.4rem 1.35rem; }
             .proc { grid-template-columns: 1fr; gap: 0; }
-            .proc::before { top: 1.15rem; bottom: 1.15rem; left: 1.15rem; right: auto; width: 1px; height: auto; }
-            .proc-step { text-align: left; display: grid; grid-template-columns: auto 1fr; column-gap: 1.15rem; padding: 0.65rem 0; align-items: start; }
+            .proc::before { top: 1.35rem; bottom: 1.35rem; left: 1.35rem; right: auto; width: 2px; height: auto; }
+            .proc-step { text-align: left; display: grid; grid-template-columns: auto 1fr; column-gap: 1.2rem; padding: 0.75rem 0; align-items: center; }
             .proc-node { margin: 0; }
-            .proc-copy { padding-top: 0.25rem; }
+            .proc-copy { padding-top: 0; }
         }
         @media (max-width: 767px) {
             .top-hero { min-height: 86vh; padding-top: 3rem; }
@@ -866,22 +852,22 @@
 
         <!-- Key Metrics Band -->
         <section class="mb-24" aria-label="디노티시아 주요 성과">
-            <div class="metric-strip">
+            <div class="metric-panel">
                 <div class="metric">
                     <p class="metric-num">900<small>억 원</small></p>
                     <p class="metric-label">Series A 투자 유치</p>
                 </div>
                 <div class="metric">
                     <p class="metric-num"><sup>TOP</sup>100</p>
-                    <p class="metric-label">CB Insights<br>글로벌 AI 100 선정</p>
+                    <p class="metric-label">CB Insights 글로벌 AI 100</p>
                 </div>
                 <div class="metric">
                     <p class="metric-num">세계 최초</p>
-                    <p class="metric-label">벡터 데이터 연산<br>가속기 VDPU 개발</p>
+                    <p class="metric-label">벡터 연산 가속기 VDPU</p>
                 </div>
                 <div class="metric">
                     <p class="metric-num">4<small>대</small></p>
-                    <p class="metric-label">칩부터 모델까지<br>자체 핵심 기술</p>
+                    <p class="metric-label">자체 개발 핵심 기술</p>
                 </div>
             </div>
         </section>
@@ -956,39 +942,46 @@
         <!-- Technology & Products -->
         <section class="mb-24">
             <div class="sec-head">
-                <span class="eyebrow">Technology &amp; Products</span>
-                <h2 class="sec-title">칩부터 모델까지,<br>직접 만드는 AI 인프라</h2>
-                <p class="sec-lede">가속기 하드웨어와 데이터베이스, 파운데이션 모델, 온디바이스까지 —<br class="hidden md:block">AI 인프라의 전 계층을 직접 설계하는 <b>Full Stack AI Infra</b> 기업입니다.</p>
+                <span class="eyebrow">Full Stack AI Infra</span>
+                <h2 class="sec-title">하드웨어부터 소프트웨어까지,<br>한 팀이 직접 만듭니다</h2>
+                <p class="sec-lede">칩(HW)부터 데이터베이스, 파운데이션 모델, 온디바이스(SW)까지 —<br class="hidden md:block">AI 인프라의 <b>모든 계층</b>을 자체 기술로 쌓아 올립니다.</p>
             </div>
-            <div class="grid md:grid-cols-2 gap-5">
-                <article class="tech-card">
-                    <span class="tech-idx" aria-hidden="true">01</span>
-                    <p class="tech-cat">Hardware · Accelerator</p>
-                    <h3 class="tech-name">VDPU</h3>
-                    <div class="tech-rule"></div>
-                    <p class="tech-desc">세계 최초로 개발한 <b>벡터 데이터 연산 가속기</b>. 벡터 연산을 하드웨어 레벨에서 가속해 AI 인프라의 성능 한계를 끌어올립니다.</p>
-                </article>
-                <article class="tech-card">
-                    <span class="tech-idx" aria-hidden="true">02</span>
-                    <p class="tech-cat">Vector Database</p>
-                    <h3 class="tech-name">SEAHORSE <span>씨홀스</span></h3>
-                    <div class="tech-rule"></div>
-                    <p class="tech-desc">VDPU 기반의 <b>고성능 벡터 데이터베이스</b>. 생성형 AI의 핵심 기술인 RAG를 위한 대규모 검색·저장을 책임집니다.</p>
-                </article>
-                <article class="tech-card">
-                    <span class="tech-idx" aria-hidden="true">03</span>
-                    <p class="tech-cat">Foundation Model</p>
-                    <h3 class="tech-name">DNA</h3>
-                    <div class="tech-rule"></div>
-                    <p class="tech-desc">독자적으로 개발한 <b>LLM 파운데이션 모델</b>. 온디바이스 환경까지 겨냥한 효율적인 언어모델로 개인화 AI의 두뇌 역할을 합니다.</p>
-                </article>
-                <article class="tech-card">
-                    <span class="tech-idx" aria-hidden="true">04</span>
-                    <p class="tech-cat">On-Device AI</p>
-                    <h3 class="tech-name">MNEMOS <span>니모스</span></h3>
-                    <div class="tech-rule"></div>
-                    <p class="tech-desc">DNA 모델을 탑재한 <b>엣지 디바이스</b>. 클라우드 없이도 개인화된, 기억하는 AI 경험을 제공합니다.</p>
-                </article>
+            <div class="stack">
+                <div class="stack-axis" aria-hidden="true">
+                    <span>SW</span>
+                    <div class="rail"></div>
+                    <span>HW</span>
+                </div>
+                <div class="stack-layers">
+                    <div class="layer">
+                        <div class="layer-head">
+                            <p class="layer-cat">On-Device AI</p>
+                            <h3 class="layer-name">MNEMOS <span>니모스</span></h3>
+                        </div>
+                        <p class="layer-desc">DNA 모델을 탑재한 <b>엣지 디바이스</b>. 클라우드 없이 개인화된, 기억하는 AI 경험을 제공합니다.</p>
+                    </div>
+                    <div class="layer">
+                        <div class="layer-head">
+                            <p class="layer-cat">Foundation Model</p>
+                            <h3 class="layer-name">DNA</h3>
+                        </div>
+                        <p class="layer-desc">온디바이스까지 겨냥해 <b>자체 개발한 LLM 파운데이션 모델</b>. 개인화 AI의 두뇌 역할을 합니다.</p>
+                    </div>
+                    <div class="layer">
+                        <div class="layer-head">
+                            <p class="layer-cat">Vector Database</p>
+                            <h3 class="layer-name">SEAHORSE <span>씨홀스</span></h3>
+                        </div>
+                        <p class="layer-desc">VDPU로 가속하는 <b>고성능 벡터 데이터베이스</b>. 생성형 AI의 핵심 기술인 RAG를 책임집니다.</p>
+                    </div>
+                    <div class="layer">
+                        <div class="layer-head">
+                            <p class="layer-cat">Hardware Accelerator</p>
+                            <h3 class="layer-name">VDPU</h3>
+                        </div>
+                        <p class="layer-desc">세계 최초로 개발한 <b>벡터 데이터 연산 가속기</b>. 스택 전체의 성능을 밑에서 떠받칩니다.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -998,21 +991,18 @@
                 <span class="eyebrow">How We Work</span>
                 <h2 class="sec-title">우리가 일하는 방식</h2>
             </div>
-            <div class="grid md:grid-cols-3 gap-x-10 gap-y-12">
-                <div class="value-col">
-                    <p class="value-num">01</p>
+            <div class="grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
+                <div class="value-col pt-8 md:pt-0 md:pr-10">
                     <h3 class="value-title">본질에 집중합니다</h3>
-                    <p class="value-desc">직급이 아니라 문제의 본질과 근거로 이야기합니다. 가장 타당한 아이디어가 이기는 자리를 만듭니다.</p>
+                    <p class="value-desc">직급이 아니라 근거로 이야기합니다. 가장 타당한 아이디어가 이깁니다.</p>
                 </div>
-                <div class="value-col">
-                    <p class="value-num">02</p>
+                <div class="value-col pt-8 md:pt-0 md:px-10">
                     <h3 class="value-title">빠르게 실험합니다</h3>
-                    <p class="value-desc">완벽한 계획보다 빠른 시도를 택합니다. 데이터를 기준으로 논의하고, 결과로 방향을 잡습니다.</p>
+                    <p class="value-desc">완벽한 계획보다 빠른 시도를 택합니다. 데이터로 방향을 잡습니다.</p>
                 </div>
-                <div class="value-col">
-                    <p class="value-num">03</p>
-                    <h3 class="value-title">전문성을 존중합니다</h3>
-                    <p class="value-desc">서로의 전문 영역을 신뢰합니다. 혼자만의 성과보다 팀 전체의 결과물을 함께 키웁니다.</p>
+                <div class="value-col pt-8 md:pt-0 md:pl-10">
+                    <h3 class="value-title">전문성을 신뢰합니다</h3>
+                    <p class="value-desc">서로의 전문 영역을 믿고, 팀 전체의 결과를 함께 키웁니다.</p>
                 </div>
             </div>
         </section>
@@ -1077,42 +1067,42 @@
         <section class="mb-24">
             <div class="sec-head">
                 <span class="eyebrow">Hiring Process</span>
-                <h2 class="sec-title">합류까지의 여정</h2>
+                <h2 class="sec-title">지원부터 합류까지</h2>
             </div>
             <div class="proc">
                 <div class="proc-step">
-                    <div class="proc-node">01</div>
+                    <div class="proc-node">1</div>
                     <div class="proc-copy">
                         <h4>서류 전형</h4>
-                        <p>지원서와 이력으로 함께할 여정을 살핍니다.</p>
+                        <p>지원서 검토</p>
                     </div>
                 </div>
                 <div class="proc-step">
-                    <div class="proc-node">02</div>
+                    <div class="proc-node">2</div>
                     <div class="proc-copy">
                         <h4>실무 인터뷰</h4>
-                        <p>전문 영역에 대해 깊이 있게 대화합니다.</p>
+                        <p>직무 심층 대화</p>
                     </div>
                 </div>
                 <div class="proc-step">
-                    <div class="proc-node">03</div>
+                    <div class="proc-node">3</div>
                     <div class="proc-copy">
                         <h4>컬처핏 인터뷰</h4>
-                        <p>일하는 방식과 방향이 맞는지 나눕니다.</p>
+                        <p>팀 적합성 확인</p>
                     </div>
                 </div>
                 <div class="proc-step">
-                    <div class="proc-node">04</div>
+                    <div class="proc-node">4</div>
                     <div class="proc-copy">
                         <h4>처우 협의</h4>
-                        <p>합류 조건을 투명하게 논의합니다.</p>
+                        <p>합류 조건 논의</p>
                     </div>
                 </div>
                 <div class="proc-step">
-                    <div class="proc-node">05</div>
+                    <div class="proc-node">5</div>
                     <div class="proc-copy">
                         <h4>최종 합류</h4>
-                        <p>디노티시아의 여정에 함께합니다.</p>
+                        <p>함께 시작</p>
                     </div>
                 </div>
             </div>
