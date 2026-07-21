@@ -39,11 +39,18 @@
         .text-orange { color: var(--brand-orange); }
         .bg-orange { background-color: var(--brand-orange); }
         
-        /* 로고 타이포그래피 */
+        /* 로고 타이포그래피 (전용 웹폰트 임베드) */
+        @font-face {
+            font-family: 'DnoWordmark';
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+            src: url(data:font/woff2;base64,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) format('woff2');
+        }
         .logo-text {
-            font-family: 'Pretendard', sans-serif;
-            font-weight: 900;
-            letter-spacing: -0.06em;
+            font-family: 'DnoWordmark', 'Pretendard', -apple-system, sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.045em;
             display: block;
         }
         
@@ -612,136 +619,322 @@
             50% { transform: scale(1.02); opacity: 0.9; }
         }
 
-        /* ===== Stats band ===== */
-        .stat-cell {
-            text-align: center;
-            padding: 1.75rem 1rem;
-            border-radius: 1.25rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
-        }
-        .stat-cell:hover {
-            border-color: rgba(255, 107, 0, 0.35);
-            background: rgba(255, 107, 0, 0.04);
-            transform: translateY(-3px);
-        }
-        .stat-num {
-            font-size: clamp(1.9rem, 5vw, 3rem);
-            font-weight: 900;
-            letter-spacing: -0.03em;
-            line-height: 1.05;
-            color: var(--brand-orange);
-        }
-        .stat-num small { font-size: 0.55em; font-weight: 800; }
-        .stat-label { margin-top: 0.6rem; font-size: 0.85rem; font-weight: 700; color: #cbd5e1; }
-
-        /* ===== Feature / product / value cards ===== */
-        .feature-card {
-            position: relative;
-            border-radius: 1.25rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 1.9rem;
-            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-            height: 100%;
-        }
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 107, 0, 0.35);
-            background: rgba(255, 107, 0, 0.045);
-        }
-        .mono-badge {
-            display: inline-grid;
-            place-items: center;
-            width: 3.1rem;
-            height: 3.1rem;
-            border-radius: 0.9rem;
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.22), rgba(255, 107, 0, 0.06));
-            border: 1px solid rgba(255, 107, 0, 0.3);
-            color: var(--brand-orange);
-            font-weight: 900;
-            font-size: 1.15rem;
-            letter-spacing: -0.02em;
-        }
-        .product-tag {
-            display: inline-block;
-            font-size: 0.68rem;
+        /* ===== Editorial section header ===== */
+        .sec-head { margin-bottom: 3.5rem; }
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 0.72rem;
             font-weight: 800;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.24em;
             text-transform: uppercase;
-            color: #7c8cff;
-            background: rgba(124, 140, 255, 0.12);
-            border: 1px solid rgba(124, 140, 255, 0.25);
-            padding: 0.2rem 0.6rem;
-            border-radius: 9999px;
+            color: #ff8a3d;
+        }
+        .eyebrow::before {
+            content: '';
+            width: 1.75rem;
+            height: 1px;
+            background: linear-gradient(90deg, var(--brand-orange), transparent);
+        }
+        .sec-title {
+            margin-top: 1.1rem;
+            font-size: clamp(1.9rem, 4vw, 2.55rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1.12;
+            color: #fff;
+        }
+        .sec-lede {
+            margin-top: 1.15rem;
+            max-width: 36rem;
+            color: #94a3b8;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .sec-lede b { color: #e2e8f0; font-weight: 600; }
+
+        /* ===== Full-stack layers ===== */
+        .stack { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1.1rem; }
+        .stack-axis { display: flex; flex-direction: column; align-items: center; padding: 0.3rem 0; }
+        .stack-axis span { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; color: #7d8ba0; }
+        .stack-axis .rail { flex: 1; width: 2px; margin: 0.65rem 0; border-radius: 2px; background: linear-gradient(to bottom, rgba(124, 140, 255, 0.55), var(--brand-orange)); }
+        .stack-layers {
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 1.25rem;
+            overflow: hidden;
+        }
+        .stack-layers::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, rgba(124, 140, 255, 0.55), var(--brand-orange));
+        }
+        .layer {
+            display: grid;
+            grid-template-columns: 13.5rem 1fr;
+            gap: 1.75rem;
+            align-items: center;
+            padding: 1.7rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            transition: background 0.3s ease;
+        }
+        .layer:first-child { border-top: 0; }
+        .layer:hover { background: rgba(255, 107, 0, 0.035); }
+        .layer-head { display: flex; flex-direction: column; gap: 0.45rem; }
+        .layer-cat { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #64748b; }
+        .layer-name { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.035em; color: #fff; }
+        .layer-name span { font-size: 0.82rem; font-weight: 600; color: #94a3b8; margin-left: 0.4rem; letter-spacing: 0; }
+        .layer-desc { color: #94a3b8; line-height: 1.7; font-size: 0.96rem; }
+        .layer-desc b { color: #e2e8f0; font-weight: 600; }
+
+        /* ===== Hero actions ===== */
+        .hero-sub {
+            margin-top: 1.6rem;
+            max-width: 30rem;
+            color: #b9c6d6;
+            font-size: 1.02rem;
+            font-weight: 500;
+            line-height: 1.7;
+        }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 2.1rem; }
+        .hero-btn-primary, .hero-btn-ghost {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            padding: 0.95rem 1.6rem; border-radius: 9999px;
+            font-size: 0.98rem; font-weight: 800; letter-spacing: -0.01em;
+            transition: transform 0.2s ease, filter 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+        .hero-btn-primary {
+            background: var(--brand-orange); color: #fff;
+            box-shadow: 0 16px 38px rgba(255, 107, 0, 0.32);
+        }
+        .hero-btn-primary:hover { filter: brightness(1.08); transform: translateY(-2px); }
+        .hero-btn-ghost {
+            color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .hero-btn-ghost:hover { border-color: rgba(255, 107, 0, 0.5); background: rgba(255, 107, 0, 0.08); color: #fff; }
+
+        /* ===== Hero V110 chip ===== */
+        .chip-glow {
+            position: absolute;
+            width: min(78%, 460px);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.22), transparent 62%);
+            filter: blur(26px);
+            animation: chipGlowPulse 6.5s ease-in-out infinite;
+            z-index: -1;
+        }
+        .hero-chip-wrap { position: relative; width: min(94%, 560px); aspect-ratio: 1 / 1; display: grid; place-items: center; }
+        .hero-chip {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: 50% 45%;
+            -webkit-mask-image: radial-gradient(72% 68% at 50% 46%, #000 48%, transparent 74%);
+            mask-image: radial-gradient(72% 68% at 50% 46%, #000 48%, transparent 74%);
+            filter: drop-shadow(0 34px 55px rgba(0, 0, 0, 0.55));
+            animation: chipBreath 6.5s ease-in-out infinite;
+        }
+        @keyframes chipBreath {
+            0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+            50% { transform: translateY(-14px) scale(1.02) rotate(-0.6deg); }
+        }
+        @keyframes chipGlowPulse {
+            0%, 100% { opacity: 0.55; transform: scale(0.94); }
+            50% { opacity: 1; transform: scale(1.06); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-chip, .chip-glow { animation: none; }
         }
 
-        /* ===== Benefits ===== */
-        .benefit-item {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-            padding: 1.4rem 1.5rem;
-            border-radius: 1rem;
-            background: rgba(255, 255, 255, 0.025);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            transition: border-color 0.25s ease, background 0.25s ease;
+        /* ===== Product architecture map ===== */
+        .archmap { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; }
+        .archmap-axis { display: flex; flex-direction: column; align-items: center; padding: 1.2rem 0; }
+        .archmap-axis span { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em; color: #7d8ba0; }
+        .archmap-axis .rail { flex: 1; width: 2px; margin: 0.6rem 0; border-radius: 2px; background: linear-gradient(to bottom, #8b96ff, #34d3bf 48%, var(--brand-orange)); }
+        .archmap-body {
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 1.4rem;
+            overflow: hidden;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.014) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px),
+                rgba(255, 255, 255, 0.008);
+            background-size: 42px 42px, 42px 42px, auto;
         }
-        .benefit-item:hover {
-            border-color: rgba(255, 107, 0, 0.3);
-            background: rgba(255, 107, 0, 0.04);
-        }
-        .benefit-ico {
-            flex: 0 0 auto;
-            width: 2.6rem;
-            height: 2.6rem;
+        .zone {
+            position: relative;
             display: grid;
-            place-items: center;
-            border-radius: 0.75rem;
-            background: rgba(255, 107, 0, 0.1);
-            border: 1px solid rgba(255, 107, 0, 0.22);
-            font-size: 1.3rem;
+            grid-template-columns: 15rem 1fr;
+            gap: 1.75rem;
+            padding: 1.9rem 2rem 1.9rem 2.1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
+        .zone:first-child { border-top: 0; }
+        .zone::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 3px; background: var(--z); opacity: 0.9;
+        }
+        .zone-tag { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #64748b; }
+        .zone-name { margin-top: 0.5rem; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.035em; color: #fff; }
+        .zone-name span { font-size: 0.8rem; font-weight: 600; color: #94a3b8; margin-left: 0.35rem; letter-spacing: 0; }
+        .zone-desc { margin-top: 0.7rem; font-size: 0.88rem; line-height: 1.65; color: #94a3b8; }
+        .zone-team {
+            display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 1.05rem;
+            font-size: 0.72rem; font-weight: 800;
+            color: var(--z);
+            border: 1px solid color-mix(in srgb, var(--z) 42%, transparent);
+            background: color-mix(in srgb, var(--z) 13%, transparent);
+            padding: 0.32rem 0.72rem; border-radius: 9999px;
+        }
+        .zone-team::before { content: ''; width: 0.45rem; height: 0.45rem; border-radius: 9999px; background: var(--z); }
+        .zone-people { display: flex; flex-wrap: wrap; gap: 0.75rem; align-content: center; }
+        .mnode {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.55rem 1rem 0.55rem 0.55rem;
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.9rem;
+            background: rgba(255, 255, 255, 0.022);
+            cursor: pointer; text-align: left; font: inherit; color: inherit;
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+        .mnode:hover { border-color: color-mix(in srgb, var(--z) 55%, transparent); background: color-mix(in srgb, var(--z) 9%, transparent); transform: translateY(-2px); }
+        .mnode:focus-visible { outline: 2px solid var(--z); outline-offset: 2px; }
+        .mnode-ava { flex: 0 0 auto; width: 3rem; height: 3rem; border-radius: 9999px; overflow: hidden; border: 1.5px solid color-mix(in srgb, var(--z) 45%, rgba(255, 255, 255, 0.22)); background: #0b1728; }
+        .mnode-ava img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
+        .mnode-info { display: flex; flex-direction: column; gap: 0.08rem; }
+        .mnode-name { font-size: 0.98rem; font-weight: 800; color: #fff; letter-spacing: -0.01em; }
+        .mnode-role { font-size: 0.75rem; color: #94a3b8; font-weight: 500; }
+        .mnode-hiring { display: inline-flex; align-items: center; margin-top: 0.28rem; font-size: 0.7rem; font-weight: 800; color: var(--z); width: fit-content; }
+        .mnode-hiring::before { content: ''; width: 0.35rem; height: 0.35rem; border-radius: 9999px; background: var(--z); margin-right: 0.35rem; box-shadow: 0 0 0 3px color-mix(in srgb, var(--z) 22%, transparent); }
+        .mnode-hiring:hover { text-decoration: underline; }
+        .mnode-ava.is-initial { display: grid; place-items: center; color: var(--z); font-weight: 900; font-size: 1.15rem; background: color-mix(in srgb, var(--z) 16%, #0b1728); }
+
+        /* product portfolio pipeline */
+        .pflow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0.55rem; margin-bottom: 2.25rem; }
+        .pnode { flex: 1 1 0; min-width: 9rem; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem; background: rgba(255, 255, 255, 0.02); padding: 1.1rem 1.25rem; }
+        .pnode strong { display: block; font-size: 1.05rem; font-weight: 900; letter-spacing: -0.02em; color: #fff; }
+        .pnode span { display: block; margin-top: 0.3rem; font-size: 0.76rem; color: #94a3b8; font-weight: 600; }
+        .pnode.is-flag { border-color: color-mix(in srgb, var(--z) 55%, transparent); background: color-mix(in srgb, var(--z) 12%, transparent); }
+        .pnode.is-flag strong { color: var(--z); }
+        .parrow { display: grid; place-items: center; color: #475569; font-weight: 900; font-size: 1.1rem; flex: 0 0 auto; }
+
+        /* vertical-integration layer index + output */
+        .zone-idx { position: absolute; top: 1.4rem; right: 1.6rem; font-size: 2.5rem; font-weight: 900; line-height: 1; letter-spacing: -0.04em; color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--z) 45%, rgba(255, 255, 255, 0.08)); pointer-events: none; }
+        .zone-out { display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 1.05rem; font-size: 0.72rem; font-weight: 800; color: var(--z); border: 1px solid color-mix(in srgb, var(--z) 42%, transparent); background: color-mix(in srgb, var(--z) 13%, transparent); padding: 0.32rem 0.72rem; border-radius: 9999px; }
+        .zone-out::before { content: ''; width: 0.45rem; height: 0.45rem; border-radius: 2px; transform: rotate(45deg); background: var(--z); }
+
+        /* ===== Culture values ===== */
+        .value-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: #fff; }
+        .value-desc { margin-top: 0.95rem; color: #94a3b8; line-height: 1.85; font-size: 1rem; }
+
+        /* ===== Benefits list ===== */
+        .benefit {
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            padding: 1.7rem 0.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .benefit-ico { flex: 0 0 auto; width: 2.3rem; height: 2.3rem; color: var(--brand-orange); }
+        .benefit-ico svg { width: 100%; height: 100%; display: block; }
+        .benefit h4 { color: #fff; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
+        .benefit p { margin-top: 0.4rem; color: #94a3b8; font-size: 0.9rem; line-height: 1.65; }
+
+        /* ===== Startup vibe cards ===== */
+        .vibe-card {
+            border-radius: 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.75rem;
+            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+        }
+        .vibe-card:hover { transform: translateY(-4px); border-color: rgba(255, 107, 0, 0.35); background: rgba(255, 107, 0, 0.045); }
+        .vibe-emoji { display: block; font-size: 1.9rem; line-height: 1; }
+        .vibe-card h3 { margin-top: 1rem; color: #fff; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.02em; }
+        .vibe-card p { margin-top: 0.55rem; color: #94a3b8; font-size: 0.94rem; line-height: 1.7; }
+        .pull-quote {
+            margin-top: 1.5rem;
+            padding: 1.6rem 1.9rem;
+            border-radius: 1.1rem;
+            border: 1px solid rgba(255, 107, 0, 0.22);
+            background: rgba(255, 107, 0, 0.05);
+            color: #e2e8f0;
+            font-size: 1.08rem;
+            font-weight: 600;
+            line-height: 1.7;
+        }
+        .pull-quote b { color: var(--brand-orange); font-weight: 700; }
+        .pull-quote .pq-by { display: block; margin-top: 0.7rem; font-size: 0.85rem; font-weight: 700; color: #94a3b8; }
+
 
         /* ===== Recruitment process ===== */
-        .process-track {
+        .proc {
+            position: relative;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 1rem;
-            counter-reset: step;
+            gap: 1.5rem;
         }
-        .process-step {
+        .proc::before {
+            content: '';
+            position: absolute;
+            top: 1.35rem;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.16);
+        }
+        .proc-step { position: relative; text-align: center; }
+        .proc-node {
             position: relative;
-            text-align: center;
-            padding: 1.6rem 0.85rem;
-            border-radius: 1.1rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .process-step::before {
-            counter-increment: step;
-            content: counter(step, decimal-leading-zero);
-            display: inline-grid;
-            place-items: center;
+            z-index: 1;
             width: 2.7rem;
             height: 2.7rem;
-            margin: 0 auto 0.9rem;
+            margin: 0 auto 1.4rem;
+            display: grid;
+            place-items: center;
             border-radius: 9999px;
-            background: linear-gradient(135deg, var(--brand-orange), #ff8a3d);
-            color: #001529;
-            font-weight: 900;
-            font-size: 0.95rem;
-            box-shadow: 0 10px 24px rgba(255, 107, 0, 0.28);
+            background: #0f1f34;
+            border: 1.5px solid rgba(255, 255, 255, 0.22);
+            color: #e2e8f0;
+            font-weight: 800;
+            font-size: 0.9rem;
+            font-variant-numeric: tabular-nums;
         }
-        .process-step h4 { color: white; font-weight: 800; font-size: 1rem; }
-        .process-step p { margin-top: 0.45rem; color: #94a3b8; font-size: 0.8rem; line-height: 1.5; }
+        .proc-step:last-child .proc-node {
+            border-color: var(--brand-orange);
+            background: var(--brand-orange);
+            color: var(--brand-navy);
+            box-shadow: 0 8px 22px rgba(255, 107, 0, 0.32);
+        }
+        .proc-step h4 { color: #fff; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+        .proc-step p { margin-top: 0.5rem; color: #9aa8bd; font-size: 0.88rem; line-height: 1.55; }
 
         @media (max-width: 767px) {
-            .process-track { grid-template-columns: 1fr; gap: 0.75rem; }
-            .process-step { display: flex; align-items: center; text-align: left; gap: 1rem; padding: 1.1rem 1.25rem; }
-            .process-step::before { margin: 0; }
-            .stat-num { font-size: clamp(1.7rem, 8vw, 2.4rem); }
+            .sec-head { margin-bottom: 2.5rem; }
+            .stack { grid-template-columns: 1fr; }
+            .stack-axis { display: none; }
+            .layer { grid-template-columns: 1fr; gap: 0.5rem; padding: 1.4rem 1.35rem; }
+            .archmap { grid-template-columns: 1fr; }
+            .archmap-axis { display: none; }
+            .zone { grid-template-columns: 1fr; gap: 1.1rem; padding: 1.5rem 1.35rem; }
+            .zone-people { gap: 0.6rem; }
+            .mnode { width: 100%; }
+            .pflow { flex-direction: column; gap: 0.4rem; }
+            .parrow { transform: rotate(90deg); padding: 0.1rem 0; }
+            .zone-idx { font-size: 2rem; top: 1.1rem; right: 1.2rem; }
+            .hero-actions { width: 100%; }
+            .hero-btn-primary, .hero-btn-ghost { flex: 1 1 auto; justify-content: center; }
+            .proc { grid-template-columns: 1fr; gap: 0; }
+            .proc::before { top: 1.35rem; bottom: 1.35rem; left: 1.35rem; right: auto; width: 2px; height: auto; }
+            .proc-step { text-align: left; display: grid; grid-template-columns: auto 1fr; column-gap: 1.2rem; padding: 0.75rem 0; align-items: center; }
+            .proc-node { margin: 0; }
+            .proc-copy { padding-top: 0; }
         }
         @media (max-width: 767px) {
             .top-hero { min-height: 86vh; padding-top: 3rem; }
@@ -771,16 +964,17 @@
                     디노티시아<br>
                     <span class="text-orange">R&amp;D 집중 채용</span>
                 </h1>
+                <p class="hero-sub">반도체 칩부터 AI 모델까지 — 장기기억 AI를 함께 만들 동료를 찾습니다.</p>
+                <div class="hero-actions">
+                    <a href="https://dno.career.greetinghr.com/ko" target="_blank" rel="noopener" class="hero-btn-primary">디노티시아 채용 바로가기 →</a>
+                    <a href="#roles" class="hero-btn-ghost">직무 소개 보기</a>
+                </div>
             </div>
-            <div class="semiconductor-stage" aria-label="glowing semiconductor image">
+            <div class="semiconductor-stage">
                 <div class="chip-orbit"></div>
-                <div class="chip-visual" role="img" aria-label="빛나는 반도체 칩 이미지">
-                    <div class="chip-board"></div>
-                    <div class="chip-core"></div>
-                    <div class="chip-pins" aria-hidden="true">
-                        <span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span>
-                    </div>
+                <div class="chip-glow" aria-hidden="true"></div>
+                <div class="hero-chip-wrap">
+                    <img src="V110.png" class="hero-chip" alt="Dnotitia V110 · AI 연산 전용 반도체 칩">
                 </div>
             </div>
         </div>
@@ -809,30 +1003,8 @@
             <p class="text-white text-2xl md:text-3xl font-bold opacity-90">디노티시아와 함께합시다</p>
         </header>
 
-        <!-- Key Metrics Band -->
-        <section class="mb-24" aria-label="디노티시아 주요 성과">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-                <div class="stat-cell">
-                    <p class="stat-num">900<small>억 원</small></p>
-                    <p class="stat-label">Series A 투자 유치</p>
-                </div>
-                <div class="stat-cell">
-                    <p class="stat-num">TOP 100</p>
-                    <p class="stat-label">CB Insights 글로벌 AI 100 선정</p>
-                </div>
-                <div class="stat-cell">
-                    <p class="stat-num">세계 <small>최초</small></p>
-                    <p class="stat-label">벡터 데이터 연산 가속기 VDPU</p>
-                </div>
-                <div class="stat-cell">
-                    <p class="stat-num">4<small>대</small></p>
-                    <p class="stat-label">칩부터 모델까지 자체 핵심기술</p>
-                </div>
-            </div>
-        </section>
-
         <!-- Role Introduction -->
-        <section class="role-intro mb-24">
+        <section id="roles" class="role-intro mb-24">
             <div class="role-tabs" aria-label="직무소개 그룹 필터">
                 <button type="button" class="role-tab is-active" data-role-filter="all" aria-pressed="true">전체보기</button>
                 <button type="button" class="role-tab" data-role-filter="soc" aria-pressed="false">SoC그룹</button>
@@ -860,182 +1032,183 @@
             </div>
             <div class="role-empty-message" aria-live="polite">현재 선택한 그룹에는 공개된 직무소개 카드가 없습니다.</div>
         </section>
-        <!-- Recruitment Positions -->
-        <section class="mb-24">
-            <div class="flex items-center justify-center mb-16"><h2 class="section-title text-3xl font-black tracking-tight text-white">모집 직무</h2></div>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">01</span> SoC그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/196737" target="_blank" rel="noopener" class="job-link" data-open-interview="design-verification-engineer">Design Verification Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/196734" target="_blank" rel="noopener" class="job-link" data-open-interview="soc-rtl-design-engineer">SoC / RTL Design Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/203022" target="_blank" rel="noopener" class="job-link" data-open-interview="soc-pkg-board-hardware-engineer">SoC PKG / Board Hardware Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/203021" target="_blank" rel="noopener" class="job-link" data-open-interview="soc-firmware-engineer">SoC Firmware Engineer →</a></div></div>
-                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">02</span> SW그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/198745" target="_blank" rel="noopener" class="job-link" data-open-interview="device-driver-software-engineer">Device Driver Software Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/198793" target="_blank" rel="noopener" class="job-link" data-open-interview="firmware-software-engineer">Firmware Software Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/199727" target="_blank" rel="noopener" class="job-link" data-open-interview="vector-library-engineer">Vector Library Engineer →</a></div></div>
-                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">03</span> Data그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/200913" target="_blank" rel="noopener" class="job-link" data-open-interview="vector-database-engineer">Vector Database Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/198903" target="_blank" rel="noopener" class="job-link" data-open-interview="storage-system-software-engineer">Storage System Software Engineer →</a></div></div>
-                <div class="job-category-card p-8 rounded-2xl"><h3 class="text-orange font-black text-xl mb-6 flex items-center"><span class="mr-3 opacity-50 text-sm font-normal">04</span> Core그룹</h3><div class="space-y-4"><a href="https://dno.career.greetinghr.com/ko/o/198531" target="_blank" rel="noopener" class="job-link" data-open-interview="optimization-engineer">Optimization Engineer →</a><a href="https://dno.career.greetinghr.com/ko/o/206229" target="_blank" rel="noopener" class="job-link" data-open-interview="system-architect">System Architect →</a></div></div>
-            </div>
-        </section>
-        <!-- About Dnotitia Section (With Videos Inside) -->
-        <section class="glass-card rounded-3xl p-10 md:p-14 mb-24">
-            <h2 class="text-3xl font-bold mb-8 italic text-orange border-b border-white/10 pb-4">About Dnotitia</h2>
-            <div class="text-slate-300 leading-relaxed space-y-6 text-lg mb-12">
-                <p>디노티시아는 AI와 데이터 시스템의 융합을 통해 혁신적인 가치를 창출하는 <a href="https://www.koit.co.kr/news/articleView.html?idxno=205883" target="_blank" class="news-link">장기기억 인공지능 전문기업</a>으로, CB Insights의 <a href="https://zdnet.co.kr/view/?no=20250425111526" target="_blank" class="news-link">‘2025 글로벌 AI 100’</a>에 선정되며 기술력을 인정받았습니다.</p>
-                <p>디노티시아는 세계 최초로 개발한 벡터 데이터 연산 가속기 <a href="https://www.epnc.co.kr/news/articleView.html?idxno=328142" target="_blank" class="news-link">'VDPU'</a>를 기반으로 고성능 벡터 데이터베이스 <a href="https://www.etnews.com/20260324000436" target="_blank" class="news-link">‘SEAHORSE(씨홀스)’</a>를 선보이고 있으며, 이를 통해 생성형 인공지능의 핵심 기술인 RAG 솔루션을 구현하고 있습니다.</p>
-                <p>또한 독자적으로 개발한 LLM 파운데이션 모델 <a href="https://www.digitaltoday.co.kr/news/articleView.html?idxno=580007" target="_blank" class="news-link">'DNA'</a>를 활용한 엣지 디바이스 <a href="http://www.itdaily.kr/news/articleView.html?idxno=237265" target="_blank" class="news-link">‘MNEMOS(니모스)’</a>를 통해 개인화된 AI 경험을 제공하고 있습니다.</p>
-            </div>
 
-            <!-- YouTube Video Grid Inside About Section -->
-            <div class="grid md:grid-cols-2 gap-8 border-t border-white/10 pt-10">
-                <!-- Video 1 -->
-                <div class="space-y-3">
-                    <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
-                        <iframe src="https://www.youtube.com/embed/_V_CGUpwKJ8?rel=0" title="Dnotitia Vision Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                    </div>
-                    <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">디노티시아가 여는 새로운 AI 시대</p>
+        <!-- How We Collaborate -->
+        <section class="mb-24">
+            <div class="sec-head">
+                <span class="eyebrow">🤝 How We Work</span>
+                <h2 class="sec-title">우리는 이렇게 협업해요</h2>
+                <p class="sec-lede">직무는 달라도, 인터뷰에서 팀원들이 공통으로 꼽은 협업의 원칙이에요.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="vibe-card">
+                    <span class="vibe-emoji">💬</span>
+                    <h3>이해될 때까지 질문해요</h3>
+                    <p>그 순간엔 시간이 걸려도, 서로 완전히 이해하고 나면 실수가 줄고 결국 더 빨라져요.</p>
                 </div>
-                <!-- Video 2 -->
-                <div class="space-y-3">
-                    <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
-                        <iframe src="https://www.youtube.com/embed/xPEdPYyrbwk?rel=0" title="Dnotitia Technology Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                    </div>
-                    <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">장기기억 AI 기술의 혁신과 비전</p>
+                <div class="vibe-card">
+                    <span class="vibe-emoji">📊</span>
+                    <h3>감이 아니라 근거로</h3>
+                    <p>로그·시뮬레이션·계측 데이터 같은 객관적인 근거로 이야기하면 합의가 빨라요.</p>
                 </div>
+                <div class="vibe-card">
+                    <span class="vibe-emoji">📝</span>
+                    <h3>기록으로 같은 그림을</h3>
+                    <p>결정은 문서로 남겨, 모두가 같은 방향을 바라보게 해요.</p>
+                </div>
+                <div class="vibe-card">
+                    <span class="vibe-emoji">🧩</span>
+                    <h3>직급보다 문제 중심</h3>
+                    <p>연차와 상관없이 자유롭게 의견 내고, 책임을 따지기보다 함께 문제를 풀어요.</p>
+                </div>
+            </div>
+            <div class="pull-quote">
+                “결국 협업에서 가장 중요한 건, <b>빠르고 명확한 소통으로 쌓는 신뢰</b>라고 생각해요.”
+                <span class="pq-by">— SoC Firmware Engineer 김영일</span>
             </div>
         </section>
 
-        <!-- Technology & Products -->
+        <!-- Why Dnotitia -->
         <section class="mb-24">
-            <div class="flex items-center justify-center mb-6"><h2 class="section-title text-3xl font-black tracking-tight text-white">핵심 기술 &amp; 제품</h2></div>
-            <p class="text-center text-slate-400 max-w-2xl mx-auto mb-16 leading-relaxed">칩(Chip)부터 소프트웨어, 데이터베이스, 파운데이션 모델까지 —<br class="hidden md:block">AI 인프라의 전 계층을 직접 설계하는 <span class="text-orange font-bold">Full Stack AI Infra</span> 기업입니다.</p>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="feature-card">
-                    <div class="flex items-center justify-between mb-5">
-                        <span class="mono-badge">VDPU</span>
-                        <span class="product-tag">Hardware</span>
-                    </div>
-                    <h3 class="text-white text-xl font-black mb-2">VDPU</h3>
-                    <p class="text-slate-400 leading-relaxed">세계 최초로 개발한 <span class="text-slate-200 font-semibold">벡터 데이터 연산 가속기</span>. 벡터 연산을 하드웨어 레벨에서 가속해 AI 인프라의 성능 한계를 끌어올립니다.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="flex items-center justify-between mb-5">
-                        <span class="mono-badge">SH</span>
-                        <span class="product-tag">Database</span>
-                    </div>
-                    <h3 class="text-white text-xl font-black mb-2">SEAHORSE <span class="text-slate-400 text-base font-semibold">씨홀스</span></h3>
-                    <p class="text-slate-400 leading-relaxed">VDPU 기반의 <span class="text-slate-200 font-semibold">고성능 벡터 데이터베이스</span>. 생성형 AI의 핵심인 RAG를 위한 대규모 검색·저장을 책임집니다.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="flex items-center justify-between mb-5">
-                        <span class="mono-badge">DNA</span>
-                        <span class="product-tag">LLM</span>
-                    </div>
-                    <h3 class="text-white text-xl font-black mb-2">DNA</h3>
-                    <p class="text-slate-400 leading-relaxed">독자적으로 개발한 <span class="text-slate-200 font-semibold">LLM 파운데이션 모델</span>. 온디바이스 환경까지 겨냥한 효율적인 언어모델로 개인화 AI의 두뇌 역할을 합니다.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="flex items-center justify-between mb-5">
-                        <span class="mono-badge">MN</span>
-                        <span class="product-tag">On-Device</span>
-                    </div>
-                    <h3 class="text-white text-xl font-black mb-2">MNEMOS <span class="text-slate-400 text-base font-semibold">니모스</span></h3>
-                    <p class="text-slate-400 leading-relaxed">DNA 모델을 탑재한 <span class="text-slate-200 font-semibold">엣지 디바이스</span>. 클라우드 없이도 개인화된, 기억하는 AI 경험을 제공합니다.</p>
-                </div>
+            <div class="sec-head">
+                <span class="eyebrow">✨ Why Dnotitia</span>
+                <h2 class="sec-title">여기서만 할 수 있는 경험</h2>
+                <p class="sec-lede">대기업과 무엇이 다른지, 팀원들이 직접 느낀 디노티시아의 좋은 점이에요.</p>
             </div>
-        </section>
-
-        <!-- Culture & Core Values -->
-        <section class="mb-24">
-            <div class="flex items-center justify-center mb-16"><h2 class="section-title text-3xl font-black tracking-tight text-white">일하는 문화</h2></div>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="feature-card">
-                    <span class="mono-badge mb-5">01</span>
-                    <h3 class="text-white text-lg font-black mb-2">본질에 집중합니다</h3>
-                    <p class="text-slate-400 leading-relaxed">직급보다 문제의 본질과 근거를 봅니다. 가장 좋은 아이디어가 이기는 자리를 만듭니다.</p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="vibe-card">
+                    <span class="vibe-emoji">🚀</span>
+                    <h3>세상에 없던 칩을 처음부터</h3>
+                    <p>세계 최초 VDPU. 레퍼런스 없이 새로운 AI 반도체를 직접 설계하고 구현해요.</p>
                 </div>
-                <div class="feature-card">
-                    <span class="mono-badge mb-5">02</span>
-                    <h3 class="text-white text-lg font-black mb-2">빠르게 실험합니다</h3>
-                    <p class="text-slate-400 leading-relaxed">완벽한 계획보다 빠른 시도를 택합니다. 데이터를 기준으로 논의하고 방향을 잡습니다.</p>
+                <div class="vibe-card">
+                    <span class="vibe-emoji">🎯</span>
+                    <h3>내 아이디어가 제품이 돼요</h3>
+                    <p>빠른 의사결정과 큰 영향력. 제안이 실제 설계에 반영되는 걸 눈으로 확인해요.</p>
                 </div>
-                <div class="feature-card">
-                    <span class="mono-badge mb-5">03</span>
-                    <h3 class="text-white text-lg font-black mb-2">전문성을 존중합니다</h3>
-                    <p class="text-slate-400 leading-relaxed">서로의 전문 영역을 신뢰하고, 팀 전체의 결과물을 함께 키워가는 협업을 지향합니다.</p>
+                <div class="vibe-card">
+                    <span class="vibe-emoji">🌱</span>
+                    <h3>설계부터 양산까지</h3>
+                    <p>파편이 아니라 제품의 전 과정을 가까이서 경험하며 빠르게 성장해요.</p>
+                </div>
+                <div class="vibe-card">
+                    <span class="vibe-emoji">🗣️</span>
+                    <h3>솔직한 피드백이 환영받아요</h3>
+                    <p>개선점을 솔직히 말해도 괜찮은 문화. 매일 조금씩 더 나은 방향으로 나아가요.</p>
+                </div>
+                <div class="vibe-card">
+                    <span class="vibe-emoji">🔗</span>
+                    <h3>팀 경계가 유연해요</h3>
+                    <p>문제가 생기면 팀을 넘어 함께 모여 원인을 찾고 해결해요.</p>
+                </div>
+                <div class="vibe-card">
+                    <span class="vibe-emoji">🔥</span>
+                    <h3>배우고 성장하는 동료들</h3>
+                    <p>업무에서도 삶에서도 매일 배우게 되는, 향상심 있는 사람들과 함께해요.</p>
                 </div>
             </div>
         </section>
 
         <!-- Benefits -->
         <section class="mb-24">
-            <div class="flex items-center justify-center mb-16"><h2 class="section-title text-3xl font-black tracking-tight text-white">성장과 복지</h2></div>
-            <div class="grid md:grid-cols-2 gap-4">
-                <div class="benefit-item">
-                    <span class="benefit-ico">🧭</span>
-                    <div>
-                        <h4 class="text-white font-bold mb-1">유연근무 &amp; 재택근무</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">몰입할 수 있는 시간과 공간을 스스로 설계합니다.</p>
-                    </div>
+            <div class="grid md:grid-cols-[0.85fr_1.15fr] gap-x-16 gap-y-8 items-start">
+                <div class="sec-head md:mb-0 md:sticky md:top-8">
+                    <span class="eyebrow">🎁 Life at Dnotitia</span>
+                    <h2 class="sec-title">성장에 집중할 수 있는<br>환경을 만듭니다</h2>
+                    <p class="sec-lede">일 자체에 몰입할 수 있도록, 시간과 공간, 장비, 성장의 기회를 함께 설계합니다.</p>
                 </div>
-                <div class="benefit-item">
-                    <span class="benefit-ico">💻</span>
-                    <div>
-                        <h4 class="text-white font-bold mb-1">최고 사양의 장비</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">업무 몰입을 위한 최상의 개발 환경과 장비를 지원합니다.</p>
+                <div class="grid sm:grid-cols-2 gap-x-10">
+                    <div class="benefit">
+                        <span class="benefit-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+                        <div>
+                            <h4>유연근무 &amp; 재택근무</h4>
+                            <p>몰입할 수 있는 시간과 공간을 스스로 설계합니다.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-ico">📈</span>
-                    <div>
-                        <h4 class="text-white font-bold mb-1">성장 지원</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">도서·교육·컨퍼런스 등 배움과 성장에 필요한 것을 함께합니다.</p>
+                    <div class="benefit">
+                        <span class="benefit-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg></span>
+                        <div>
+                            <h4>최고 사양의 장비</h4>
+                            <p>업무 몰입을 위한 최상의 개발 환경과 장비를 지원합니다.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-ico">🍽️</span>
-                    <div>
-                        <h4 class="text-white font-bold mb-1">식사 &amp; 간식 지원</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">잘 먹고 일할 수 있도록 식사와 간식·음료를 챙깁니다.</p>
+                    <div class="benefit">
+                        <span class="benefit-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-7"/><path d="M17 8h4v4"/></svg></span>
+                        <div>
+                            <h4>성장 지원</h4>
+                            <p>도서·교육·컨퍼런스 등 배움과 성장에 필요한 것을 함께합니다.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-ico">🏥</span>
-                    <div>
-                        <h4 class="text-white font-bold mb-1">건강 관리</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">건강검진 등 구성원의 건강한 일상을 지원합니다.</p>
+                    <div class="benefit">
+                        <span class="benefit-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h11v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V8Z"/><path d="M16 9h2.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3v2M12 3v2"/></svg></span>
+                        <div>
+                            <h4>식사 &amp; 간식 지원</h4>
+                            <p>잘 먹고 일할 수 있도록 식사와 간식·음료를 챙깁니다.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-ico">🚀</span>
-                    <div>
-                        <h4 class="text-white font-bold mb-1">함께 성장하는 보상</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">회사의 성장을 구성원과 함께 나누는 보상 체계를 지향합니다.</p>
+                    <div class="benefit">
+                        <span class="benefit-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-14 2 8h6"/></svg></span>
+                        <div>
+                            <h4>건강 관리</h4>
+                            <p>건강검진 등 구성원의 건강한 일상을 지원합니다.</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <span class="benefit-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M9 13.5 7.5 21 12 18l4.5 3L15 13.5"/></svg></span>
+                        <div>
+                            <h4>함께 나누는 보상</h4>
+                            <p>회사의 성장을 구성원과 함께 나누는 보상 체계를 지향합니다.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <p class="text-center text-slate-500 text-xs mt-6">* 세부 복지 항목은 직무·고용형태에 따라 달라질 수 있습니다.</p>
+            <p class="text-slate-500 text-xs mt-8">* 세부 복지 항목은 직무·고용형태에 따라 달라질 수 있습니다.</p>
         </section>
 
         <!-- Recruitment Process -->
         <section class="mb-24">
-            <div class="flex items-center justify-center mb-16"><h2 class="section-title text-3xl font-black tracking-tight text-white">채용 프로세스</h2></div>
-            <div class="process-track">
-                <div class="process-step">
-                    <h4>서류 전형</h4>
-                    <p>지원서와 이력을 통해 함께할 여정을 확인합니다.</p>
+            <div class="sec-head">
+                <span class="eyebrow">📮 Hiring Process</span>
+                <h2 class="sec-title">지원부터 합류까지</h2>
+            </div>
+            <div class="proc">
+                <div class="proc-step">
+                    <div class="proc-node">1</div>
+                    <div class="proc-copy">
+                        <h4>서류 전형</h4>
+                        <p>지원서 검토</p>
+                    </div>
                 </div>
-                <div class="process-step">
-                    <h4>실무 인터뷰</h4>
-                    <p>전문 영역에 대해 깊이 있게 대화합니다.</p>
+                <div class="proc-step">
+                    <div class="proc-node">2</div>
+                    <div class="proc-copy">
+                        <h4>실무 인터뷰</h4>
+                        <p>직무 심층 대화</p>
+                    </div>
                 </div>
-                <div class="process-step">
-                    <h4>컬처핏 인터뷰</h4>
-                    <p>일하는 방식과 방향이 서로 맞는지 나눕니다.</p>
+                <div class="proc-step">
+                    <div class="proc-node">3</div>
+                    <div class="proc-copy">
+                        <h4>컬처핏 인터뷰</h4>
+                        <p>팀 적합성 확인</p>
+                    </div>
                 </div>
-                <div class="process-step">
-                    <h4>처우 협의</h4>
-                    <p>합류 조건을 투명하게 논의합니다.</p>
+                <div class="proc-step">
+                    <div class="proc-node">4</div>
+                    <div class="proc-copy">
+                        <h4>처우 협의</h4>
+                        <p>합류 조건 논의</p>
+                    </div>
                 </div>
-                <div class="process-step">
-                    <h4>최종 합류</h4>
-                    <p>디노티시아의 여정에 함께합니다.</p>
+                <div class="proc-step">
+                    <div class="proc-node">5</div>
+                    <div class="proc-copy">
+                        <h4>최종 합류</h4>
+                        <p>함께 시작</p>
+                    </div>
                 </div>
             </div>
-            <p class="text-center text-slate-500 text-xs mt-6">* 전형 절차는 직무에 따라 일부 달라질 수 있습니다.</p>
+            <p class="text-slate-500 text-xs mt-8">* 전형 절차는 직무에 따라 일부 달라질 수 있습니다.</p>
         </section>
 
         <!-- CTA Section -->
