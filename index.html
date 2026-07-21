@@ -719,6 +719,39 @@
         }
         .hero-btn-ghost:hover { border-color: rgba(255, 107, 0, 0.5); background: rgba(255, 107, 0, 0.08); color: #fff; }
 
+        /* ===== Hero V110 chip ===== */
+        .chip-glow {
+            position: absolute;
+            width: min(78%, 460px);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.22), transparent 62%);
+            filter: blur(26px);
+            animation: chipGlowPulse 6.5s ease-in-out infinite;
+            z-index: -1;
+        }
+        .hero-chip-wrap { position: relative; width: min(94%, 560px); aspect-ratio: 1 / 1; display: grid; place-items: center; }
+        .hero-chip {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: 50% 45%;
+            -webkit-mask-image: radial-gradient(72% 68% at 50% 46%, #000 48%, transparent 74%);
+            mask-image: radial-gradient(72% 68% at 50% 46%, #000 48%, transparent 74%);
+            filter: drop-shadow(0 34px 55px rgba(0, 0, 0, 0.55));
+            animation: chipBreath 6.5s ease-in-out infinite;
+        }
+        @keyframes chipBreath {
+            0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+            50% { transform: translateY(-14px) scale(1.02) rotate(-0.6deg); }
+        }
+        @keyframes chipGlowPulse {
+            0%, 100% { opacity: 0.55; transform: scale(0.94); }
+            50% { opacity: 1; transform: scale(1.06); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-chip, .chip-glow { animation: none; }
+        }
+
         /* ===== Product architecture map ===== */
         .archmap { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; }
         .archmap-axis { display: flex; flex-direction: column; align-items: center; padding: 1.2rem 0; }
@@ -780,6 +813,21 @@
         .mnode-hiring { display: inline-flex; align-items: center; margin-top: 0.28rem; font-size: 0.7rem; font-weight: 800; color: var(--z); width: fit-content; }
         .mnode-hiring::before { content: ''; width: 0.35rem; height: 0.35rem; border-radius: 9999px; background: var(--z); margin-right: 0.35rem; box-shadow: 0 0 0 3px color-mix(in srgb, var(--z) 22%, transparent); }
         .mnode-hiring:hover { text-decoration: underline; }
+        .mnode-ava.is-initial { display: grid; place-items: center; color: var(--z); font-weight: 900; font-size: 1.15rem; background: color-mix(in srgb, var(--z) 16%, #0b1728); }
+
+        /* product portfolio pipeline */
+        .pflow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0.55rem; margin-bottom: 2.25rem; }
+        .pnode { flex: 1 1 0; min-width: 9rem; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem; background: rgba(255, 255, 255, 0.02); padding: 1.1rem 1.25rem; }
+        .pnode strong { display: block; font-size: 1.05rem; font-weight: 900; letter-spacing: -0.02em; color: #fff; }
+        .pnode span { display: block; margin-top: 0.3rem; font-size: 0.76rem; color: #94a3b8; font-weight: 600; }
+        .pnode.is-flag { border-color: color-mix(in srgb, var(--z) 55%, transparent); background: color-mix(in srgb, var(--z) 12%, transparent); }
+        .pnode.is-flag strong { color: var(--z); }
+        .parrow { display: grid; place-items: center; color: #475569; font-weight: 900; font-size: 1.1rem; flex: 0 0 auto; }
+
+        /* vertical-integration layer index + output */
+        .zone-idx { position: absolute; top: 1.4rem; right: 1.6rem; font-size: 2.5rem; font-weight: 900; line-height: 1; letter-spacing: -0.04em; color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--z) 45%, rgba(255, 255, 255, 0.08)); pointer-events: none; }
+        .zone-out { display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 1.05rem; font-size: 0.72rem; font-weight: 800; color: var(--z); border: 1px solid color-mix(in srgb, var(--z) 42%, transparent); background: color-mix(in srgb, var(--z) 13%, transparent); padding: 0.32rem 0.72rem; border-radius: 9999px; }
+        .zone-out::before { content: ''; width: 0.45rem; height: 0.45rem; border-radius: 2px; transform: rotate(45deg); background: var(--z); }
 
         /* ===== Culture values ===== */
         .value-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: #fff; }
@@ -850,6 +898,9 @@
             .zone { grid-template-columns: 1fr; gap: 1.1rem; padding: 1.5rem 1.35rem; }
             .zone-people { gap: 0.6rem; }
             .mnode { width: 100%; }
+            .pflow { flex-direction: column; gap: 0.4rem; }
+            .parrow { transform: rotate(90deg); padding: 0.1rem 0; }
+            .zone-idx { font-size: 2rem; top: 1.1rem; right: 1.2rem; }
             .hero-actions { width: 100%; }
             .hero-btn-primary, .hero-btn-ghost { flex: 1 1 auto; justify-content: center; }
             .proc { grid-template-columns: 1fr; gap: 0; }
@@ -892,15 +943,11 @@
                     <a href="#archmap" class="hero-btn-ghost">직무 지도 살펴보기</a>
                 </div>
             </div>
-            <div class="semiconductor-stage" aria-label="glowing semiconductor image">
+            <div class="semiconductor-stage">
                 <div class="chip-orbit"></div>
-                <div class="chip-visual" role="img" aria-label="빛나는 반도체 칩 이미지">
-                    <div class="chip-board"></div>
-                    <div class="chip-core"></div>
-                    <div class="chip-pins" aria-hidden="true">
-                        <span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span>
-                    </div>
+                <div class="chip-glow" aria-hidden="true"></div>
+                <div class="hero-chip-wrap">
+                    <img src="V110.png" class="hero-chip" alt="Dnotitia V110 · AI 연산 전용 반도체 칩">
                 </div>
             </div>
         </div>
@@ -910,7 +957,7 @@
         <!-- Header Section -->
         <header class="text-center mb-24">
             <div class="mb-10">
-                <span class="logo-text text-6xl md:text-7xl text-white">dnotitia</span>
+                <span class="logo-text text-6xl md:text-7xl text-white">Dnotitia</span>
             </div>
             
             <!-- 인증 및 투자 정보 모듈 -->
@@ -929,113 +976,142 @@
             <p class="text-white text-2xl md:text-3xl font-bold opacity-90">디노티시아와 함께합시다</p>
         </header>
 
-        <!-- Product × Team × People Map -->
+        <!-- Vertical Integration Map -->
         <section id="archmap" class="mb-24">
             <div class="sec-head">
-                <span class="eyebrow">Product · Team · People</span>
-                <h2 class="sec-title">우리 제품은,<br>이 사람들이 만듭니다</h2>
-                <p class="sec-lede">제품 스택의 각 계층을 <b>어느 팀이 맡고, 지금 어떤 자리를 채우고 있는지</b> 한 장의 지도에 담았습니다.<br class="hidden md:block"><b>사람을 누르면</b> 직무 인터뷰가, <b>채용중을 누르면</b> 지원 페이지가 열립니다.</p>
+                <span class="eyebrow">Vertical Integration</span>
+                <h2 class="sec-title">반도체부터 AI 서비스까지,<br>직접 만듭니다</h2>
+                <p class="sec-lede">System Architect가 전체를 설계하고, <b>VDPU 반도체</b>와 <b>SEAHORSE 데이터 플랫폼</b>을 축으로 —<br class="hidden md:block">칩부터 서비스까지 하나의 팀이 수직 통합으로 개발합니다. <b>사람을 누르면</b> 인터뷰, <b>채용중을 누르면</b> 지원 페이지가 열립니다.</p>
             </div>
 
-            <div class="archmap">
-                <div class="archmap-axis" aria-hidden="true">
-                    <span>SW</span>
-                    <div class="rail"></div>
-                    <span>HW</span>
-                </div>
-                <div class="archmap-body">
-
-                    <div class="zone" style="--z:#8b96ff">
-                        <div class="zone-head">
-                            <p class="zone-tag">On-Device AI</p>
-                            <h3 class="zone-name">MNEMOS <span>니모스</span></h3>
-                            <p class="zone-desc">DNA 모델을 탑재한 엣지 디바이스. 개인화된, 기억하는 AI 경험을 만듭니다.</p>
-                            <span class="zone-team">SW그룹</span>
-                        </div>
-                        <div class="zone-people">
-                            <div class="mnode" data-interview-id="device-driver-software-engineer" role="button" tabindex="0" aria-label="김성희 Device Driver Software Engineer 인터뷰 보기">
-                                <span class="mnode-ava"><img src="kim-sunghee-device-driver-software-engineer.png" alt="김성희"></span>
-                                <span class="mnode-info"><span class="mnode-name">김성희</span><span class="mnode-role">Device Driver SW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198745" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                            <div class="mnode" data-interview-id="firmware-software-engineer" role="button" tabindex="0" aria-label="이종성 Firmware Software Engineer 인터뷰 보기">
-                                <span class="mnode-ava"><img src="lee-jongsung-firmware-software-engineer.png" alt="이종성"></span>
-                                <span class="mnode-info"><span class="mnode-name">이종성</span><span class="mnode-role">Firmware SW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198793" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="zone" style="--z:#a78bfa">
-                        <div class="zone-head">
-                            <p class="zone-tag">Foundation Model</p>
-                            <h3 class="zone-name">DNA</h3>
-                            <p class="zone-desc">온디바이스까지 겨냥한 자체 개발 LLM. 개인화 AI의 두뇌 역할을 합니다.</p>
-                            <span class="zone-team">Core그룹</span>
-                        </div>
-                        <div class="zone-people">
-                            <div class="mnode" data-interview-id="optimization-engineer" role="button" tabindex="0" aria-label="장수형 Optimization Engineer 인터뷰 보기">
-                                <span class="mnode-ava"><img src="jang-suhyung-optimization-engineer.png" alt="장수형"></span>
-                                <span class="mnode-info"><span class="mnode-name">장수형</span><span class="mnode-role">Optimization Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198531" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                            <div class="mnode" data-interview-id="system-architect" role="button" tabindex="0" aria-label="백진환 System Architect 인터뷰 보기">
-                                <span class="mnode-ava"><img src="baek-jinhwan-system-architect.png" alt="백진환"></span>
-                                <span class="mnode-info"><span class="mnode-name">백진환</span><span class="mnode-role">System Architect</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/206229" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="zone" style="--z:#34d3bf">
-                        <div class="zone-head">
-                            <p class="zone-tag">Vector Database</p>
-                            <h3 class="zone-name">SEAHORSE <span>씨홀스</span></h3>
-                            <p class="zone-desc">VDPU로 가속하는 고성능 벡터 데이터베이스. 생성형 AI의 RAG를 책임집니다.</p>
-                            <span class="zone-team">Data그룹</span>
-                        </div>
-                        <div class="zone-people">
-                            <div class="mnode" data-interview-id="vector-database-engineer" role="button" tabindex="0" aria-label="정주현 Vector Database Engineer 인터뷰 보기">
-                                <span class="mnode-ava"><img src="jung-juhyun-vector-database-engineer.png" alt="정주현"></span>
-                                <span class="mnode-info"><span class="mnode-name">정주현</span><span class="mnode-role">Vector Database Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/200913" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                            <div class="mnode" data-interview-id="storage-system-software-engineer" role="button" tabindex="0" aria-label="임근우 Storage System Software Engineer 인터뷰 보기">
-                                <span class="mnode-ava"><img src="lim-geunwoo-storage-system-software-engineer.png" alt="임근우"></span>
-                                <span class="mnode-info"><span class="mnode-name">임근우</span><span class="mnode-role">Storage System SW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198903" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="zone" style="--z:#ff7a2f">
-                        <div class="zone-head">
-                            <p class="zone-tag">Hardware Accelerator</p>
-                            <h3 class="zone-name">VDPU</h3>
-                            <p class="zone-desc">세계 최초 벡터 데이터 연산 가속기. 스택 전체의 성능을 밑에서 떠받치는 실리콘입니다.</p>
-                            <span class="zone-team">SoC그룹</span>
-                        </div>
-                        <div class="zone-people">
-                            <div class="mnode" data-interview-id="soc-rtl-design-engineer" role="button" tabindex="0" aria-label="함은경 SoC / RTL Design Engineer 인터뷰 보기">
-                                <span class="mnode-ava"><img src="ham-eunkyung-soc-rtl-design-engineer.png" alt="함은경"></span>
-                                <span class="mnode-info"><span class="mnode-name">함은경</span><span class="mnode-role">SoC / RTL Design Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/196734" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                            <div class="mnode" data-interview-id="design-verification-engineer" role="button" tabindex="0" aria-label="손현욱 Design Verification Engineer 인터뷰 보기">
-                                <span class="mnode-ava"><img src="son-hyunwook-soc-dv-engineer.png" alt="손현욱"></span>
-                                <span class="mnode-info"><span class="mnode-name">손현욱</span><span class="mnode-role">Design Verification Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/196737" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                            <div class="mnode" data-interview-id="soc-pkg-board-hardware-engineer" role="button" tabindex="0" aria-label="안우진 SoC PKG / Board Hardware Engineer 인터뷰 보기">
-                                <span class="mnode-ava"><img src="ahn-woojin-soc-pkg-board-hardware-engineer.png" alt="안우진"></span>
-                                <span class="mnode-info"><span class="mnode-name">안우진</span><span class="mnode-role">SoC PKG / Board HW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/203022" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                            <div class="mnode" data-interview-id="soc-firmware-engineer" role="button" tabindex="0" aria-label="김영일 SoC Firmware Engineer 인터뷰 보기">
-                                <span class="mnode-ava"><img src="kim-youngil-soc-firmware-engineer.png" alt="김영일"></span>
-                                <span class="mnode-info"><span class="mnode-name">김영일</span><span class="mnode-role">SoC Firmware Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/203021" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                            <div class="mnode" data-interview-id="vector-library-engineer" role="button" tabindex="0" aria-label="김유찬 Vector Library Engineer 인터뷰 보기">
-                                <span class="mnode-ava"><img src="kim-yuchan-vector-library-engineer.png" alt="김유찬"></span>
-                                <span class="mnode-info"><span class="mnode-name">김유찬</span><span class="mnode-role">Vector Library Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/199727" target="_blank" rel="noopener">채용중</a></span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+            <div class="pflow" aria-label="제품 연결 구조">
+                <div class="pnode is-flag" style="--z:#ff7a2f"><strong>VDPU</strong><span>AI 연산 전용 반도체</span></div>
+                <span class="parrow" aria-hidden="true">→</span>
+                <div class="pnode"><strong>VDPU SDK</strong><span>연산·검색 가속 라이브러리</span></div>
+                <span class="parrow" aria-hidden="true">→</span>
+                <div class="pnode is-flag" style="--z:#2dd4bf"><strong>SEAHORSE</strong><span>벡터 DB · 관리형 클라우드</span></div>
+                <span class="parrow" aria-hidden="true">→</span>
+                <div class="pnode"><strong>AI Agent</strong><span>데이터로 일하는 AI 서비스</span></div>
             </div>
-            <p class="text-slate-500 text-xs mt-5">* 왼쪽 축은 소프트웨어(위)–하드웨어(아래) 계층을, 색은 담당 그룹을 나타냅니다.</p>
+
+            <div class="archmap-body">
+
+                <div class="zone" style="--z:#6c7bff">
+                    <div class="zone-head">
+                        <span class="zone-idx" aria-hidden="true">01</span>
+                        <h3 class="zone-name">System Architect</h3>
+                        <p class="zone-desc">반도체–SW–클라우드–AI 전 영역의 아키텍처와 데이터 흐름을 설계합니다.</p>
+                        <span class="zone-out">전체 시스템 설계</span>
+                    </div>
+                    <div class="zone-people">
+                        <div class="mnode" data-interview-id="system-architect" role="button" tabindex="0" aria-label="백진환 System Architect 인터뷰 보기">
+                            <span class="mnode-ava"><img src="baek-jinhwan-system-architect.png" alt="백진환"></span>
+                            <span class="mnode-info"><span class="mnode-name">백진환</span><span class="mnode-role">System Architect</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/206229" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="zone" style="--z:#ff7a2f">
+                    <div class="zone-head">
+                        <span class="zone-idx" aria-hidden="true">02</span>
+                        <h3 class="zone-name">SoC</h3>
+                        <p class="zone-desc">AI 연산 전용 반도체를 직접 설계하고 검증합니다.</p>
+                        <span class="zone-out">제품 · VDPU</span>
+                    </div>
+                    <div class="zone-people">
+                        <div class="mnode" data-interview-id="soc-rtl-design-engineer" role="button" tabindex="0" aria-label="함은경 SoC / RTL Design Engineer 인터뷰 보기">
+                            <span class="mnode-ava"><img src="ham-eunkyung-soc-rtl-design-engineer.png" alt="함은경"></span>
+                            <span class="mnode-info"><span class="mnode-name">함은경</span><span class="mnode-role">SoC / RTL Design</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/196734" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                        <div class="mnode" data-interview-id="design-verification-engineer" role="button" tabindex="0" aria-label="손현욱 Design Verification Engineer 인터뷰 보기">
+                            <span class="mnode-ava"><img src="son-hyunwook-soc-dv-engineer.png" alt="손현욱"></span>
+                            <span class="mnode-info"><span class="mnode-name">손현욱</span><span class="mnode-role">Design Verification</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/196737" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                        <div class="mnode" data-interview-id="soc-firmware-engineer" role="button" tabindex="0" aria-label="김영일 SoC Firmware Engineer 인터뷰 보기">
+                            <span class="mnode-ava"><img src="kim-youngil-soc-firmware-engineer.png" alt="김영일"></span>
+                            <span class="mnode-info"><span class="mnode-name">김영일</span><span class="mnode-role">SoC Firmware</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/203021" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                        <div class="mnode" data-interview-id="soc-pkg-board-hardware-engineer" role="button" tabindex="0" aria-label="안우진 SoC PKG / Board Hardware Engineer 인터뷰 보기">
+                            <span class="mnode-ava"><img src="ahn-woojin-soc-pkg-board-hardware-engineer.png" alt="안우진"></span>
+                            <span class="mnode-info"><span class="mnode-name">안우진</span><span class="mnode-role">SoC PKG / Board HW</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/203022" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="zone" style="--z:#3b82f6">
+                    <div class="zone-head">
+                        <span class="zone-idx" aria-hidden="true">03</span>
+                        <h3 class="zone-name">System SW</h3>
+                        <p class="zone-desc">드라이버·펌웨어·BSP로 칩을 OS와 애플리케이션에서 쓸 수 있게 만듭니다.</p>
+                        <span class="zone-out">System SW Stack</span>
+                    </div>
+                    <div class="zone-people">
+                        <div class="mnode" data-interview-id="firmware-software-engineer" role="button" tabindex="0" aria-label="이종성 Firmware Software Engineer 인터뷰 보기">
+                            <span class="mnode-ava"><img src="lee-jongsung-firmware-software-engineer.png" alt="이종성"></span>
+                            <span class="mnode-info"><span class="mnode-name">이종성</span><span class="mnode-role">Firmware SW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198793" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                        <div class="mnode" data-interview-id="device-driver-software-engineer" role="button" tabindex="0" aria-label="김성희 Device Driver Software Engineer 인터뷰 보기">
+                            <span class="mnode-ava"><img src="kim-sunghee-device-driver-software-engineer.png" alt="김성희"></span>
+                            <span class="mnode-info"><span class="mnode-name">김성희</span><span class="mnode-role">Device Driver SW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198745" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="zone" style="--z:#4fb866">
+                    <div class="zone-head">
+                        <span class="zone-idx" aria-hidden="true">04</span>
+                        <h3 class="zone-name">Runtime · Optimization</h3>
+                        <p class="zone-desc">VDPU SDK와 추론 최적화로 성능을 극한까지 끌어올립니다.</p>
+                        <span class="zone-out">제품 · VDPU SDK</span>
+                    </div>
+                    <div class="zone-people">
+                        <div class="mnode" data-interview-id="vector-library-engineer" role="button" tabindex="0" aria-label="김유찬 Vector Library Engineer 인터뷰 보기">
+                            <span class="mnode-ava"><img src="kim-yuchan-vector-library-engineer.png" alt="김유찬"></span>
+                            <span class="mnode-info"><span class="mnode-name">김유찬</span><span class="mnode-role">Vector Library Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/199727" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                        <div class="mnode" data-interview-id="optimization-engineer" role="button" tabindex="0" aria-label="장수형 Optimization Engineer 인터뷰 보기">
+                            <span class="mnode-ava"><img src="jang-suhyung-optimization-engineer.png" alt="장수형"></span>
+                            <span class="mnode-info"><span class="mnode-name">장수형</span><span class="mnode-role">Optimization Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198531" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="zone" style="--z:#2dd4bf">
+                    <div class="zone-head">
+                        <span class="zone-idx" aria-hidden="true">05</span>
+                        <h3 class="zone-name">Cloud · Data</h3>
+                        <p class="zone-desc">고성능 벡터 검색 엔진과 관리형 클라우드로 데이터 인프라를 만듭니다.</p>
+                        <span class="zone-out">제품 · SEAHORSE</span>
+                    </div>
+                    <div class="zone-people">
+                        <div class="mnode" data-interview-id="vector-database-engineer" role="button" tabindex="0" aria-label="정주현 Vector Database Engineer 인터뷰 보기">
+                            <span class="mnode-ava"><img src="jung-juhyun-vector-database-engineer.png" alt="정주현"></span>
+                            <span class="mnode-info"><span class="mnode-name">정주현</span><span class="mnode-role">Vector Database Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/200913" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                        <div class="mnode" data-interview-id="storage-system-software-engineer" role="button" tabindex="0" aria-label="임근우 Storage System Software Engineer 인터뷰 보기">
+                            <span class="mnode-ava"><img src="lim-geunwoo-storage-system-software-engineer.png" alt="임근우"></span>
+                            <span class="mnode-info"><span class="mnode-name">임근우</span><span class="mnode-role">Storage System SW Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko/o/198903" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="zone" style="--z:#a78bfa">
+                    <div class="zone-head">
+                        <span class="zone-idx" aria-hidden="true">06</span>
+                        <h3 class="zone-name">AI Application</h3>
+                        <p class="zone-desc">데이터로 실제 업무를 수행하는 AI Agent 서비스를 만듭니다.</p>
+                        <span class="zone-out">제품 · AI Agent</span>
+                    </div>
+                    <div class="zone-people">
+                        <div class="mnode">
+                            <span class="mnode-ava is-initial" aria-hidden="true">김</span>
+                            <span class="mnode-info"><span class="mnode-name">김영로</span><span class="mnode-role">AI Agent Dev Engineer</span><a class="mnode-hiring" href="https://dno.career.greetinghr.com/ko" target="_blank" rel="noopener">채용중</a></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <p class="text-slate-500 text-xs mt-5">* 01 설계에서 06 AI 서비스까지, 반도체·시스템·데이터를 잇는 수직 통합 구조입니다. 색은 담당 조직을 나타냅니다.</p>
         </section>
         <!-- About Dnotitia Section (With Videos Inside) -->
         <section class="glass-card rounded-3xl p-10 md:p-14 mb-24">
