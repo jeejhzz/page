@@ -846,37 +846,20 @@
         .benefit h4 { color: #fff; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
         .benefit p { margin-top: 0.4rem; color: #94a3b8; font-size: 0.9rem; line-height: 1.65; }
 
-        /* ===== Culture manifesto ===== */
-        .mini-eyebrow { display: inline-flex; align-items: center; gap: 0.65rem; font-size: 0.82rem; font-weight: 800; color: #ffb27a; letter-spacing: 0.01em; }
-        .mini-eyebrow::before { content: ''; width: 1.7rem; height: 1px; background: linear-gradient(90deg, var(--brand-orange), transparent); }
-        .culture-lead {
-            margin-top: 1.7rem;
-            max-width: 46rem;
-            font-size: clamp(1.45rem, 3vw, 2.25rem);
-            font-weight: 700;
-            line-height: 1.58;
-            letter-spacing: -0.03em;
-            color: #93a3b8;
-            text-wrap: balance;
-        }
-        .culture-lead em { font-style: normal; color: #fff; }
-        .culture-lead em.accent { color: var(--brand-orange); }
-
-        /* ===== Perks (benefits) ===== */
-        .perks-title { margin-top: 1.15rem; max-width: 32rem; font-size: clamp(1.55rem, 3vw, 2.15rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1.25; color: #fff; }
-        .perks { margin-top: 2.6rem; border-top: 1px solid rgba(255, 255, 255, 0.1); }
-        .perk {
-            display: grid;
-            grid-template-columns: 10.5rem 1fr;
-            gap: 1.75rem;
-            padding: 1.7rem 0.25rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            align-items: baseline;
-        }
-        .perk-label { font-weight: 800; color: #fff; font-size: 1.05rem; letter-spacing: -0.01em; }
-        .perk p { color: #94a3b8; font-size: 0.98rem; line-height: 1.72; }
+        /* ===== Refined editorial sections (culture / perks) ===== */
+        .rsec { display: grid; grid-template-columns: 12rem 1fr; gap: 2.5rem 3.5rem; }
+        .rsec-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; color: #64748b; }
+        .principles > div { padding: 1.7rem 0; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .principles > div:first-child { border-top: 0; padding-top: 0.15rem; }
+        .principles h3 { font-size: 1.12rem; font-weight: 700; color: #eef2f7; letter-spacing: -0.01em; }
+        .principles p { margin-top: 0.55rem; font-size: 0.95rem; color: #8493a5; line-height: 1.75; max-width: 33rem; }
+        .rlist > div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1.75rem; padding: 1.35rem 0; border-top: 1px solid rgba(255, 255, 255, 0.08); align-items: baseline; }
+        .rlist > div:first-child { border-top: 0; padding-top: 0.15rem; }
+        .rlist .k { color: #cbd5e1; font-weight: 700; font-size: 0.96rem; letter-spacing: -0.005em; }
+        .rlist .v { color: #8493a5; font-size: 0.95rem; line-height: 1.7; }
         @media (max-width: 767px) {
-            .perk { grid-template-columns: 1fr; gap: 0.4rem; padding: 1.4rem 0.15rem; }
+            .rsec { grid-template-columns: 1fr; gap: 1.4rem; }
+            .rlist > div { grid-template-columns: 1fr; gap: 0.3rem; padding: 1.15rem 0; }
         }
 
         /* ===== Recruitment process ===== */
@@ -1041,45 +1024,41 @@
 
         <!-- Culture -->
         <section class="mb-24">
-            <p class="mini-eyebrow">일하는 방식</p>
-            <p class="culture-lead">
-                우리는 직급이 아니라 <em class="accent">근거</em>로 이야기합니다.
-                완벽한 계획을 기다리기보다 <em>빠르게 시도하고</em>, 결과를 데이터로 확인합니다.
-                서로의 전문성을 믿기에, 각자의 성과보다 <em>함께 만든 결과</em>를 더 자랑스러워합니다.
-            </p>
+            <div class="rsec">
+                <p class="rsec-label">일하는 방식</p>
+                <div class="principles">
+                    <div>
+                        <h3>근거로 결정합니다</h3>
+                        <p>직급이 아니라 문제의 본질과 데이터로 판단합니다.</p>
+                    </div>
+                    <div>
+                        <h3>빠르게 검증합니다</h3>
+                        <p>완결된 계획보다 작은 실험을 앞세워 방향을 좁혀갑니다.</p>
+                    </div>
+                    <div>
+                        <h3>전문성을 신뢰합니다</h3>
+                        <p>서로의 영역을 존중하며, 팀이 함께 만든 결과를 중요하게 여깁니다.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Perks -->
         <section class="mb-24">
-            <p class="mini-eyebrow">복지 &amp; 성장</p>
-            <h2 class="perks-title">성장에만 집중하도록, 나머지는 회사가 챙깁니다.</h2>
-            <div class="perks">
-                <div class="perk">
-                    <span class="perk-label">시간과 공간</span>
-                    <p>유연근무와 재택근무. 가장 몰입되는 리듬은 각자가 가장 잘 압니다.</p>
-                </div>
-                <div class="perk">
-                    <span class="perk-label">개발 환경</span>
-                    <p>최고 사양의 장비와 도구. 일에 필요한 것에는 인색하지 않습니다.</p>
-                </div>
-                <div class="perk">
-                    <span class="perk-label">배움</span>
-                    <p>책, 강의, 컨퍼런스 — 성장에 드는 비용은 회사가 함께 냅니다.</p>
-                </div>
-                <div class="perk">
-                    <span class="perk-label">끼니</span>
-                    <p>잘 먹어야 잘 만듭니다. 식사와 간식, 커피를 넉넉히 챙깁니다.</p>
-                </div>
-                <div class="perk">
-                    <span class="perk-label">건강</span>
-                    <p>정기 건강검진으로, 오래 함께 일할 몸을 돌봅니다.</p>
-                </div>
-                <div class="perk">
-                    <span class="perk-label">성장의 몫</span>
-                    <p>회사가 커지는 만큼, 그 결실을 구성원과 함께 나눕니다.</p>
+            <div class="rsec">
+                <p class="rsec-label">구성원 지원</p>
+                <div>
+                    <div class="rlist">
+                        <div><span class="k">근무</span><span class="v">유연근무와 재택근무를 지원합니다.</span></div>
+                        <div><span class="k">장비</span><span class="v">업무에 필요한 최상의 장비와 도구를 제공합니다.</span></div>
+                        <div><span class="k">성장</span><span class="v">도서·교육·컨퍼런스 등 학습 비용을 지원합니다.</span></div>
+                        <div><span class="k">식사</span><span class="v">식사와 간식, 음료를 제공합니다.</span></div>
+                        <div><span class="k">건강</span><span class="v">정기 건강검진을 지원합니다.</span></div>
+                        <div><span class="k">보상</span><span class="v">회사의 성장에 따른 성과를 구성원과 나눕니다.</span></div>
+                    </div>
+                    <p class="text-slate-500 text-xs mt-6">* 세부 복지는 직무·고용형태에 따라 달라질 수 있습니다.</p>
                 </div>
             </div>
-            <p class="text-slate-500 text-xs mt-6">* 세부 복지는 직무·고용형태에 따라 달라질 수 있습니다.</p>
         </section>
 
         <!-- Recruitment Process -->
