@@ -779,37 +779,49 @@
         }
         .hero-btn-ghost:hover { border-color: rgba(255, 107, 0, 0.5); background: rgba(255, 107, 0, 0.08); color: #fff; }
 
-        /* ===== Landing hero (two-column) ===== */
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2.75rem;
-            align-items: center;
-        }
-        @media (min-width: 900px) {
-            .hero-grid { grid-template-columns: 1.03fr 0.97fr; gap: 3.25rem; }
-        }
-        /* let the front door breathe wider than the body column */
-        @media (min-width: 1240px) {
-            .hero-grid { margin-inline: -8.5rem; }
-        }
-        .hero-logo { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 2.1rem; }
-        .hero-badges { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-bottom: 1.9rem; }
+        /* ===== Landing hero ===== */
+        .hero-grid { display: grid; grid-template-columns: 1fr; }
+        .hero-logo { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 2.2rem; }
         .hero-title {
-            font-size: clamp(2.1rem, 4.6vw, 3.45rem);
+            font-size: clamp(2.05rem, 7.4vw, 2.6rem);
+            word-break: keep-all;
             font-weight: 800;
             line-height: 1.2;
             letter-spacing: -0.035em;
             color: #fff;
         }
         .hero-tagline {
-            margin-top: 1.15rem;
+            margin-top: 1.2rem;
             font-size: clamp(1.3rem, 2.3vw, 1.8rem);
             font-weight: 700;
             color: #fff;
             opacity: 0.9;
         }
-        .hero-cta { margin-top: 2.25rem; display: flex; }
+        .hero-actions-row {
+            margin-top: 1.75rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.9rem 1.4rem;
+        }
+        .hero-badges { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+        @media (min-width: 900px) {
+            /* headline runs the full width so it stays on one line at full size,
+               the chip sits beside the tagline, actions span the width underneath */
+            .hero-grid {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+                grid-template-areas:
+                    "logo  logo"
+                    "title title"
+                    "aside chip";
+                column-gap: 3rem;
+                margin-inline: calc(-1 * clamp(0px, (100vw - 100% - 5rem) / 2, 11rem));
+            }
+            .hero-logo { grid-area: logo; }
+            .hero-title { grid-area: title; white-space: nowrap; font-size: 3.45rem; }
+            .hero-aside { grid-area: aside; align-self: center; }
+            .hero-chip-stage { grid-area: chip; }
+        }
         .hero-chip-stage {
             position: relative;
             width: 100%;
@@ -1063,9 +1075,8 @@
             .interview-modal { padding: 0.75rem; }
             .interview-header,
             .interview-body { padding: 1.25rem; }
-            .hero-cta { margin-top: 2rem; }
             .hero-logo { margin-bottom: 1.6rem; }
-            .hero-badges { margin-bottom: 1.5rem; }
+            .hero-actions-row { margin-top: 1.9rem; }
             .interview-question { font-size: 1.08rem; }
         }
     </style>
@@ -1076,12 +1087,19 @@
         
         <!-- Header Section -->
         <header class="hero-grid mb-24">
-            <div class="hero-copy">
-                <div class="hero-logo">
-                    <img src="logo-symbol-white.png" alt="" aria-hidden="true" class="h-12 md:h-16 w-auto">
-                    <img src="logo-word-white.png" alt="Dnotitia" class="h-7 md:h-9 w-auto">
-                </div>
+            <div class="hero-logo">
+                <img src="logo-symbol-white.png" alt="" aria-hidden="true" class="h-12 md:h-16 w-auto">
+                <img src="logo-word-white.png" alt="Dnotitia" class="h-7 md:h-9 w-auto">
+            </div>
 
+            <h1 class="hero-title">
+                <span class="text-orange">장기기억 AI</span>를 향한 위대한 여정
+            </h1>
+
+            <div class="hero-aside">
+                <p class="hero-tagline">디노티시아와 함께합시다</p>
+                <div class="hero-actions-row">
+                <a href="https://dno.career.greetinghr.com/ko/home" target="_blank" rel="noopener" class="hero-btn-primary">채용 공고 바로가기 →</a>
                 <!-- 인증 및 투자 정보 모듈 -->
                 <div class="hero-badges">
                     <a href="https://it.donga.com/107569/" target="_blank" class="badge-module text-orange-400 bg-orange-900/20 border border-orange-500/30 hover:bg-orange-500/10">
@@ -1090,15 +1108,7 @@
                     <a href="https://zdnet.co.kr/view/?no=20260421140808" target="_blank" class="badge-module text-white bg-orange border border-orange-500/50 hover:brightness-110 shadow-lg shadow-orange-600/20">
                         900억 원 규모 Series A 투자 유치
                     </a>
-                </div>
-
-                <h1 class="hero-title">
-                    <span class="text-orange">장기기억 AI</span>를 향한<br>위대한 여정
-                </h1>
-                <p class="hero-tagline">디노티시아와 함께합시다</p>
-
-                <div class="hero-cta">
-                    <a href="https://dno.career.greetinghr.com/ko/home" target="_blank" rel="noopener" class="hero-btn-primary">채용 공고 바로가기 →</a>
+                    </div>
                 </div>
             </div>
 
