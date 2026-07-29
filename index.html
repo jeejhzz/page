@@ -120,13 +120,38 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: #000;
         }
-        .video-container iframe {
+        .video-container iframe,
+        .video-container .yt-facade {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
         }
+        .yt-facade { border: 0; padding: 0; margin: 0; cursor: pointer; display: block; background: #050e1c; }
+        .yt-facade-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .yt-facade::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(160deg, rgba(0,21,41,0.12), rgba(0,21,41,0.48));
+            transition: background .25s ease;
+        }
+        .yt-facade:hover::after { background: linear-gradient(160deg, rgba(0,21,41,0.04), rgba(0,21,41,0.30)); }
+        .yt-facade-play {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 4.5rem; height: 4.5rem; border-radius: 9999px;
+            background: var(--brand-orange);
+            box-shadow: 0 14px 40px rgba(255,107,0,0.4);
+            transition: transform .2s ease, filter .2s ease;
+            z-index: 1;
+        }
+        .yt-facade-play::after {
+            content: ''; position: absolute; top: 50%; left: 54%;
+            transform: translate(-50%,-50%);
+            border-style: solid; border-width: 0.7rem 0 0.7rem 1.15rem;
+            border-color: transparent transparent transparent #001529;
+        }
+        .yt-facade:hover .yt-facade-play { transform: translate(-50%,-50%) scale(1.06); filter: brightness(1.05); }
         /* Badge Modules */
         .badge-module {
             display: inline-flex;
@@ -1193,28 +1218,47 @@
                 <!-- Video 1: SEAHORSE 제품 소개 -->
                 <div class="space-y-3">
                     <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
-                        <iframe src="https://www.youtube.com/embed/_V_CGUpwKJ8?rel=0" title="SEAHORSE 제품 소개" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <button type="button" class="yt-facade" data-yt="_V_CGUpwKJ8" data-title="SEAHORSE 제품 소개" aria-label="SEAHORSE 제품 소개 영상 재생">
+                            <img class="yt-facade-img" src="https://i.ytimg.com/vi/_V_CGUpwKJ8/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/_V_CGUpwKJ8/hqdefault.jpg';" alt="" loading="lazy">
+                            <span class="yt-facade-play" aria-hidden="true"></span>
+                        </button>
                     </div>
                     <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">SEAHORSE 제품 소개 영상</p>
                 </div>
                 <!-- Video 2: CTO 인터뷰 -->
                 <div class="space-y-3">
                     <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
-                        <iframe src="https://www.youtube.com/embed/xPEdPYyrbwk?rel=0" title="CTO 인터뷰" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <button type="button" class="yt-facade" data-yt="xPEdPYyrbwk" data-title="CTO 인터뷰" aria-label="CTO가 이야기하는 디노티시아 영상 재생">
+                            <img class="yt-facade-img" src="https://i.ytimg.com/vi/xPEdPYyrbwk/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/xPEdPYyrbwk/hqdefault.jpg';" alt="" loading="lazy">
+                            <span class="yt-facade-play" aria-hidden="true"></span>
+                        </button>
                     </div>
                     <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">CTO가 이야기하는 디노티시아</p>
                 </div>
             </div>
         </section>
+        <script>
+            document.querySelectorAll('.yt-facade').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var id = btn.getAttribute('data-yt');
+                    var f = document.createElement('iframe');
+                    f.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+                    f.title = btn.getAttribute('data-title') || '';
+                    f.setAttribute('frameborder', '0');
+                    f.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                    f.setAttribute('allowfullscreen', '');
+                    btn.replaceWith(f);
+                });
+            });
+        </script>
 
         <!-- Benefits -->
         <section class="mb-24">
-            <div class="grid md:grid-cols-[0.85fr_1.15fr] gap-x-16 gap-y-8 items-start">
-                <div class="sec-head md:mb-0 md:sticky md:top-8">
-                    <span class="eyebrow">🎁 Life at Dnotitia</span>
-                    <h2 class="sec-title">디노티시아는 구성원의<br>성장에 진심을 다합니다</h2>
-                </div>
-                <div class="grid sm:grid-cols-2 gap-x-10">
+            <div class="sec-head">
+                <span class="eyebrow">🎁 Life at Dnotitia</span>
+                <h2 class="sec-title">디노티시아는 구성원의 성장에 진심을 다합니다</h2>
+            </div>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-x-10 gap-y-9">
                     <div class="benefit">
                         <span class="benefit-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
                         <div>
@@ -1258,13 +1302,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </section>
 
         <!-- Recruitment Process -->
         <section class="mb-24">
             <div class="sec-head">
-                <span class="eyebrow">📮 Hiring Process</span>
+                <span class="eyebrow">📮 Recruit Process</span>
                 <h2 class="sec-title">지원부터 합류까지</h2>
             </div>
             <div class="proc">
@@ -1272,35 +1315,30 @@
                     <div class="proc-node">1</div>
                     <div class="proc-copy">
                         <h4>서류 전형</h4>
-                        <p>지원서 검토</p>
                     </div>
                 </div>
                 <div class="proc-step">
                     <div class="proc-node">2</div>
                     <div class="proc-copy">
-                        <h4>실무 인터뷰</h4>
-                        <p>직무 심층 대화</p>
+                        <h4>1차 인터뷰</h4>
                     </div>
                 </div>
                 <div class="proc-step">
                     <div class="proc-node">3</div>
                     <div class="proc-copy">
-                        <h4>컬처핏 인터뷰</h4>
-                        <p>팀 적합성 확인</p>
+                        <h4>2차 인터뷰</h4>
                     </div>
                 </div>
                 <div class="proc-step">
                     <div class="proc-node">4</div>
                     <div class="proc-copy">
-                        <h4>처우 협의</h4>
-                        <p>합류 조건 논의</p>
+                        <h4>레퍼런스 체크 및 처우 협의</h4>
                     </div>
                 </div>
                 <div class="proc-step">
                     <div class="proc-node">5</div>
                     <div class="proc-copy">
                         <h4>최종 합류</h4>
-                        <p>함께 시작</p>
                     </div>
                 </div>
             </div>
@@ -1318,7 +1356,7 @@
                     </div>
                     <div>
                         <p class="text-slate-500 text-sm block mb-1">근무지</p>
-                        <p class="font-bold">서울시 강남구 (유연근무 & 재택근무 가능)</p>
+                        <p class="font-bold text-base">서울시 강남구 (유연근무 &amp; 재택근무 가능)</p>
                     </div>
                 </div>
             </div>
