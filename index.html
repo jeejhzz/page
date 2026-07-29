@@ -804,7 +804,49 @@
             align-items: center;
             gap: 0.9rem 1.4rem;
         }
-        .hero-badges { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+        .about-badges { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-bottom: 2.25rem; }
+
+        /* ===== Video carousel ===== */
+        .vid-carousel { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 2.5rem; }
+        .vid-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.3rem; }
+        .vid-bar-title {
+            font-size: 0.72rem; font-weight: 800; letter-spacing: 0.24em;
+            text-transform: uppercase; color: #ff8a3d;
+        }
+        .vid-nav { display: flex; gap: 0.6rem; flex: 0 0 auto; }
+        .vid-btn {
+            width: 2.6rem; height: 2.6rem; display: inline-grid; place-items: center;
+            border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.05); color: #fff;
+            font-size: 1.2rem; font-weight: 900; line-height: 1; cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+        .vid-btn:hover { border-color: rgba(255, 107, 0, 0.4); background: rgba(255, 107, 0, 0.12); transform: translateY(-1px); }
+        .vid-btn:focus-visible { outline: 2px solid var(--brand-orange); outline-offset: 2px; }
+        .vid-track {
+            display: flex; gap: 2rem;
+            overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .vid-track::-webkit-scrollbar { display: none; }
+        .vid-item { flex: 0 0 calc((100% - 2rem) / 2); min-width: 0; scroll-snap-align: start; }
+        .vid-cap {
+            margin-top: 0.85rem; padding-left: 0.5rem;
+            border-left: 2px solid var(--brand-orange);
+            color: #94a3b8; font-size: 0.875rem; font-weight: 700;
+        }
+        .vid-dots { display: flex; justify-content: center; gap: 0.45rem; margin-top: 1.6rem; }
+        .vid-dot {
+            width: 0.45rem; height: 0.45rem; padding: 0; border: 0; border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.22); cursor: pointer;
+            transition: background 0.25s ease, width 0.25s ease;
+        }
+        .vid-dot.is-active { width: 1.5rem; background: var(--brand-orange); }
+        @media (max-width: 767px) {
+            .vid-track { gap: 1.25rem; }
+            .vid-item { flex-basis: 100%; }
+        }
+        @media (prefers-reduced-motion: reduce) { .vid-track { scroll-behavior: auto; } }
         @media (min-width: 900px) {
             /* headline runs the full width so it stays on one line at full size,
                the chip sits beside the tagline, actions span the width underneath */
@@ -1099,16 +1141,7 @@
             <div class="hero-aside">
                 <p class="hero-tagline">디노티시아와 함께합시다</p>
                 <div class="hero-actions-row">
-                <a href="https://dno.career.greetinghr.com/ko/home" target="_blank" rel="noopener" class="hero-btn-primary">채용 공고 바로가기 →</a>
-                <!-- 인증 및 투자 정보 모듈 -->
-                <div class="hero-badges">
-                    <a href="https://it.donga.com/107569/" target="_blank" class="badge-module text-orange-400 bg-orange-900/20 border border-orange-500/30 hover:bg-orange-500/10">
-                        CB Insights 'Global AI Agent 유망 기업' 선정
-                    </a>
-                    <a href="https://zdnet.co.kr/view/?no=20260421140808" target="_blank" class="badge-module text-white bg-orange border border-orange-500/50 hover:brightness-110 shadow-lg shadow-orange-600/20">
-                        900억 원 규모 Series A 투자 유치
-                    </a>
-                    </div>
+                    <a href="https://dno.career.greetinghr.com/ko/home" target="_blank" rel="noopener" class="hero-btn-primary">채용 공고 바로가기 →</a>
                 </div>
             </div>
 
@@ -1123,33 +1156,60 @@
         <!-- About Dnotitia -->
         <section class="glass-card rounded-3xl p-10 md:p-14 mb-24">
             <h2 class="text-3xl font-bold mb-8 italic text-orange border-b border-white/10 pb-4">About Dnotitia</h2>
+
+            <!-- 인증 및 투자 정보 모듈 -->
+            <div class="about-badges">
+                <a href="https://it.donga.com/107569/" target="_blank" class="badge-module text-orange-400 bg-orange-900/20 border border-orange-500/30 hover:bg-orange-500/10">
+                    CB Insights 'Global AI Agent 유망 기업' 선정
+                </a>
+                <a href="https://zdnet.co.kr/view/?no=20260421140808" target="_blank" class="badge-module text-white bg-orange border border-orange-500/50 hover:brightness-110 shadow-lg shadow-orange-600/20">
+                    900억 원 규모 Series A 투자 유치
+                </a>
+            </div>
             <div class="text-slate-300 leading-relaxed space-y-6 text-lg mb-12">
                 <p>디노티시아는 AI와 데이터 시스템의 융합을 통해 혁신적인 가치를 창출하는 <a href="https://www.koit.co.kr/news/articleView.html?idxno=205883" target="_blank" class="news-link">장기기억 인공지능 전문기업</a>으로, CB Insights의 <a href="https://zdnet.co.kr/view/?no=20250425111526" target="_blank" class="news-link">‘2025 글로벌 AI 100’</a>에 선정되며 기술력을 인정받았습니다.</p>
                 <p>세계 최초로 개발한 벡터 데이터 연산 가속기 <a href="https://www.epnc.co.kr/news/articleView.html?idxno=328142" target="_blank" class="news-link">'VDPU'</a>를 기반으로, 고성능 벡터 데이터베이스 <a href="https://www.etnews.com/20260324000436" target="_blank" class="news-link">‘SEAHORSE(씨홀스)’</a>를 선보이며 생성형 AI의 핵심 기술인 RAG 솔루션을 구현하고 있습니다.</p>
             </div>
 
-            <!-- YouTube Video Grid Inside About Section -->
-            <div class="grid md:grid-cols-2 gap-8 border-t border-white/10 pt-10">
-                <!-- Video 1: SEAHORSE 제품 소개 -->
-                <div class="space-y-3">
-                    <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
-                        <button type="button" class="yt-facade" data-yt="_V_CGUpwKJ8" data-title="SEAHORSE 제품 소개" aria-label="SEAHORSE 제품 소개 영상 재생">
-                            <img class="yt-facade-img" src="https://i.ytimg.com/vi/_V_CGUpwKJ8/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/_V_CGUpwKJ8/hqdefault.jpg';" alt="" loading="lazy">
-                            <span class="yt-facade-play" aria-hidden="true"></span>
-                        </button>
+            <!-- YouTube videos: auto-advancing carousel -->
+            <div class="vid-carousel">
+                <div class="vid-bar">
+                    <p class="vid-bar-title">Dnotitia on YouTube</p>
+                    <div class="vid-nav">
+                        <button type="button" class="vid-btn" data-vid-nav="prev" aria-label="이전 영상">&lsaquo;</button>
+                        <button type="button" class="vid-btn" data-vid-nav="next" aria-label="다음 영상">&rsaquo;</button>
                     </div>
-                    <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">SEAHORSE 제품 소개 영상</p>
                 </div>
-                <!-- Video 2: CTO 인터뷰 -->
-                <div class="space-y-3">
-                    <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
-                        <button type="button" class="yt-facade" data-yt="xPEdPYyrbwk" data-title="CTO 인터뷰" aria-label="CTO가 이야기하는 디노티시아 영상 재생">
-                            <img class="yt-facade-img" src="https://i.ytimg.com/vi/xPEdPYyrbwk/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/xPEdPYyrbwk/hqdefault.jpg';" alt="" loading="lazy">
-                            <span class="yt-facade-play" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                    <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">CTO가 이야기하는 디노티시아</p>
+                <div class="vid-track" role="group" aria-label="디노티시아 영상 모음">
+                    <article class="vid-item">
+                        <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
+                            <button type="button" class="yt-facade" data-yt="_V_CGUpwKJ8" data-title="SEAHORSE 제품 소개" aria-label="SEAHORSE 제품 소개 영상 영상 재생">
+                                <img class="yt-facade-img" src="https://i.ytimg.com/vi/_V_CGUpwKJ8/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/_V_CGUpwKJ8/hqdefault.jpg';" alt="" loading="lazy">
+                                <span class="yt-facade-play" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <p class="vid-cap">SEAHORSE 제품 소개 영상</p>
+                    </article>
+                    <article class="vid-item">
+                        <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
+                            <button type="button" class="yt-facade" data-yt="xPEdPYyrbwk" data-title="CTO 인터뷰" aria-label="CTO가 이야기하는 디노티시아 영상 재생">
+                                <img class="yt-facade-img" src="https://i.ytimg.com/vi/xPEdPYyrbwk/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/xPEdPYyrbwk/hqdefault.jpg';" alt="" loading="lazy">
+                                <span class="yt-facade-play" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <p class="vid-cap">CTO가 이야기하는 디노티시아</p>
+                    </article>
+                    <article class="vid-item">
+                        <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
+                            <button type="button" class="yt-facade" data-yt="_TAjyEEuFv0" data-title="디노티시아 소개" aria-label="디노티시아 이야기 영상 재생">
+                                <img class="yt-facade-img" src="https://i.ytimg.com/vi/_TAjyEEuFv0/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/_TAjyEEuFv0/hqdefault.jpg';" alt="" loading="lazy">
+                                <span class="yt-facade-play" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <p class="vid-cap">디노티시아 이야기</p>
+                    </article>
                 </div>
+                <div class="vid-dots" aria-label="영상 위치"></div>
             </div>
         </section>
         <script>
@@ -1165,6 +1225,108 @@
                     btn.replaceWith(f);
                 });
             });
+
+            /* Video carousel: advances every 15s, plus manual controls.
+               Scrolls the track only (never scrollIntoView) so the page never jumps. */
+            (function () {
+                var track = document.querySelector('.vid-track');
+                var dotsWrap = document.querySelector('.vid-dots');
+                if (!track || !dotsWrap) return;
+                var items = [].slice.call(track.querySelectorAll('.vid-item'));
+                if (!items.length) return;
+
+                var INTERVAL = 15000;
+                var idx = 0, timer = null, dots = [], paused = false, stopped = false;
+
+                function perView() {
+                    var w = items[0].getBoundingClientRect().width;
+                    return w ? Math.max(1, Math.round(track.clientWidth / w)) : 1;
+                }
+                function maxIndex() { return Math.max(0, items.length - perView()); }
+
+                function goTo(i, smooth) {
+                    var max = maxIndex();
+                    idx = i < 0 ? max : (i > max ? 0 : i);
+                    track.scrollTo({
+                        left: items[idx].offsetLeft - items[0].offsetLeft,
+                        behavior: smooth === false ? 'auto' : 'smooth'
+                    });
+                    syncDots();
+                }
+                function syncDots() {
+                    dots.forEach(function (d, i) {
+                        d.classList.toggle('is-active', i === idx);
+                        d.setAttribute('aria-current', i === idx ? 'true' : 'false');
+                    });
+                }
+                function buildDots() {
+                    var n = maxIndex() + 1;
+                    dotsWrap.innerHTML = '';
+                    dots = [];
+                    dotsWrap.style.display = n <= 1 ? 'none' : '';
+                    for (var i = 0; i < n; i++) {
+                        var d = document.createElement('button');
+                        d.type = 'button';
+                        d.className = 'vid-dot';
+                        d.setAttribute('aria-label', (i + 1) + '번째 영상으로 이동');
+                        d.addEventListener('click', (function (k) {
+                            return function () { goTo(k); restart(); };
+                        })(i));
+                        dotsWrap.appendChild(d);
+                        dots.push(d);
+                    }
+                    if (idx > maxIndex()) idx = maxIndex();
+                    syncDots();
+                }
+                function restart() {
+                    window.clearInterval(timer);
+                    if (stopped) return;
+                    timer = window.setInterval(function () {
+                        if (!paused) goTo(idx + 1);
+                    }, INTERVAL);
+                }
+
+                document.querySelectorAll('[data-vid-nav]').forEach(function (b) {
+                    b.addEventListener('click', function () {
+                        goTo(idx + (b.getAttribute('data-vid-nav') === 'next' ? 1 : -1));
+                        restart();
+                    });
+                });
+
+                track.addEventListener('mouseenter', function () { paused = true; });
+                track.addEventListener('mouseleave', function () { paused = false; });
+                track.addEventListener('focusin', function () { paused = true; });
+                track.addEventListener('focusout', function () { paused = false; });
+
+                /* once a video is opened, stop auto-advancing */
+                track.addEventListener('click', function (e) {
+                    if (e.target.closest('.yt-facade, iframe')) { stopped = true; window.clearInterval(timer); }
+                });
+
+                /* keep the dots honest when the user swipes the track */
+                var settle;
+                track.addEventListener('scroll', function () {
+                    window.clearTimeout(settle);
+                    settle = window.setTimeout(function () {
+                        var base = items[0].offsetLeft, best = 0, bestD = Infinity;
+                        items.forEach(function (it, i) {
+                            var d = Math.abs((it.offsetLeft - base) - track.scrollLeft);
+                            if (d < bestD) { bestD = d; best = i; }
+                        });
+                        idx = Math.min(best, maxIndex());
+                        syncDots();
+                    }, 120);
+                });
+
+                var rz;
+                window.addEventListener('resize', function () {
+                    window.clearTimeout(rz);
+                    rz = window.setTimeout(function () { buildDots(); goTo(idx, false); }, 150);
+                });
+
+                buildDots();
+                restart();
+            })();
         </script>
 
         <!-- Role Introduction -->
