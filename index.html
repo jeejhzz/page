@@ -783,7 +783,7 @@
         .hero-grid { display: grid; grid-template-columns: 1fr; }
         .hero-logo { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 2.2rem; }
         .hero-title {
-            font-size: clamp(2.05rem, 7.4vw, 2.6rem);
+            font-size: clamp(2.3rem, 8.2vw, 3rem);
             word-break: keep-all;
             font-weight: 800;
             line-height: 1.2;
@@ -792,13 +792,17 @@
         }
         .hero-tagline {
             margin-top: 1.2rem;
-            font-size: clamp(1.3rem, 2.3vw, 1.8rem);
+            font-size: clamp(1.45rem, 2.7vw, 2.2rem);
             font-weight: 700;
             color: #fff;
             opacity: 0.9;
         }
+        .hero-actions-row .hero-btn-primary {
+            font-size: 1.12rem;
+            padding: 1.15rem 2.1rem;
+        }
         .hero-actions-row {
-            margin-top: 1.75rem;
+            margin-top: 2rem;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
@@ -860,7 +864,7 @@
                 margin-inline: calc(-1 * clamp(0px, (100vw - 100% - 5rem) / 2, 11rem));
             }
             .hero-logo { grid-area: logo; }
-            .hero-title { grid-area: title; white-space: nowrap; font-size: 3.45rem; }
+            .hero-title { grid-area: title; white-space: nowrap; font-size: min(4.9rem, 6vw); }
             .hero-aside { grid-area: aside; align-self: center; }
             .hero-chip-stage { grid-area: chip; }
         }
@@ -1130,8 +1134,8 @@
         <!-- Header Section -->
         <header class="hero-grid mb-24">
             <div class="hero-logo">
-                <img src="logo-symbol-white.png" alt="" aria-hidden="true" class="h-12 md:h-16 w-auto">
-                <img src="logo-word-white.png" alt="Dnotitia" class="h-7 md:h-9 w-auto">
+                <img src="logo-symbol-white.png" alt="" aria-hidden="true" class="h-14 md:h-20 w-auto">
+                <img src="logo-word-white.png" alt="Dnotitia" class="h-8 md:h-[2.8rem] w-auto">
             </div>
 
             <h1 class="hero-title">
