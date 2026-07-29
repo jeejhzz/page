@@ -779,12 +779,40 @@
         }
         .hero-btn-ghost:hover { border-color: rgba(255, 107, 0, 0.5); background: rgba(255, 107, 0, 0.08); color: #fff; }
 
-        /* ===== Hero V110 chip ===== */
-        .hero-cta { margin-top: 2.5rem; display: flex; justify-content: center; }
+        /* ===== Landing hero (two-column) ===== */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.75rem;
+            align-items: center;
+        }
+        @media (min-width: 900px) {
+            .hero-grid { grid-template-columns: 1.03fr 0.97fr; gap: 3.25rem; }
+        }
+        /* let the front door breathe wider than the body column */
+        @media (min-width: 1240px) {
+            .hero-grid { margin-inline: -8.5rem; }
+        }
+        .hero-logo { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 2.1rem; }
+        .hero-badges { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-bottom: 1.9rem; }
+        .hero-title {
+            font-size: clamp(2.1rem, 4.6vw, 3.45rem);
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.035em;
+            color: #fff;
+        }
+        .hero-tagline {
+            margin-top: 1.15rem;
+            font-size: clamp(1.3rem, 2.3vw, 1.8rem);
+            font-weight: 700;
+            color: #fff;
+            opacity: 0.9;
+        }
+        .hero-cta { margin-top: 2.25rem; display: flex; }
         .hero-chip-stage {
             position: relative;
-            margin: 1.25rem auto 0;
-            width: min(100%, 600px);
+            width: 100%;
             display: grid;
             place-items: center;
         }
@@ -793,7 +821,7 @@
             display: block;
             position: relative;
             width: 100%;
-            aspect-ratio: 1 / 0.84;
+            aspect-ratio: 1 / 0.92;
         }
         .hero-chip-stage .hero-chip {
             position: absolute;
@@ -1036,7 +1064,8 @@
             .interview-header,
             .interview-body { padding: 1.25rem; }
             .hero-cta { margin-top: 2rem; }
-            .hero-chip-stage { margin-top: 1rem; }
+            .hero-logo { margin-bottom: 1.6rem; }
+            .hero-badges { margin-bottom: 1.5rem; }
             .interview-question { font-size: 1.08rem; }
         }
     </style>
@@ -1046,29 +1075,31 @@
     <div class="max-w-4xl mx-auto px-6 py-12 md:py-24">
         
         <!-- Header Section -->
-        <header class="text-center mb-24">
-            <div class="mb-10 flex items-center justify-center gap-3 md:gap-4">
-                <img src="logo-symbol-white.png" alt="" aria-hidden="true" class="h-14 md:h-[4.5rem] w-auto">
-                <img src="logo-word-white.png" alt="Dnotitia" class="h-8 md:h-[2.7rem] w-auto">
-            </div>
-            
-            <!-- 인증 및 투자 정보 모듈 -->
-            <div class="flex flex-wrap justify-center gap-3 mb-8">
-                <a href="https://it.donga.com/107569/" target="_blank" class="badge-module text-orange-400 bg-orange-900/20 border border-orange-500/30 hover:bg-orange-500/10">
-                    CB Insights 'Global AI Agent 유망 기업' 선정
-                </a>
-                <a href="https://zdnet.co.kr/view/?no=20260421140808" target="_blank" class="badge-module text-white bg-orange border border-orange-500/50 hover:brightness-110 shadow-lg shadow-orange-600/20">
-                    900억 원 규모 Series A 투자 유치
-                </a>
-            </div>
-            
-            <h1 class="text-4xl md:text-[3.55rem] font-extrabold mb-6 leading-tight">
-                <span class="text-orange">장기기억 AI</span>를 향한 위대한 여정
-            </h1>
-            <p class="text-white text-2xl md:text-3xl font-bold opacity-90">디노티시아와 함께합시다</p>
+        <header class="hero-grid mb-24">
+            <div class="hero-copy">
+                <div class="hero-logo">
+                    <img src="logo-symbol-white.png" alt="" aria-hidden="true" class="h-12 md:h-16 w-auto">
+                    <img src="logo-word-white.png" alt="Dnotitia" class="h-7 md:h-9 w-auto">
+                </div>
 
-            <div class="hero-cta">
-                <a href="https://dno.career.greetinghr.com/ko/home" target="_blank" rel="noopener" class="hero-btn-primary">채용 공고 바로가기 →</a>
+                <!-- 인증 및 투자 정보 모듈 -->
+                <div class="hero-badges">
+                    <a href="https://it.donga.com/107569/" target="_blank" class="badge-module text-orange-400 bg-orange-900/20 border border-orange-500/30 hover:bg-orange-500/10">
+                        CB Insights 'Global AI Agent 유망 기업' 선정
+                    </a>
+                    <a href="https://zdnet.co.kr/view/?no=20260421140808" target="_blank" class="badge-module text-white bg-orange border border-orange-500/50 hover:brightness-110 shadow-lg shadow-orange-600/20">
+                        900억 원 규모 Series A 투자 유치
+                    </a>
+                </div>
+
+                <h1 class="hero-title">
+                    <span class="text-orange">장기기억 AI</span>를 향한<br>위대한 여정
+                </h1>
+                <p class="hero-tagline">디노티시아와 함께합시다</p>
+
+                <div class="hero-cta">
+                    <a href="https://dno.career.greetinghr.com/ko/home" target="_blank" rel="noopener" class="hero-btn-primary">채용 공고 바로가기 →</a>
+                </div>
             </div>
 
             <div class="hero-chip-stage">
