@@ -586,7 +586,7 @@
             padding: 1.75rem;
         }
         .interview-item {
-            padding: 1.35rem 0;
+            padding: 1.7rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.07);
         }
         .interview-item:first-child {
@@ -597,18 +597,33 @@
             padding-bottom: 0;
         }
         .interview-question {
-            color: white;
-            font-size: 1.05rem;
+            position: relative;
+            padding-left: 1rem;
+            color: #fff;
+            font-size: 1.2rem;
             font-weight: 900;
-            line-height: 1.55;
+            line-height: 1.5;
+            letter-spacing: -0.015em;
+        }
+        .interview-question::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.3em;
+            bottom: 0.3em;
+            width: 3px;
+            border-radius: 2px;
+            background: var(--brand-orange);
         }
         .interview-answer {
-            margin-top: 0.85rem;
-            color: #cbd5e1;
-            font-size: 1rem;
+            margin-top: 1.05rem;
+            padding-left: 1rem;
+            color: #a9b7c8;
+            font-size: 0.98rem;
             font-weight: 500;
             line-height: 1.85;
         }
+        .interview-answer + .interview-answer { margin-top: 0.8rem; }
         .interview-more {
             display: flex;
             justify-content: center;
@@ -665,6 +680,8 @@
 
         /* ===== Editorial section header ===== */
         .sec-head { margin-bottom: 3.5rem; }
+        .sec-head-center { text-align: center; }
+        .sec-head-center .sec-title { max-width: 46rem; margin-left: auto; margin-right: auto; }
         .eyebrow {
             display: inline-flex;
             align-items: center;
@@ -995,6 +1012,7 @@
             .interview-modal { padding: 0.75rem; }
             .interview-header,
             .interview-body { padding: 1.25rem; }
+            .interview-question { font-size: 1.08rem; }
         }
     </style>
 </head>
@@ -1025,8 +1043,59 @@
             <p class="text-white text-2xl md:text-3xl font-bold opacity-90">디노티시아와 함께합시다</p>
         </header>
 
+        <!-- About Dnotitia -->
+        <section class="glass-card rounded-3xl p-10 md:p-14 mb-24">
+            <h2 class="text-3xl font-bold mb-8 italic text-orange border-b border-white/10 pb-4">About Dnotitia</h2>
+            <div class="text-slate-300 leading-relaxed space-y-6 text-lg mb-12">
+                <p>디노티시아는 AI와 데이터 시스템의 융합을 통해 혁신적인 가치를 창출하는 <a href="https://www.koit.co.kr/news/articleView.html?idxno=205883" target="_blank" class="news-link">장기기억 인공지능 전문기업</a>으로, CB Insights의 <a href="https://zdnet.co.kr/view/?no=20250425111526" target="_blank" class="news-link">‘2025 글로벌 AI 100’</a>에 선정되며 기술력을 인정받았습니다.</p>
+                <p>세계 최초로 개발한 벡터 데이터 연산 가속기 <a href="https://www.epnc.co.kr/news/articleView.html?idxno=328142" target="_blank" class="news-link">'VDPU'</a>를 기반으로, 고성능 벡터 데이터베이스 <a href="https://www.etnews.com/20260324000436" target="_blank" class="news-link">‘SEAHORSE(씨홀스)’</a>를 선보이며 생성형 AI의 핵심 기술인 RAG 솔루션을 구현하고 있습니다.</p>
+            </div>
+
+            <!-- YouTube Video Grid Inside About Section -->
+            <div class="grid md:grid-cols-2 gap-8 border-t border-white/10 pt-10">
+                <!-- Video 1: SEAHORSE 제품 소개 -->
+                <div class="space-y-3">
+                    <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
+                        <button type="button" class="yt-facade" data-yt="_V_CGUpwKJ8" data-title="SEAHORSE 제품 소개" aria-label="SEAHORSE 제품 소개 영상 재생">
+                            <img class="yt-facade-img" src="https://i.ytimg.com/vi/_V_CGUpwKJ8/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/_V_CGUpwKJ8/hqdefault.jpg';" alt="" loading="lazy">
+                            <span class="yt-facade-play" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">SEAHORSE 제품 소개 영상</p>
+                </div>
+                <!-- Video 2: CTO 인터뷰 -->
+                <div class="space-y-3">
+                    <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
+                        <button type="button" class="yt-facade" data-yt="xPEdPYyrbwk" data-title="CTO 인터뷰" aria-label="CTO가 이야기하는 디노티시아 영상 재생">
+                            <img class="yt-facade-img" src="https://i.ytimg.com/vi/xPEdPYyrbwk/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/xPEdPYyrbwk/hqdefault.jpg';" alt="" loading="lazy">
+                            <span class="yt-facade-play" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">CTO가 이야기하는 디노티시아</p>
+                </div>
+            </div>
+        </section>
+        <script>
+            document.querySelectorAll('.yt-facade').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var id = btn.getAttribute('data-yt');
+                    var f = document.createElement('iframe');
+                    f.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+                    f.title = btn.getAttribute('data-title') || '';
+                    f.setAttribute('frameborder', '0');
+                    f.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                    f.setAttribute('allowfullscreen', '');
+                    btn.replaceWith(f);
+                });
+            });
+        </script>
+
         <!-- Role Introduction -->
         <section id="roles" class="role-intro mb-24">
+            <div class="sec-head sec-head-center">
+                <span class="eyebrow">👥 People at Dnotitia</span>
+                <h2 class="sec-title">디노티시아는 HW부터 SW까지<br class="hidden sm:block"> Full-Stack 전문가를 보유하고 있어요.</h2>
+            </div>
             <div class="role-tabs" aria-label="직무소개 그룹 필터">
                 <button type="button" class="role-tab is-active" data-role-filter="all" aria-pressed="true">전체보기</button>
                 <button type="button" class="role-tab" data-role-filter="soc" aria-pressed="false">SoC그룹</button>
@@ -1204,53 +1273,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- About Dnotitia -->
-        <section class="glass-card rounded-3xl p-10 md:p-14 mb-24">
-            <h2 class="text-3xl font-bold mb-8 italic text-orange border-b border-white/10 pb-4">About Dnotitia</h2>
-            <div class="text-slate-300 leading-relaxed space-y-6 text-lg mb-12">
-                <p>디노티시아는 AI와 데이터 시스템의 융합을 통해 혁신적인 가치를 창출하는 <a href="https://www.koit.co.kr/news/articleView.html?idxno=205883" target="_blank" class="news-link">장기기억 인공지능 전문기업</a>으로, CB Insights의 <a href="https://zdnet.co.kr/view/?no=20250425111526" target="_blank" class="news-link">‘2025 글로벌 AI 100’</a>에 선정되며 기술력을 인정받았습니다.</p>
-                <p>세계 최초로 개발한 벡터 데이터 연산 가속기 <a href="https://www.epnc.co.kr/news/articleView.html?idxno=328142" target="_blank" class="news-link">'VDPU'</a>를 기반으로, 고성능 벡터 데이터베이스 <a href="https://www.etnews.com/20260324000436" target="_blank" class="news-link">‘SEAHORSE(씨홀스)’</a>를 선보이며 생성형 AI의 핵심 기술인 RAG 솔루션을 구현하고 있습니다.</p>
-            </div>
-
-            <!-- YouTube Video Grid Inside About Section -->
-            <div class="grid md:grid-cols-2 gap-8 border-t border-white/10 pt-10">
-                <!-- Video 1: SEAHORSE 제품 소개 -->
-                <div class="space-y-3">
-                    <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
-                        <button type="button" class="yt-facade" data-yt="_V_CGUpwKJ8" data-title="SEAHORSE 제품 소개" aria-label="SEAHORSE 제품 소개 영상 재생">
-                            <img class="yt-facade-img" src="https://i.ytimg.com/vi/_V_CGUpwKJ8/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/_V_CGUpwKJ8/hqdefault.jpg';" alt="" loading="lazy">
-                            <span class="yt-facade-play" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                    <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">SEAHORSE 제품 소개 영상</p>
-                </div>
-                <!-- Video 2: CTO 인터뷰 -->
-                <div class="space-y-3">
-                    <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
-                        <button type="button" class="yt-facade" data-yt="xPEdPYyrbwk" data-title="CTO 인터뷰" aria-label="CTO가 이야기하는 디노티시아 영상 재생">
-                            <img class="yt-facade-img" src="https://i.ytimg.com/vi/xPEdPYyrbwk/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/xPEdPYyrbwk/hqdefault.jpg';" alt="" loading="lazy">
-                            <span class="yt-facade-play" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                    <p class="text-slate-400 text-sm font-bold pl-2 border-l-2 border-orange">CTO가 이야기하는 디노티시아</p>
-                </div>
-            </div>
-        </section>
-        <script>
-            document.querySelectorAll('.yt-facade').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    var id = btn.getAttribute('data-yt');
-                    var f = document.createElement('iframe');
-                    f.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
-                    f.title = btn.getAttribute('data-title') || '';
-                    f.setAttribute('frameborder', '0');
-                    f.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-                    f.setAttribute('allowfullscreen', '');
-                    btn.replaceWith(f);
-                });
-            });
-        </script>
 
         <!-- Benefits -->
         <section class="mb-24">
