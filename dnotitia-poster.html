@@ -94,7 +94,7 @@
     .lead b { color: var(--orange-soft); font-weight: 700; }
 
     /* ---------- product trio ---------- */
-    .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; margin-top: 2.1rem; }
+    .trio { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; margin-top: 2.1rem; }
     .trio div {
         border: 1px solid var(--line); border-radius: 0.9rem;
         background: rgba(255, 255, 255, 0.03); padding: 1.25rem 1.15rem;
@@ -113,14 +113,13 @@
         display: flex; align-items: center; gap: 1rem;
         border: 1px solid var(--line); border-radius: 0.85rem;
         background: rgba(255, 255, 255, 0.025);
-        padding: 1rem 1.25rem;
+        padding: 0.85rem 1.25rem;
         text-decoration: none; color: inherit;
         transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
     }
     .job:hover { border-color: rgba(255, 107, 0, 0.4); background: rgba(255, 107, 0, 0.06); transform: translateX(3px); }
     .job-text { flex: 1; min-width: 0; }
     .job-title { display: block; font-size: 1.04rem; font-weight: 800; letter-spacing: -0.015em; }
-    .job-desc { display: block; margin-top: 0.3rem; color: var(--muted); font-size: 0.88rem; line-height: 1.5; word-break: keep-all; }
     .job-go { flex: 0 0 auto; color: var(--orange); font-size: 0.82rem; font-weight: 800; opacity: 0.75; }
 
     /* ---------- facts + process ---------- */
@@ -222,10 +221,6 @@
                 <dt>SEAHORSE</dt>
                 <dd>VDPU 위에서 동작하는 고성능 벡터 데이터베이스입니다.</dd>
             </div>
-            <div>
-                <dt>RAG 솔루션</dt>
-                <dd>생성형 AI에 장기기억을 더하는 핵심 기술을 구현합니다.</dd>
-            </div>
         </dl>
     </section>
 
@@ -234,7 +229,7 @@
     <!-- ============ open roles ============ -->
     <section class="pad">
         <span class="eyebrow">Open Positions</span>
-        <h2>HW부터 SW까지, 10개 직무를 모집합니다</h2>
+        <h2>HW to SW, Full-Stack Hiring</h2>
         <p class="lead">직무명을 누르면 상세 공고로 이동합니다.</p>
 
         <div class="group">
@@ -247,35 +242,30 @@
                 <a class="job" href="https://dno.career.greetinghr.com/ko/o/206229" target="_blank" rel="noopener">
                     <span class="job-text">
                         <span class="job-title">System Architect</span>
-                        <span class="job-desc">AI 인프라의 구조를 설계하는 역할</span>
                     </span>
                     <span class="job-go">지원 →</span>
                 </a>
                 <a class="job" href="https://dno.career.greetinghr.com/ko/o/196734" target="_blank" rel="noopener">
                     <span class="job-text">
                         <span class="job-title">SoC / RTL Design Engineer</span>
-                        <span class="job-desc">AI 인프라를 움직이는 하드웨어 구조를 만드는 역할</span>
                     </span>
                     <span class="job-go">지원 →</span>
                 </a>
                 <a class="job" href="https://dno.career.greetinghr.com/ko/o/196737" target="_blank" rel="noopener">
                     <span class="job-text">
                         <span class="job-title">SoC Design Verification Engineer</span>
-                        <span class="job-desc">복잡한 칩 설계를 끝까지 검증하는 역할</span>
                     </span>
                     <span class="job-go">지원 →</span>
                 </a>
                 <a class="job" href="https://dno.career.greetinghr.com/ko/o/203021" target="_blank" rel="noopener">
                     <span class="job-text">
                         <span class="job-title">SoC Firmware Engineer</span>
-                        <span class="job-desc">칩과 시스템이 만나는 지점을 설계하는 역할</span>
                     </span>
                     <span class="job-go">지원 →</span>
                 </a>
                 <a class="job" href="https://dno.career.greetinghr.com/ko/o/203022" target="_blank" rel="noopener">
                     <span class="job-text">
                         <span class="job-title">SoC PKG / Board HW Engineer</span>
-                        <span class="job-desc">실리콘 칩에 생명을 불어넣는 옷과 무대</span>
                     </span>
                     <span class="job-go">지원 →</span>
                 </a>
@@ -292,21 +282,18 @@
                 <a class="job" href="https://dno.career.greetinghr.com/ko/o/198793" target="_blank" rel="noopener">
                     <span class="job-text">
                         <span class="job-title">Firmware SW Engineer</span>
-                        <span class="job-desc">제한된 공간에서 성능을 끌어내는 역할</span>
                     </span>
                     <span class="job-go">지원 →</span>
                 </a>
                 <a class="job" href="https://dno.career.greetinghr.com/ko/o/198745" target="_blank" rel="noopener">
                     <span class="job-text">
                         <span class="job-title">Device Driver SW Engineer</span>
-                        <span class="job-desc">하드웨어와 OS 사이의 통로를 여는 역할</span>
                     </span>
                     <span class="job-go">지원 →</span>
                 </a>
                 <a class="job" href="https://dno.career.greetinghr.com/ko/o/199727" target="_blank" rel="noopener">
                     <span class="job-text">
                         <span class="job-title">Vector Library Engineer</span>
-                        <span class="job-desc">수학 연산을 빠른 실행 코드로 바꾸는 역할</span>
                     </span>
                     <span class="job-go">지원 →</span>
                 </a>
@@ -323,14 +310,12 @@
                 <a class="job" href="https://dno.career.greetinghr.com/ko/o/200913" target="_blank" rel="noopener">
                     <span class="job-text">
                         <span class="job-title">Vector Database Engineer</span>
-                        <span class="job-desc">AI의 장기 기억 장치를 만드는 역할</span>
                     </span>
                     <span class="job-go">지원 →</span>
                 </a>
                 <a class="job" href="https://dno.career.greetinghr.com/ko/o/198903" target="_blank" rel="noopener">
                     <span class="job-text">
                         <span class="job-title">Storage System SW Engineer</span>
-                        <span class="job-desc">데이터 흐름의 기반을 단단하게 만드는 역할</span>
                     </span>
                     <span class="job-go">지원 →</span>
                 </a>
