@@ -1801,6 +1801,11 @@
             `;
             interviewModal.classList.add('is-open');
             document.body.style.overflow = 'hidden';
+            // .interview-body is a reused scroll container, and swapping its innerHTML
+            // does not reset scrollTop — so the next interview would open wherever the
+            // previous one was left off. Reset after is-open, because the modal is
+            // display:none (no layout box) until then.
+            interviewBody.scrollTop = 0;
         };
 
         const closeInterview = () => {
