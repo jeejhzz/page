@@ -32,12 +32,13 @@
             scroll-padding-top: 2rem;
         }
         .top-hero,
-        .max-w-4xl > header,
-        .max-w-4xl > section,
-        .max-w-4xl > .grid {
+        .page-shell > header,
+        .page-shell > section,
+        .page-shell > .grid {
             scroll-snap-align: start;
             scroll-snap-stop: normal;
         }
+        .page-shell { max-width: 78rem; }
         .text-orange { color: var(--brand-orange); }
         .bg-orange { background-color: var(--brand-orange); }
         
@@ -347,7 +348,7 @@
             justify-content: space-between;
             gap: 1.6rem;
             min-height: 15rem;
-            padding: 1.9rem;
+            padding: 2.15rem;
             border-radius: 1.25rem;
             background: #0f1a2c;
             border: 1px solid rgba(255, 255, 255, 0.09);
@@ -372,9 +373,9 @@
         }
         .rc-title { margin-top: 1.25rem; color: #8fa1b8; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.13em; text-transform: uppercase; line-height: 1.45; }
         .rc-person { margin-top: 0.6rem; display: flex; align-items: baseline; gap: 0.55rem; flex-wrap: wrap; }
-        .rc-person strong { color: #fff; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.03em; }
-        .rc-quote { margin-top: 1rem; color: #dbe4ee; font-size: 0.98rem; font-weight: 600; line-height: 1.6; word-break: keep-all; }
-        .rc-link { color: var(--brand-orange); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.01em; }
+        .rc-person strong { color: #fff; font-size: 1.65rem; font-weight: 900; letter-spacing: -0.03em; }
+        .rc-quote { margin-top: 1.05rem; color: #dbe4ee; font-size: 1.06rem; font-weight: 600; line-height: 1.6; word-break: keep-all; }
+        .rc-link { color: var(--brand-orange); font-size: 0.92rem; font-weight: 800; letter-spacing: 0.01em; }
         .role-card-grid {
             display: flex;
             gap: 1.5rem;
@@ -703,7 +704,7 @@
         .sec-title {
             margin-top: 1.1rem;
             word-break: keep-all;
-            font-size: clamp(1.9rem, 4vw, 2.55rem);
+            font-size: clamp(2.05rem, 4vw, 2.95rem);
             font-weight: 900;
             letter-spacing: -0.04em;
             line-height: 1.12;
@@ -711,9 +712,9 @@
         }
         .sec-lede {
             margin-top: 1.15rem;
-            max-width: 36rem;
+            max-width: 44rem;
             color: #94a3b8;
-            font-size: 1rem;
+            font-size: 1.08rem;
             line-height: 1.8;
         }
         .sec-lede b { color: #e2e8f0; font-weight: 600; }
@@ -832,7 +833,7 @@
         }
         .close-title {
             color: #fff;
-            font-size: 1.12rem;
+            font-size: 1.22rem;
             font-weight: 800;
             letter-spacing: -0.01em;
         }
@@ -843,7 +844,7 @@
             color: #7d8ba0; font-size: 0.78rem; font-weight: 700;
             letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem;
         }
-        .close-facts dd { color: #fff; font-size: 1.02rem; font-weight: 700; word-break: keep-all; }
+        .close-facts dd { color: #fff; font-size: 1.1rem; font-weight: 700; word-break: keep-all; }
         .close-actions { display: flex; flex-direction: column; gap: 0.75rem; }
         .close-btn {
             display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
@@ -887,7 +888,7 @@
         .vid-cap {
             margin-top: 0.85rem; padding-left: 0.5rem;
             border-left: 2px solid var(--brand-orange);
-            color: #94a3b8; font-size: 0.875rem; font-weight: 700;
+            color: #94a3b8; font-size: 0.95rem; font-weight: 700;
         }
         .vid-dots { display: flex; justify-content: center; gap: 0.45rem; margin-top: 1.6rem; }
         .vid-dot {
@@ -912,7 +913,6 @@
                     "aside chip";
                 column-gap: 2.5rem;
                 row-gap: 2.75rem;
-                margin-inline: calc(-1 * clamp(0px, (100vw - 100% - 5rem) / 2, 11rem));
             }
             .hero-logo { grid-area: logo; margin-bottom: 0; }
             .hero-title { grid-area: title; white-space: nowrap; font-size: min(4.9rem, 6vw); }
@@ -1064,24 +1064,24 @@
             padding: 1.7rem 0.25rem;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .benefit-ico { flex: 0 0 auto; width: 2.3rem; height: 2.3rem; color: var(--brand-orange); }
+        .benefit-ico { flex: 0 0 auto; width: 2.5rem; height: 2.5rem; color: var(--brand-orange); }
         .benefit-ico svg { width: 100%; height: 100%; display: block; }
-        .benefit h4 { color: #fff; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
-        .benefit p { margin-top: 0.4rem; color: #94a3b8; font-size: 0.9rem; line-height: 1.65; }
+        .benefit h4 { color: #fff; font-weight: 700; font-size: 1.14rem; letter-spacing: -0.01em; }
+        .benefit p { margin-top: 0.45rem; color: #94a3b8; font-size: 0.98rem; line-height: 1.7; }
 
         /* ===== Startup vibe cards ===== */
         .vibe-card {
             border-radius: 1.25rem;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 1.75rem;
+            padding: 2.05rem;
             transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
         }
         .vibe-card:hover { transform: translateY(-4px); border-color: rgba(255, 107, 0, 0.35); background: rgba(255, 107, 0, 0.045); }
-        .vibe-ico { display: block; width: 2.05rem; height: 2.05rem; color: var(--brand-orange); }
+        .vibe-ico { display: block; width: 2.3rem; height: 2.3rem; color: var(--brand-orange); }
         .vibe-ico svg { width: 100%; height: 100%; display: block; }
-        .vibe-card h3 { margin-top: 1.1rem; color: #fff; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.02em; }
-        .vibe-card p { margin-top: 0.55rem; color: #94a3b8; font-size: 0.94rem; line-height: 1.7; }
+        .vibe-card h3 { margin-top: 1.15rem; color: #fff; font-weight: 800; font-size: 1.22rem; letter-spacing: -0.02em; }
+        .vibe-card p { margin-top: 0.6rem; color: #94a3b8; font-size: 1.02rem; line-height: 1.72; }
         .pull-quote {
             margin-top: 1.5rem;
             padding: 1.6rem 1.9rem;
@@ -1136,7 +1136,7 @@
             color: var(--brand-navy);
             box-shadow: 0 8px 22px rgba(255, 107, 0, 0.32);
         }
-        .proc-step h4 { color: #fff; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+        .proc-step h4 { color: #fff; font-weight: 800; font-size: 1.14rem; letter-spacing: -0.02em; }
         .proc-step p { margin-top: 0.5rem; color: #9aa8bd; font-size: 0.88rem; line-height: 1.55; }
 
         @media (max-width: 767px) {
@@ -1183,7 +1183,7 @@
 </head>
 <body class="selection:bg-orange-500/30">
 
-    <div class="max-w-4xl mx-auto px-6 py-12 md:py-24">
+    <div class="page-shell mx-auto px-6 py-12 md:py-24">
         
         <!-- Header Section -->
         <header class="hero-grid mb-24">
@@ -1228,7 +1228,7 @@
                     900억 원 규모 Series A 투자 유치
                 </a>
             </div>
-            <div class="text-slate-300 leading-relaxed space-y-6 text-lg mb-12">
+            <div class="text-slate-300 leading-relaxed space-y-6 text-xl mb-12">
                 <p>디노티시아는 AI와 데이터 시스템의 융합을 통해 혁신적인 가치를 창출하는 <a href="https://www.koit.co.kr/news/articleView.html?idxno=205883" target="_blank" class="news-link">장기기억 인공지능 전문기업</a>으로, CB Insights의 <a href="https://zdnet.co.kr/view/?no=20250425111526" target="_blank" class="news-link">‘2025 글로벌 AI 100’</a>에 선정되며 기술력을 인정받았습니다.</p>
                 <p>세계 최초로 개발한 벡터 데이터 연산 가속기 <a href="https://www.epnc.co.kr/news/articleView.html?idxno=328142" target="_blank" class="news-link">'VDPU'</a>를 기반으로, 고성능 벡터 데이터베이스 <a href="https://www.etnews.com/20260324000436" target="_blank" class="news-link">‘SEAHORSE(씨홀스)’</a>를 선보이며 생성형 AI의 핵심 기술인 RAG 솔루션을 구현하고 있습니다.</p>
             </div>
@@ -1523,11 +1523,11 @@
                 <div class="vibe-card">
                     <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h4"/></svg></span>
                     <h3>기억 대신 기록으로</h3>
-                    <p>결정은 문서로 남겨, 모두가 같은 방향을 바라보게 해요.</p>
+                    <p>회의 중 결정된 사항은 문서로 남겨, 모두가 같은 그림을 보고 일해요.</p>
                 </div>
                 <div class="vibe-card">
                     <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M7 20h10"/><path d="M4 7.5h16"/><path d="m4 7.5-2 4.8a2.9 2.9 0 0 0 5.8 0Z"/><path d="m20 7.5 2 4.8a2.9 2.9 0 0 1-5.8 0Z"/></svg></span>
-                    <h3>직급보다 논리가 우선</h3>
+                    <h3>연차보다 논리가 우선</h3>
                     <p>연차와 상관없이 자유롭게 의견 내고, 책임을 따지기보다 함께 문제를 풀어요.</p>
                 </div>
             </div>
@@ -1699,7 +1699,7 @@
                 <span class="bg-orange/10 text-orange font-bold px-3 py-1 rounded-full mr-4 text-xs tracking-wider">문의</span>
                 <a href="mailto:journey.z@dnotitia.com" class="hover:text-white transition-colors border-b border-white/10">journey.z@dnotitia.com</a>
             </div>
-            <p class="opacity-60 text-xs">© 2025 Dnotitia Inc. All rights reserved.</p>
+            <p class="opacity-60 text-xs">© 2026 Dnotitia Inc. All rights reserved.</p>
         </footer>
     </div>
 
