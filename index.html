@@ -313,16 +313,17 @@
             transition: all 0.2s ease;
         }
         .role-tab:hover {
-            border-color: rgba(124, 140, 255, 0.36);
+            border-color: rgba(255, 107, 0, 0.32);
             color: white;
-            background: rgba(124, 140, 255, 0.12);
+            background: rgba(255, 107, 0, 0.09);
         }
         .role-tab.is-active {
-            color: white;
-            background: linear-gradient(135deg, #6856ff, #4936df);
-            border-color: rgba(255, 255, 255, 0.16);
-            box-shadow: 0 12px 28px rgba(73, 54, 223, 0.3);
+            color: var(--brand-navy);
+            background: var(--brand-orange);
+            border-color: transparent;
+            box-shadow: 0 10px 24px rgba(255, 107, 0, 0.26);
         }
+        .role-tab:focus-visible { outline: 2px solid var(--brand-orange); outline-offset: 3px; }
         .role-empty-message {
             display: none;
             margin-top: 2rem;
@@ -355,25 +356,25 @@
             transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
         }
         .role-card:hover {
-            border-color: rgba(124, 140, 255, 0.4);
+            border-color: rgba(255, 107, 0, 0.34);
             background: #111f36;
             transform: translateY(-3px);
         }
-        .role-card:focus-visible { outline: 2px solid #7c8cff; outline-offset: 3px; }
+        .role-card:focus-visible { outline: 2px solid var(--brand-orange); outline-offset: 3px; }
         .rc-badge {
             align-self: flex-start;
             display: inline-flex; align-items: center;
-            border-radius: 0.45rem;
-            background: linear-gradient(135deg, #6856ff, #4936df);
-            color: #fff; padding: 0.34rem 0.65rem;
-            font-size: 0.72rem; font-weight: 900; letter-spacing: 0.02em;
-            box-shadow: 0 10px 24px rgba(73, 54, 223, 0.28);
+            border-radius: 9999px;
+            background: rgba(255, 107, 0, 0.09);
+            border: 1px solid rgba(255, 107, 0, 0.26);
+            color: #ff9c4d; padding: 0.3rem 0.72rem;
+            font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em;
         }
-        .rc-title { margin-top: 1.2rem; color: #7c8cff; font-size: 0.9rem; font-weight: 900; letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.35; }
+        .rc-title { margin-top: 1.25rem; color: #8fa1b8; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.13em; text-transform: uppercase; line-height: 1.45; }
         .rc-person { margin-top: 0.6rem; display: flex; align-items: baseline; gap: 0.55rem; flex-wrap: wrap; }
         .rc-person strong { color: #fff; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.03em; }
-        .rc-quote { margin-top: 1rem; color: #e2e8f0; font-size: 0.98rem; font-weight: 700; line-height: 1.55; }
-        .rc-link { color: #7c8cff; font-size: 0.86rem; font-weight: 900; }
+        .rc-quote { margin-top: 1rem; color: #dbe4ee; font-size: 0.98rem; font-weight: 600; line-height: 1.6; word-break: keep-all; }
+        .rc-link { color: var(--brand-orange); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.01em; }
         .role-card-grid {
             display: flex;
             gap: 1.5rem;
@@ -410,6 +411,8 @@
             border-color: rgba(255, 107, 0, 0.35);
             background: rgba(255, 107, 0, 0.12);
         }
+        .role-card-control:focus-visible,
+        .vid-dot:focus-visible { outline: 2px solid var(--brand-orange); outline-offset: 3px; }
         .role-card-image {
             position: relative;
             aspect-ratio: 4 / 3;
@@ -474,7 +477,7 @@
             z-index: 2;
         }
         .role-card-title {
-            color: #7c8cff;
+            color: var(--brand-orange);
             font-size: 0.88rem;
             font-weight: 900;
             letter-spacing: 0.05em;
@@ -515,7 +518,7 @@
             line-height: 1.55;
         }
         .role-card-link {
-            color: #7c8cff;
+            color: var(--brand-orange);
             font-size: 0.86rem;
             font-weight: 900;
             white-space: nowrap;
@@ -550,7 +553,7 @@
             gap: 1.5rem;
             padding: 1.6rem 1.75rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.10), rgba(124, 140, 255, 0.08));
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.12), rgba(255, 107, 0, 0.02));
         }
         .interview-kicker {
             color: var(--brand-orange);
@@ -1031,8 +1034,9 @@
             transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
         }
         .vibe-card:hover { transform: translateY(-4px); border-color: rgba(255, 107, 0, 0.35); background: rgba(255, 107, 0, 0.045); }
-        .vibe-emoji { display: block; font-size: 1.9rem; line-height: 1; }
-        .vibe-card h3 { margin-top: 1rem; color: #fff; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.02em; }
+        .vibe-ico { display: block; width: 2.05rem; height: 2.05rem; color: var(--brand-orange); }
+        .vibe-ico svg { width: 100%; height: 100%; display: block; }
+        .vibe-card h3 { margin-top: 1.1rem; color: #fff; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.02em; }
         .vibe-card p { margin-top: 0.55rem; color: #94a3b8; font-size: 0.94rem; line-height: 1.7; }
         .pull-quote {
             margin-top: 1.5rem;
@@ -1167,7 +1171,10 @@
 
         <!-- About Dnotitia -->
         <section class="glass-card rounded-3xl p-10 md:p-14 mb-24">
-            <h2 class="text-3xl font-bold mb-8 italic text-orange border-b border-white/10 pb-4">About Dnotitia</h2>
+            <div class="sec-head" style="margin-bottom: 2.25rem;">
+                <span class="eyebrow">Company</span>
+                <h2 class="sec-title">About Dnotitia</h2>
+            </div>
 
             <!-- 인증 및 투자 정보 모듈 -->
             <div class="about-badges">
@@ -1344,7 +1351,7 @@
         <!-- Role Introduction -->
         <section id="roles" class="role-intro mb-24">
             <div class="sec-head">
-                <span class="eyebrow">👥 People at Dnotitia</span>
+                <span class="eyebrow">People at Dnotitia</span>
                 <h2 class="sec-title">디노티시아에서는 HW부터 SW까지<br class="hidden sm:block"> Full-Stack 전문가들과 함께 할 수 있어요</h2>
             </div>
             <div class="role-tabs" aria-label="직무소개 그룹 필터">
@@ -1455,28 +1462,28 @@
         <!-- How We Collaborate -->
         <section class="mb-24">
             <div class="sec-head">
-                <span class="eyebrow">🤝 How We Work</span>
+                <span class="eyebrow">How We Work</span>
                 <h2 class="sec-title">디노티시아가 일하는 법</h2>
                 <p class="sec-lede">구성원들이 꼽은 협업의 원칙이에요.</p>
             </div>
             <div class="grid sm:grid-cols-2 gap-4">
                 <div class="vibe-card">
-                    <span class="vibe-emoji">💬</span>
+                    <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a7 7 0 0 1-7 7H8l-4 3v-5.5A7 7 0 0 1 8 5h5a7 7 0 0 1 7 7Z"/><path d="M10.4 9.8a1.7 1.7 0 1 1 2.4 1.6c-.5.3-.9.7-.9 1.3v.3"/><path d="M11.9 15.6h.01"/></svg></span>
                     <h3>이해될 때까지 질문</h3>
                     <p>그 순간엔 시간이 걸려도, 서로 완전히 이해하고 나면 실수가 줄고 결국 더 빨라져요.</p>
                 </div>
                 <div class="vibe-card">
-                    <span class="vibe-emoji">📊</span>
+                    <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M7 20v-5"/><path d="M12 20V9"/><path d="M17 20v-8"/></svg></span>
                     <h3>감이 아니라 데이터로</h3>
                     <p>로그·시뮬레이션·계측 데이터 같은 객관적인 근거로 이야기하면 합의가 빨라요.</p>
                 </div>
                 <div class="vibe-card">
-                    <span class="vibe-emoji">📝</span>
+                    <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h4"/></svg></span>
                     <h3>기억 대신 기록으로</h3>
                     <p>결정은 문서로 남겨, 모두가 같은 방향을 바라보게 해요.</p>
                 </div>
                 <div class="vibe-card">
-                    <span class="vibe-emoji">🧩</span>
+                    <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M7 20h10"/><path d="M4 7.5h16"/><path d="m4 7.5-2 4.8a2.9 2.9 0 0 0 5.8 0Z"/><path d="m20 7.5 2 4.8a2.9 2.9 0 0 1-5.8 0Z"/></svg></span>
                     <h3>직급보다 논리가 우선</h3>
                     <p>연차와 상관없이 자유롭게 의견 내고, 책임을 따지기보다 함께 문제를 풀어요.</p>
                 </div>
@@ -1486,38 +1493,38 @@
         <!-- Why Dnotitia -->
         <section class="mb-24">
             <div class="sec-head">
-                <span class="eyebrow">✨ Why Dnotitia</span>
+                <span class="eyebrow">Why Dnotitia</span>
                 <h2 class="sec-title">디노티시아가 다른 점</h2>
                 <p class="sec-lede">구성원들이 직접 느낀 우리 회사의 매력이에요.</p>
             </div>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="vibe-card">
-                    <span class="vibe-emoji">🚀</span>
+                    <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="7.5" y="7.5" width="9" height="9" rx="1.4"/><path d="M10 3.5v4M14 3.5v4M10 16.5v4M14 16.5v4"/><path d="M3.5 10h4M3.5 14h4M16.5 10h4M16.5 14h4"/></svg></span>
                     <h3>세상에 없는 칩을 만들어요</h3>
                     <p>세계 최초 VDPU. 레퍼런스 없이 새로운 AI 반도체를 직접 설계하고 구현해요.</p>
                 </div>
                 <div class="vibe-card">
-                    <span class="vibe-emoji">🎯</span>
+                    <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5"/><path d="M10.5 21h3"/><path d="M12 3a5.8 5.8 0 0 0-3.7 10.3c.6.5.9 1.2.9 1.9V16h5.6v-.8c0-.7.3-1.4.9-1.9A5.8 5.8 0 0 0 12 3Z"/></svg></span>
                     <h3>내 아이디어가 현실이 돼요</h3>
                     <p>빠른 의사결정과 큰 영향력. 제안이 실제 설계에 반영되는 걸 눈으로 확인해요.</p>
                 </div>
                 <div class="vibe-card">
-                    <span class="vibe-emoji">🌱</span>
+                    <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="m15 7.5 4.5 4.5L15 16.5"/><circle cx="4" cy="12" r="1.5"/><circle cx="11" cy="12" r="1.5"/></svg></span>
                     <h3>A부터 Z까지 경험해요</h3>
                     <p>파편이 아니라 제품의 전 과정을 가까이서 경험하며 빠르게 성장해요.</p>
                 </div>
                 <div class="vibe-card">
-                    <span class="vibe-emoji">🗣️</span>
+                    <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h1v3l3.4-3"/><path d="M10.5 11.5a2 2 0 0 1 2-2H19a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-1v3l-3.4-3h-2.1a2 2 0 0 1-2-2Z"/></svg></span>
                     <h3>솔직한 피드백을 환영해요</h3>
                     <p>개선점을 솔직히 말해도 괜찮은 문화. 매일 조금씩 더 나은 방향으로 나아가요.</p>
                 </div>
                 <div class="vibe-card">
-                    <span class="vibe-emoji">🔗</span>
+                    <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="6" r="2.4"/><circle cx="18.5" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M7.9 6h8.2"/><path d="m7.2 8 3.5 8"/><path d="m16.8 8-3.5 8"/></svg></span>
                     <h3>팀 경계가 유연해요</h3>
                     <p>문제가 생기면 팀을 넘어 함께 모여 원인을 찾고 해결해요.</p>
                 </div>
                 <div class="vibe-card">
-                    <span class="vibe-emoji">🔥</span>
+                    <span class="vibe-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-8.5"/><path d="M12 12.5c0-3.1 2.5-5.6 5.6-5.6 0 3.1-2.5 5.6-5.6 5.6Z"/><path d="M12 14.5c0-2.6-2.1-4.7-4.7-4.7 0 2.6 2.1 4.7 4.7 4.7Z"/><path d="M4 21h16"/></svg></span>
                     <h3>동료들과 함께 성장해요</h3>
                     <p>업무에서도 삶에서도 매일 배우게 되는, 향상심 있는 사람들과 함께해요.</p>
                 </div>
@@ -1527,7 +1534,7 @@
         <!-- Benefits -->
         <section class="mb-24">
             <div class="sec-head">
-                <span class="eyebrow">🎁 Life at Dnotitia</span>
+                <span class="eyebrow">Life at Dnotitia</span>
                 <h2 class="sec-title">디노티시아는 구성원의 성장에 진심을 다합니다</h2>
             </div>
             <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-x-10 gap-y-9">
@@ -1579,7 +1586,7 @@
         <!-- Recruitment Process -->
         <section class="mb-24">
             <div class="sec-head">
-                <span class="eyebrow">📮 Recruit Process</span>
+                <span class="eyebrow">Recruit Process</span>
                 <h2 class="sec-title">지금 바로 디노티시아에 합류하세요</h2>
             </div>
             <div class="proc">
