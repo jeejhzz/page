@@ -855,18 +855,21 @@
             /* headline runs the full width so it stays on one line at full size,
                the chip sits beside the tagline, actions span the width underneath */
             .hero-grid {
-                grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+                grid-template-columns: minmax(0, 1fr) minmax(0, 470px);
                 grid-template-areas:
                     "logo  logo"
                     "title title"
                     "aside chip";
-                column-gap: 3rem;
+                column-gap: 2.5rem;
+                row-gap: 2.75rem;
                 margin-inline: calc(-1 * clamp(0px, (100vw - 100% - 5rem) / 2, 11rem));
             }
-            .hero-logo { grid-area: logo; }
+            .hero-logo { grid-area: logo; margin-bottom: 0; }
             .hero-title { grid-area: title; white-space: nowrap; font-size: min(4.9rem, 6vw); }
             .hero-aside { grid-area: aside; align-self: center; }
-            .hero-chip-stage { grid-area: chip; }
+            /* the masked chip leaves ~64px of empty pixels at the bottom of its box;
+               reclaim it from layout so the hero closes up (image itself is untouched) */
+            .hero-chip-stage { grid-area: chip; margin-bottom: -3.75rem; }
         }
         .hero-chip-stage {
             position: relative;
