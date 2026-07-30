@@ -668,6 +668,7 @@
 
         /* ===== Editorial section header ===== */
         .sec-head { margin-bottom: 3.5rem; }
+        .sec-head > .sec-title:first-child { margin-top: 0; }
         .eyebrow {
             display: inline-flex;
             align-items: center;
@@ -768,6 +769,8 @@
             background: rgba(255, 255, 255, 0.03);
         }
         .hero-btn-ghost:hover { border-color: rgba(255, 107, 0, 0.5); background: rgba(255, 107, 0, 0.08); color: #fff; }
+        .hero-btn-ghost .btn-arrow { opacity: 0.45; transition: opacity 0.2s ease, transform 0.2s ease; }
+        .hero-btn-ghost:hover .btn-arrow { opacity: 0.85; transform: translateX(2px); }
 
         /* ===== Landing hero ===== */
         .hero-grid { display: grid; grid-template-columns: 1fr; }
@@ -1149,7 +1152,7 @@
                 <p class="hero-sub">Pioneering the Next Era of AI with Vector Intelligence</p>
                 <div class="hero-actions-row">
                     <a href="https://dno.career.greetinghr.com/ko/home" target="_blank" rel="noopener" class="hero-btn-primary">채용 공고 바로가기 →</a>
-                    <a href="#roles" class="hero-btn-ghost">직무 소개 보러가기</a>
+                    <a href="#roles" class="hero-btn-ghost">직무 소개 보러가기<span class="btn-arrow" aria-hidden="true">→</span></a>
                 </div>
             </div>
 
@@ -1164,7 +1167,6 @@
         <!-- About Dnotitia -->
         <section class="glass-card rounded-3xl p-10 md:p-14 mb-24">
             <div class="sec-head" style="margin-bottom: 2.25rem;">
-                <span class="eyebrow">Company</span>
                 <h2 class="sec-title">About Dnotitia</h2>
             </div>
 
@@ -1202,7 +1204,7 @@
                         <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
                             <a class="yt-poster" href="https://www.youtube.com/watch?v=xPEdPYyrbwk" target="_blank" rel="noopener" aria-label="유튜브에서 영상 재생"><span class="yt-play" aria-hidden="true"></span><span class="yt-note">YouTube에서 재생</span></a>
                         </div>
-                        <p class="vid-cap">CTO가 이야기하는 디노티시아</p>
+                        <p class="vid-cap">디노티시아가 만들어가는 장기기억 AI</p>
                     </article>
                     <article class="vid-item">
                         <div class="video-container shadow-2xl shadow-orange-600/10 hover:border-orange/50 transition-all">
