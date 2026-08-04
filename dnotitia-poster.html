@@ -128,25 +128,9 @@
     .box h3 { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange-soft); margin-bottom: 1.15rem; }
     .fact + .fact { margin-top: 0.95rem; padding-top: 0.95rem; border-top: 1px solid rgba(255, 255, 255, 0.07); }
     .fact dt { color: var(--muted); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.05em; }
-    .fact dd { margin-top: 0.28rem; color: #fff; font-size: 0.96rem; font-weight: 700; word-break: keep-all; }
-    .steps { display: grid; gap: 0.55rem; counter-reset: s; }
-    .steps li { list-style: none; display: flex; align-items: center; gap: 0.7rem; color: #dbe4ee; font-size: 0.93rem; font-weight: 600; word-break: keep-all; }
-    .steps li::before {
-        counter-increment: s; content: counter(s);
-        flex: 0 0 auto; width: 1.45rem; height: 1.45rem; border-radius: 9999px;
-        display: grid; place-items: center;
-        background: rgba(255, 255, 255, 0.07); border: 1px solid var(--line);
-        font-size: 0.72rem; font-weight: 800; color: #fff;
-    }
-    .steps li:last-child::before { background: var(--orange); border-color: transparent; color: var(--navy); }
+    .fact dd { margin-top: 0.28rem; color: #fff; font-size: 0.96rem; font-weight: 700; word-break: break-word; }
+    .fact dd a { color: var(--orange); text-decoration: none; }
 
-    /* ---------- footer strip ---------- */
-    .foot { padding-top: 1.9rem; padding-bottom: 1.9rem; background: linear-gradient(180deg, transparent, rgba(255, 107, 0, 0.05)); }
-    .foot-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.6rem 1.5rem; }
-    .foot-cta { font-size: 1.06rem; font-weight: 800; color: #fff; letter-spacing: -0.01em; }
-    .foot-cta a { color: var(--orange); text-decoration: none; }
-    .foot-meta { font-size: 0.86rem; color: var(--muted); }
-    .foot-meta a { color: #cbd7e4; text-decoration: none; border-bottom: 1px solid var(--line); }
 
     @media (max-width: 720px) {
         body { padding: 1rem 0.75rem; }
@@ -328,26 +312,24 @@
                 </dl>
             </div>
             <div class="box">
-                <h3>전형 절차</h3>
-                <ol class="steps">
-                    <li>서류 전형</li>
-                    <li>1차 인터뷰</li>
-                    <li>2차 인터뷰</li>
-                    <li>레퍼런스 체크 및 처우 협의</li>
-                    <li>최종 합류</li>
-                </ol>
+                <h3>문의처</h3>
+                <dl>
+                    <div class="fact">
+                        <dt>채용 문의</dt>
+                        <dd><a href="mailto:journey.z@dnotitia.com">journey.z@dnotitia.com</a></dd>
+                    </div>
+                    <div class="fact">
+                        <dt>채용 홈페이지</dt>
+                        <dd><a href="https://dnotitia-recruit.com" target="_blank" rel="noopener">dnotitia-recruit.com</a></dd>
+                    </div>
+                    <div class="fact">
+                        <dt>커피챗 · 실시간 상담</dt>
+                        <dd>채용 홈페이지에서 신청</dd>
+                    </div>
+                </dl>
             </div>
         </div>
     </section>
 
-    <div class="rule"></div>
-
-    <!-- ============ footer strip ============ -->
-    <section class="pad foot">
-        <div class="foot-row">
-            <span class="foot-cta">지원 &amp; 직무 상세 · <a href="https://dnotitia-recruit.com" target="_blank" rel="noopener">dnotitia-recruit.com</a></span>
-            <span class="foot-meta">채용 문의 · <a href="mailto:journey.z@dnotitia.com">journey.z@dnotitia.com</a> &nbsp;|&nbsp; 커피챗 · 카카오톡 오픈채팅</span>
-        </div>
-    </section>
 </main>
 </div>
