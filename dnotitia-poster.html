@@ -51,12 +51,6 @@
         letter-spacing: -0.04em; word-break: keep-all;
     }
     h1 em { color: var(--orange); font-style: normal; }
-    .tagline {
-        margin-top: 1.1rem;
-        font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
-        font-style: italic; font-weight: 400;
-        font-size: 1.32rem; color: #c6d2e0; letter-spacing: 0.015em;
-    }
     .chip-wrap { position: relative; display: grid; place-items: center; }
     .chip-glow {
         position: absolute; width: 92%; aspect-ratio: 1; border-radius: 50%;
@@ -70,13 +64,6 @@
         mask-image: radial-gradient(66% 82% at 50% 48%, #000 52%, transparent 79%);
         filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.55));
     }
-    .badges { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 2.1rem; }
-    .badge {
-        border-radius: 9999px; padding: 0.46rem 0.95rem;
-        font-size: 0.8rem; font-weight: 700; letter-spacing: -0.01em;
-    }
-    .badge--line { border: 1px solid rgba(255, 107, 0, 0.32); background: rgba(255, 107, 0, 0.08); color: var(--orange-soft); }
-    .badge--fill { background: var(--orange); color: #fff; }
 
     /* ---------- section furniture ---------- */
     .eyebrow {
@@ -137,7 +124,6 @@
         .mast-grid { grid-template-columns: 1fr; }
         .chip-wrap { max-width: 17rem; margin: 0.5rem auto 0; }
         h1 { font-size: 2.1rem; }
-        .tagline { font-size: 1.1rem; }
         h2 { font-size: 1.5rem; }
         .trio { grid-template-columns: 1fr; }
         .mast-top { flex-direction: column; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; }
@@ -159,11 +145,6 @@
         <div class="mast-grid">
             <div>
                 <h1><em>장기기억 AI</em>를 향한<br>위대한 여정</h1>
-                <p class="tagline">Pioneering the Next Era of AI<br>with Vector Intelligence</p>
-                <div class="badges">
-                    <span class="badge badge--line">CB Insights ‘Global AI Agent 유망 기업’ 선정</span>
-                    <span class="badge badge--fill">900억 원 규모 Series A 투자 유치</span>
-                </div>
             </div>
             <div class="chip-wrap">
                 <div class="chip-glow" aria-hidden="true"></div>
