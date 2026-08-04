@@ -140,25 +140,13 @@
     }
     .steps li:last-child::before { background: var(--orange); border-color: transparent; color: var(--navy); }
 
-    /* ---------- close ---------- */
-    .close { background: linear-gradient(180deg, transparent, rgba(255, 107, 0, 0.05)); }
-    .close h2 { font-size: 2rem; }
-    .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.9rem; }
-    .btn {
-        display: inline-flex; align-items: center; gap: 0.45rem;
-        padding: 0.95rem 1.7rem; border-radius: 9999px;
-        font-size: 1rem; font-weight: 800; letter-spacing: -0.01em;
-        text-decoration: none; transition: filter 0.2s ease, transform 0.2s ease, background 0.2s ease;
-    }
-    .btn:hover { filter: brightness(1.07); transform: translateY(-2px); }
-    .btn--primary { background: var(--orange); color: #fff; box-shadow: 0 14px 32px rgba(255, 107, 0, 0.28); }
-    .btn--ghost { border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.03); color: #e2e8f0; }
-    .btn--ghost span { opacity: 0.45; }
-    .contact { margin-top: 2rem; padding-top: 1.6rem; border-top: 1px solid var(--line);
-               display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.9rem;
-               font-size: 0.86rem; color: var(--muted); }
-    .contact a { color: #cbd7e4; text-decoration: none; border-bottom: 1px solid var(--line); }
-    .contact a:hover { color: #fff; }
+    /* ---------- footer strip ---------- */
+    .foot { padding-top: 1.9rem; padding-bottom: 1.9rem; background: linear-gradient(180deg, transparent, rgba(255, 107, 0, 0.05)); }
+    .foot-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.6rem 1.5rem; }
+    .foot-cta { font-size: 1.06rem; font-weight: 800; color: #fff; letter-spacing: -0.01em; }
+    .foot-cta a { color: var(--orange); text-decoration: none; }
+    .foot-meta { font-size: 0.86rem; color: var(--muted); }
+    .foot-meta a { color: #cbd7e4; text-decoration: none; border-bottom: 1px solid var(--line); }
 
     @media (max-width: 720px) {
         body { padding: 1rem 0.75rem; }
@@ -168,10 +156,8 @@
         h1 { font-size: 2.1rem; }
         .tagline { font-size: 1.1rem; }
         h2 { font-size: 1.5rem; }
-        .close h2 { font-size: 1.6rem; }
         .trio, .cols { grid-template-columns: 1fr; }
         .mast-top { flex-direction: column; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; }
-        .btn { width: 100%; justify-content: center; }
     }
 </style>
 <div class="poster-stage">
@@ -356,20 +342,12 @@
 
     <div class="rule"></div>
 
-    <!-- ============ close ============ -->
-    <section class="pad close">
-        <span class="eyebrow">Join Us</span>
-        <h2>지금 바로 디노티시아에 합류하세요</h2>
-        <p class="lead">직무별 상세 소개와 현직자 인터뷰는 채용 홈페이지에서 확인하실 수 있습니다.</p>
-        <div class="actions">
-            <a class="btn btn--primary" href="https://dno.career.greetinghr.com/ko/home" target="_blank" rel="noopener">채용 공고 바로가기 →</a>
-            <a class="btn btn--ghost" href="https://dnotitia-recruit.com" target="_blank" rel="noopener">직무 소개 · 현직자 인터뷰 <span>→</span></a>
-        </div>
-        <div class="contact">
-            <span>커피챗 신청 · <a href="https://forms.gle/yBkLR8Vp8tf61Lh46" target="_blank" rel="noopener">신청 폼</a> &nbsp;|&nbsp; 실시간 문의 · <a href="https://open.kakao.com/o/sw3Shdqi" target="_blank" rel="noopener">카카오톡 오픈채팅</a></span>
-            <span>채용 문의 · <a href="mailto:journey.z@dnotitia.com">journey.z@dnotitia.com</a></span>
+    <!-- ============ footer strip ============ -->
+    <section class="pad foot">
+        <div class="foot-row">
+            <span class="foot-cta">지원 &amp; 직무 상세 · <a href="https://dnotitia-recruit.com" target="_blank" rel="noopener">dnotitia-recruit.com</a></span>
+            <span class="foot-meta">채용 문의 · <a href="mailto:journey.z@dnotitia.com">journey.z@dnotitia.com</a> &nbsp;|&nbsp; 커피챗 · 카카오톡 오픈채팅</span>
         </div>
     </section>
-
 </main>
 </div>
