@@ -123,13 +123,12 @@
     .job-go { flex: 0 0 auto; color: var(--orange); font-size: 0.82rem; font-weight: 800; opacity: 0.75; }
 
     /* ---------- facts + process ---------- */
-    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .box { border: 1px solid var(--line); border-radius: 1rem; background: rgba(255, 255, 255, 0.025); padding: 1.6rem 1.5rem; }
     .box h3 { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange-soft); margin-bottom: 1.15rem; }
     .fact + .fact { margin-top: 0.95rem; padding-top: 0.95rem; border-top: 1px solid rgba(255, 255, 255, 0.07); }
     .fact dt { color: var(--muted); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.05em; }
     .fact dd { margin-top: 0.28rem; color: #fff; font-size: 0.96rem; font-weight: 700; word-break: break-word; }
-    .fact dd a { color: var(--orange); text-decoration: none; }
+    .fact dd a { color: inherit; font: inherit; text-decoration: none; }
 
 
     @media (max-width: 720px) {
@@ -140,7 +139,7 @@
         h1 { font-size: 2.1rem; }
         .tagline { font-size: 1.1rem; }
         h2 { font-size: 1.5rem; }
-        .trio, .cols { grid-template-columns: 1fr; }
+        .trio { grid-template-columns: 1fr; }
         .mast-top { flex-direction: column; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; }
     }
 </style>
@@ -297,33 +296,22 @@
 
     <!-- ============ conditions + process ============ -->
     <section class="pad">
-        <div class="cols">
-            <div class="box">
-                <h3>근무 조건</h3>
-                <dl>
-                    <div class="fact">
-                        <dt>근무 형태</dt>
-                        <dd>정규직 / 인턴 (3개월 후 전환 가능)</dd>
-                    </div>
-                    <div class="fact">
-                        <dt>근무지</dt>
-                        <dd>서울시 강남구 (유연근무 &amp; 재택근무 가능)</dd>
-                    </div>
-                </dl>
-            </div>
-            <div class="box">
-                <h3>문의처</h3>
-                <dl>
-                    <div class="fact">
-                        <dt>채용 문의</dt>
-                        <dd><a href="mailto:journey.z@dnotitia.com">journey.z@dnotitia.com</a></dd>
-                    </div>
-                    <div class="fact">
-                        <dt>커피챗 · 실시간 상담</dt>
-                        <dd><a href="https://open.kakao.com/o/sw3Shdqi" target="_blank" rel="noopener">카카오톡 오픈채팅</a></dd>
-                    </div>
-                </dl>
-            </div>
+        <div class="box">
+            <h3>근무 조건</h3>
+            <dl>
+                <div class="fact">
+                    <dt>근무 형태</dt>
+                    <dd>정규직 / 인턴 (3개월 후 전환 가능)</dd>
+                </div>
+                <div class="fact">
+                    <dt>근무지</dt>
+                    <dd>서울시 강남구 (유연근무 &amp; 재택근무 가능)</dd>
+                </div>
+                <div class="fact">
+                    <dt>문의처</dt>
+                    <dd><a href="mailto:journey.z@dnotitia.com">journey.z@dnotitia.com</a></dd>
+                </div>
+            </dl>
         </div>
     </section>
 
