@@ -860,6 +860,18 @@
             box-shadow: 0 14px 32px rgba(255, 107, 0, 0.26);
         }
         .close-btn--kakao { background: #FEE500; color: #371D1E; }
+        .close-note {
+            margin-top: 1.15rem;
+            color: #94a3b8; font-size: 0.92rem; line-height: 1.65;
+            word-break: keep-all;
+        }
+        .close-mail {
+            margin-top: 0.9rem; padding-top: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            color: #7d8ba0; font-size: 0.88rem; font-weight: 600;
+        }
+        .close-mail a { color: #e2e8f0; text-decoration: none; border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
+        .close-mail a:hover { color: #fff; border-color: rgba(255, 107, 0, 0.6); }
 
         /* ===== Video carousel ===== */
         .vid-carousel { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 2.5rem; }
@@ -1685,21 +1697,18 @@
             <div class="close-card close-card--ask">
                 <h3 class="close-title">채용이 궁금하신가요?</h3>
                 <div class="close-actions">
-                    <a href="https://forms.gle/yBkLR8Vp8tf61Lh46" target="_blank" rel="noopener" class="close-btn close-btn--primary">커피챗 신청하기</a>
                     <a href="https://open.kakao.com/o/sw3Shdqi" target="_blank" rel="noopener" class="close-btn close-btn--kakao">
                         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3c-4.97 0-9 3.134-9 7 0 2.39 1.55 4.496 3.94 5.75-.145.54-.52 1.94-.596 2.22-.09.333.11.328.232.247.095-.064 1.514-.94 2.115-1.32.417.1.848.153 1.309.153 4.97 0 9-3.134 9-7s-4.03-7-9-7z"/></svg>
-                        카카오톡 실시간 상담
+                        디노티시아 채용 문의
                     </a>
                 </div>
+                <p class="close-note">커피챗을 원하시면 오픈채팅으로 편하게 요청해 주세요.</p>
+                <p class="close-mail">채용 문의 · <a href="mailto:journey.z@dnotitia.com">journey.z@dnotitia.com</a></p>
             </div>
         </div>
 
-        <footer class="pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-sm text-slate-400 gap-6">
-            <div class="flex items-center">
-                <span class="bg-orange/10 text-orange font-bold px-3 py-1 rounded-full mr-4 text-xs tracking-wider">문의</span>
-                <a href="mailto:journey.z@dnotitia.com" class="hover:text-white transition-colors border-b border-white/10">journey.z@dnotitia.com</a>
-            </div>
-            <p class="opacity-60 text-xs">© 2026 Dnotitia Inc. All rights reserved.</p>
+        <footer class="pt-10 border-t border-white/10 text-center">
+            <p class="opacity-60 text-xs text-slate-400">© 2026 Dnotitia Inc. All rights reserved.</p>
         </footer>
     </div>
 
