@@ -6,7 +6,7 @@
 const EMPTY = () => ({
   name: '', nameEn: '', birth: '', gender: '', address: '', phone: '', email: '',
   links: [], targetRole: '', summary: '',
-  education: [], experience: [], awards: [], patents: [],
+  education: [], experience: [], projects: [], awards: [], patents: [],
   certificates: [], languages: [], skills: [], publications: [],
   military: '',
   _meta: { sourceFile: '', extractedAt: '', engine: '', warnings: [] },
@@ -34,7 +34,7 @@ function normEmail(v) {
 function normMonth(v) {
   if (!v) return '';
   const s = String(v).trim();
-  if (/^(현재|재직\s*중|재학\s*중|present|current|now)$/i.test(s)) return '현재';
+  if (/^(현\s*재|재직(\s*중)?|재학(\s*중)?|present|current|now)$/i.test(s)) return '현재';
   let m = s.match(/(\d{4})\s*[.\-/년]\s*(\d{1,2})/);
   if (m) return `${m[1]}.${String(m[2]).padStart(2, '0')}`;
   m = s.match(/^(\d{4})\s*년?$/);
@@ -78,7 +78,13 @@ function age(birth) {
 }
 
 const arr = v => (Array.isArray(v) ? v : v ? [v] : []);
-const str = v => (v == null ? '' : String(v).trim());
+// 값에 남는 빈 괄호·중복 공백·끝의 구분자를 털어낸다.
+// 자동 추출 결과에는 "한양대학교 사학과 ( ) — 학" 같은 찌꺼기가 붙기 쉽다.
+const str = v => (v == null ? '' : String(v)
+  .replace(/[(（[]\s*[)）\]]/g, ' ')
+  .replace(/\s{2,}/g, ' ')
+  .replace(/[\s,|/·\-–—]+$/, '')
+  .trim());
 
 /** 어떤 모양으로 들어오든 표준 스키마로 강제한다. */
 function normalize(raw, meta = {}) {
@@ -115,13 +121,16 @@ function normalize(raw, meta = {}) {
     gpa: str(e.gpa), note: str(e.note),
   })).filter(e => e.school || e.major);
 
-  o.experience = arr(r.experience).map(e => ({
+  const asExp = e => ({
     company: str(e.company), team: str(e.team), title: str(e.title),
     start: normMonth(e.start), end: normMonth(e.end),
     location: str(e.location),
     bullets: arr(e.bullets).map(str).filter(Boolean),
     stack: arr(e.stack).map(str).filter(Boolean),
-  })).filter(e => e.company || e.title);
+  });
+  const keepExp = e => e.company || e.title;
+  o.experience = arr(r.experience).map(asExp).filter(keepExp);
+  o.projects = arr(r.projects).map(asExp).filter(keepExp);
 
   o.awards = arr(r.awards).map(a => ({
     title: str(a.title), issuer: str(a.issuer), date: normMonth(a.date), note: str(a.note),
@@ -170,7 +179,7 @@ function audit(o) {
   if (!o.email) w.push('이메일을 찾지 못했습니다');
   if (!o.phone) w.push('연락처를 찾지 못했습니다');
   if (!o.education.length) w.push('학력이 비어 있습니다');
-  if (!o.experience.length) w.push('경력이 비어 있습니다');
+  if (!o.experience.length && !o.projects.length) w.push('경력이 비어 있습니다');
   for (const e of o.experience) {
     if (!e.start) w.push(`경력 기간 누락: ${e.company || e.title}`);
   }

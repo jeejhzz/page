@@ -1,4 +1,4 @@
-// 테스트용 가상 이력서 3종을 서로 다른 양식/형식으로 만든다.
+// 테스트용 가상 이력서 5종을 서로 다른 양식·형식으로 만든다.
 // 실제 지원자 자료가 아니라 전부 지어낸 내용이다.
 const fs = require('fs');
 const path = require('path');
@@ -166,8 +166,39 @@ async function makePdf() {
   await close();
 }
 
+// 4) 한글(HWPX) — ZIP + OWPML XML
+function makeHwpx() {
+  const AdmZip = require('adm-zip');
+  const P = (t, cells) => (cells
+    ? `<hp:p><hp:tbl><hp:tr>${cells.map(c => `<hp:tc><hp:t>${c}</hp:t></hp:tc>`).join('')}</hp:tr></hp:tbl></hp:p>`
+    : `<hp:p><hp:run><hp:t>${t}</hp:t></hp:run></hp:p>`);
+  const xml = '<?xml version="1.0" encoding="UTF-8"?><hml:section xmlns:hp="h" xmlns:hml="m">'
+    + P('이 력 서')
+    + P(null, ['성명', '정한별']) + P(null, ['생년월일', '1992-04-11'])
+    + P(null, ['성별', '여']) + P(null, ['연락처', '010-1111-2222'])
+    + P(null, ['이메일', 'hanbyul.jung@example.com'])
+    + P(null, ['지원 직무', 'SoC PKG / Board HW Engineer'])
+    + P('학력사항')
+    + P('2014.03 ~ 2018.02\t서강대학교 화학공학과 학사 졸업\tGPA 3.9/4.5')
+    + P('경력사항')
+    + P('2018.03 ~ 현재\t한빛소재 | 공정개발팀 | 선임연구원')
+    + P('- 박막 증착 공정 수율 12% 개선')
+    + P('- 신규 소재 평가 프로토콜 수립')
+    + P('기술 스택: Python, JMP, SPC')
+    + P('수상')
+    + P('2021.09\t사내 기술혁신상\t한빛소재')
+    + P('어학')
+    + P('2023.03\tTOEIC 890')
+    + '</hml:section>';
+  const zip = new AdmZip();
+  zip.addFile('mimetype', Buffer.from('application/hwp+zip'));
+  zip.addFile('Contents/section0.xml', Buffer.from(xml, 'utf8'));
+  zip.writeZip(path.join(HERE, 'sample-5-hangul.hwpx'));
+}
+
 (async () => {
   await makeDocx();
   await makePdf();
-  console.log('샘플 3종 생성 완료:', fs.readdirSync(HERE).filter(f => f.startsWith('sample')).join(', '));
+  makeHwpx();
+  console.log('샘플 생성 완료:', fs.readdirSync(HERE).filter(f => f.startsWith('sample')).join(', '));
 })();

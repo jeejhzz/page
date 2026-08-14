@@ -47,6 +47,13 @@ const LABEL = {
   role: /^(지원\s*(직무|분야|부문|포지션)|희망\s*직무|position|applying\s*for)\s*[:：|\t]?\s*(.+)$/i,
 };
 
+const { HEAD } = require('./extract');
+
+// 문서 고유의 제목("AI 시장 공략 전략" 등)인지, 항목의 머리(회사명 등)인지 가른다.
+// 회사명은 짧고 법인 표기가 붙는 편이고, 구역 제목은 구(句)에 가깝다.
+const ORG = /㈜|\(주\)|주식회사|유한회사|\bInc\b|\bCorp\b|\bLtd\b|\bLLC\b|대학|학교|연구소|재단|공사|공단/i;
+const looksLikeSectionTitle = t => t.length >= 12 && !ORG.test(t);
+
 const clean = s => String(s || '').replace(/^[\s:：|\t·\-–—]+/, '').replace(/[\s|\t]+$/, '').trim();
 const isHeading = l => l.length <= 24 && !/[.。]$/.test(l);
 
@@ -55,16 +62,25 @@ function splitSections(text) {
   const out = { _head: [] };
   let cur = '_head';
   for (const raw of lines) {
-    const l = raw.trim();
+    const marked = raw.startsWith(HEAD);          // 추출 단계에서 큰 글씨로 표시된 줄
+    const l = (marked ? raw.slice(1) : raw).trim();
     if (!l) { (out[cur] = out[cur] || []).push(''); continue; }
     // "4)경력", "3. 보유기술", "■ 학력" 처럼 앞에 붙는 기호·번호를 걷어낸 뒤 제목인지 본다
     const bare = l
       .replace(/^[■□▶●○◆◇▪•\-–—#*\s]+/, '')
       .replace(/^\d{1,2}\s*[).\]]\s*/, '')
       .replace(/[:：]\s*$/, '').trim();
+
     const hit = isHeading(bare) && SECTION.find(([, re]) => re.test(bare));
     if (hit) { cur = hit[0]; out[cur] = out[cur] || []; continue; }
-    (out[cur] = out[cur] || []).push(l);
+
+    // 우리가 모르는 제목이라도 큰 글씨면 구역이 바뀐 것이다.
+    // 단 회사명처럼 항목의 머리일 수 있으니, 구(句)에 가까울 때만 구역을 닫는다.
+    if (marked && cur !== '_head' && looksLikeSectionTitle(bare)) {
+      cur = '_ignore'; out[cur] = out[cur] || []; continue;
+    }
+    // 항목 머리로 남길 때는 표시자를 유지한다 — chunk() 가 항목 경계로 쓴다.
+    (out[cur] = out[cur] || []).push(marked ? HEAD + l : l);
   }
   for (const k of Object.keys(out)) out[k] = out[k].join('\n').trim();
   return out;
@@ -92,7 +108,8 @@ function chunk(block) {
   const items = [];
   let cur = null;
   for (const raw of String(block || '').split('\n')) {
-    const l = raw.trim();
+    const marked = raw.startsWith(HEAD);
+    const l = (marked ? raw.slice(1) : raw).trim();
     if (!l) continue;
     const bullet = BULLET.test(l);
     const hasDate = RE.range.test(l) || /\b(19|20)\d{2}\s*[.\-/년]/.test(l);
@@ -105,8 +122,16 @@ function chunk(block) {
       continue;
     }
 
+    // 기간 줄 다음에 회사명이 큰 글씨로 오는 양식. 아직 본문이 안 붙은 상태면
+    // 새 항목을 열지 말고 머리를 이어 붙인다 — 같은 항목의 머리 블록이다.
+    if (marked && cur && !bullet && cur.body.length === 0) {
+      cur.head = cur.head ? `${cur.head} | ${l}` : l;
+      continue;
+    }
+
     // 섹션이 글머리표로 바로 시작하는 이력서도 있다. 그때는 머리 없는 항목을 연다.
-    if (!cur || (!bullet && hasDate)) {
+    // 큰 글씨 줄(회사명 등)도 날짜가 없어도 새 항목을 연다.
+    if (!cur || (!bullet && (hasDate || marked))) {
       cur = { head: bullet ? '' : l, body: [] };
       items.push(cur);
       if (!bullet) continue;
@@ -120,7 +145,9 @@ function parseEducation(block) {
   return chunk(block).map(({ head, lines }) => {
     const { start, end, rest: raw } = parseRange(head);
     // 학점·학위·상태는 따로 뽑아 쓰므로 본문에서 걷어내야 전공에 섞이지 않는다
-    const gm = raw.match(/(?:GPA|학점|평점)\s*[:：]?\s*([\d.]+\s*\/\s*[\d.]+|[\d.]+)/i);
+    // "학점 4.1/4.3" 뿐 아니라 "(4.0/4.5)" 처럼 라벨 없이 적는 경우도 잡는다
+    const gm = raw.match(/(?:GPA|학점|평점)\s*[:：]?\s*([\d.]+\s*\/\s*[\d.]+|[\d.]+)/i)
+      || raw.match(/[(（]?\s*([0-4]\.\d{1,2}\s*\/\s*[0-5]\.\d{1,2})\s*[)）]?/);
     const dm = raw.match(RE.degree), sm = raw.match(RE.eduStatus);
     let rest = raw;
     for (const m of [gm, dm, sm]) if (m) rest = rest.replace(m[0], ' ');
@@ -143,28 +170,42 @@ const TEAM_RE = /(팀|그룹|본부|실|센터|부서|사업부|team|group|divis
 function parseExperience(block) {
   return chunk(block).map(({ head, body }) => {
     const { start, end, rest } = parseRange(head);
-    let c = cells(rest);
 
-    // "2025.04 ~ 현재 (계약직)" 처럼 기간만 한 줄에 적고
-    // 회사·직책을 다음 줄들에 쓰는 양식이 흔하다. 글머리표 없는 앞쪽 줄을 끌어온다.
+    // 회사·팀·직책은 머리줄에 다 있을 수도, 다음 줄들에 나뉘어 있을 수도 있다.
+    // 두 곳을 한 후보 목록으로 합쳐 놓고 고른다.
     const firstBullet = body.findIndex(b => b.bullet);
-    const preLines = (firstBullet < 0 ? body : body.slice(0, firstBullet)).map(b => b.t);
-    // 머리줄에 "(계약직)" 같은 괄호 주석 말고 실질적인 낱말이 하나도 없으면 기간만 적힌 줄이다
-    const meaningful = c.filter(x => /[가-힣A-Za-z]{2,}/.test(x) && !/^[(（].*[)）]$/.test(x));
-    const headOnlyDate = meaningful.length === 0;
-    if (headOnlyDate && preLines.length) c = [...preLines.flatMap(cells), ...c];
+    const pre = (firstBullet < 0 ? body : body.slice(0, firstBullet)).filter(b => !b.bullet);
+    const headCells = cells(rest);
+    const pool = [
+      ...headCells.map(t => ({ t, from: null })),
+      ...pre.flatMap(b => cells(b.t).map(t => ({ t, from: b }))),
+    ];
+    // "(계약직)" 같은 괄호 주석은 회사명도 직책도 아니다
+    const real = pool.filter(x => /[가-힣A-Za-z]/.test(x.t) && !/^[(（].*[)）]$/.test(x.t));
 
-    const title = c.find(x => TITLE_RE.test(x)) || '';
-    const team = c.find(x => x !== title && TEAM_RE.test(x)) || '';
-    const company = c.find(x => x !== title && x !== team && /[가-힣A-Za-z]/.test(x)) || c[0] || '';
+    const used = [];
+    const take = pred => {
+      const hit = real.find(x => !used.includes(x) && pred(x.t));
+      if (hit) used.push(hit);
+      return hit;
+    };
+    const titleEnt = take(t => TITLE_RE.test(t));
+    const teamEnt = take(t => TEAM_RE.test(t));
+    const companyEnt = take(t => ORG.test(t)) || take(() => true);
 
-    const rest2 = body.filter(b => !(headOnlyDate && preLines.includes(b.t) && !b.bullet));
+    // 회사·직책으로 쓴 줄은 성과 목록에서 뺀다
+    const consumed = new Set(used.map(u => u.from).filter(Boolean));
+    const rest2 = body.filter(b => !consumed.has(b));
     const stackLine = rest2.find(b => /^(기술\s*스택|사용\s*기술|스택|stack|tech)\s*[:：]/i.test(b.t));
+
     return {
-      company, team, title, start, end, location: '',
+      company: companyEnt ? companyEnt.t : (headCells[0] || ''),
+      team: teamEnt ? teamEnt.t : '',
+      title: titleEnt ? titleEnt.t : '',
+      start, end, location: '',
       bullets: rest2.filter(b => b !== stackLine).map(b => b.t),
       stack: stackLine
-        ? stackLine.t.split(/[:：]/).slice(1).join(':').split(/[,·、/]/).map(s => s.trim()).filter(Boolean)
+        ? stackLine.t.split(/[:：]/).slice(1).join(':').split(/[,·、/]/).map(x => x.trim()).filter(Boolean)
         : [],
     };
   });
@@ -229,11 +270,40 @@ function parsePublications(block) {
   });
 }
 
+const SCHOOL_RE = /(대학교|대학원|과학기술원|university|college|institute)/i;
+
+// 구역 구분 없이 흩어져 있는 학력 줄을 줍는다. 마지막 수단이라 조건을 빡빡하게 둔다.
+function harvestEducation(text) {
+  const seen = new Set();
+  return text.split('\n').map(l => l.trim())
+    .filter(l => l && l.length <= 90 && SCHOOL_RE.test(l))
+    .filter(l => !/(재학생|대학생|졸업생|대학원생|학교\s*측|대학\s*내)/.test(l))
+    .map(l => {
+      // 한 줄에 연락처·학교가 탭으로 나란히 오는 머리글이 흔하다. 학교가 있는 칸만 쓴다.
+      const cell = cells(l).find(c => SCHOOL_RE.test(c)) || l;
+      const gpa = (l.match(/[(（]?\s*[0-4]\.\d{1,2}\s*\/\s*[0-5]\.\d{1,2}\s*[)）]?/) || [''])[0];
+      const one = parseEducation(cell + (gpa && !cell.includes(gpa) ? ' ' + gpa : ''))[0];
+      if (!one || !one.school) return null;
+      // 지나가는 말로 학교가 언급된 줄까지 학력으로 삼지 않도록,
+      // 기간·학위·상태·학점 중 하나는 있어야 한다.
+      if (!(one.start || one.degree || one.status || one.gpa)) return null;
+      const key = one.school.replace(/\s/g, '');
+      if (seen.has(key)) return null;
+      seen.add(key);
+      return one;
+    })
+    .filter(Boolean)
+    .slice(0, 6);
+}
+
 /** 평문 → 표준 스키마 직전의 느슨한 객체 */
 function parseWithRules(text) {
   const S = splitSections(text);
-  const head = [S._head, S.personal || ''].join('\n');
-  const all = text;
+  // 라벨·이름 탐색에는 제목 표시자가 방해가 되므로 걷어낸다.
+  // (구역 블록에는 그대로 둔다 — chunk() 가 항목 경계로 쓴다)
+  const strip = t => String(t || '').split(HEAD).join('');
+  const head = strip([S._head, S.personal || ''].join('\n'));
+  const all = strip(text);
   const warnings = [];
   const out = {};
 
@@ -297,15 +367,39 @@ function parseWithRules(text) {
   const links = [...new Set(all.match(RE.url) || [])].filter(u => !/^https?:\/\/(www\.)?(google|naver|daum)\./.test(u));
   out.links = links.slice(0, 6);
 
-  out.summary = (S.summary || '').split('\n').filter(Boolean).join(' ').slice(0, 600);
-  out.military = (S.military || '').split('\n').filter(Boolean).join(' ').slice(0, 120);
+  // 평문으로 쓰는 구역에서는 제목 표시자를 걷어낸다
+  out.summary = strip(S.summary || '').split('\n').filter(Boolean).join(' ').slice(0, 600);
+  out.military = strip(S.military || '').split('\n').filter(Boolean).join(' ').slice(0, 120);
   out.education = parseEducation(S.education);
-  out.experience = [...parseExperience(S.experience), ...parseExperience(S.projects)];
+  // 학력 구역이 아예 없고 머리글에만 "한양대학교 사학과 (4.0/4.5)" 처럼 적는 이력서가 있다.
+  // 그럴 때는 문서 전체에서 학교가 들어간 줄을 주워 담는다.
+  {
+    // 문서 곳곳에 흩어진 학력을 보탠다. "뽑을 수 있는 만큼" 이 목표다.
+    // 같은 학교가 두 번 나오면 버리지 말고 빈 칸을 서로 채운다.
+    const norm = t => (t || '').replace(/\s/g, '');
+    const same = (a, b) => {
+      const x = norm(a), y = norm(b);
+      if (!x || !y) return false;
+      const n = Math.min(8, x.length, y.length);
+      return x.slice(0, n) === y.slice(0, n);
+    };
+    for (const e of harvestEducation(all)) {
+      const hit = out.education.find(o => same(o.school, e.school));
+      if (!hit) { out.education.push(e); continue; }
+      for (const k of ['major', 'degree', 'status', 'start', 'end', 'gpa']) {
+        if (!hit[k] && e[k]) hit[k] = e[k];
+      }
+      if (norm(e.school).length < norm(hit.school).length) hit.school = e.school;
+    }
+    out.education = out.education.filter(e => e.school || e.major);
+  }
+  out.experience = parseExperience(S.experience);
+  out.projects = parseExperience(S.projects);
   out.awards = parseAwards(S.awards);
   out.patents = parsePatents(S.patents);
   out.certificates = parseCertificates(S.certificates);
   out.languages = parseLanguages(S.languages);
-  out.skills = parseSkills(S.skills);
+  out.skills = parseSkills(strip(S.skills));
   out.publications = parsePublications(S.publications);
 
   out._meta = { engine: 'rules', warnings };

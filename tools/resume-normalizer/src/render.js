@@ -140,6 +140,14 @@ function renderHtml(o, opts = {}) {
     (e.stack.length ? `<div class="tags">${e.stack.map(s => `<i>${esc(s)}</i>`).join('')}</div>` : '')
   )).join('');
 
+  const projects = o.projects.map(e => entry(
+    period(e.start, e.end),
+    `<strong>${esc(e.company)}</strong>` +
+    (e.title || e.team ? `<div class="meta">${joinDot(e.title, e.team)}</div>` : '') +
+    (e.bullets.length ? `<ul>${e.bullets.map(b => `<li>${esc(b)}</li>`).join('')}</ul>` : '') +
+    (e.stack.length ? `<div class="tags">${e.stack.map(s => `<i>${esc(s)}</i>`).join('')}</div>` : '')
+  )).join('');
+
   const awards = o.awards.map(a => entry(
     esc(a.date),
     `<strong>${esc(a.title)}</strong>` +
@@ -197,6 +205,7 @@ function renderHtml(o, opts = {}) {
 
   ${section('학력', 'EDUCATION', education)}
   ${section('경력', 'EXPERIENCE', experience)}
+  ${section('프로젝트', 'PROJECTS', projects)}
   ${section('수상', 'AWARDS', awards)}
   ${section('특허', 'PATENTS', patents)}
   ${section('논문·학술', 'PUBLICATIONS', publications)}

@@ -8,6 +8,10 @@ const path = require('path');
 
 const { pathToFileURL } = require('url');
 
+// 제목 줄 표시자. 추출 단계에서만 붙이고 파서가 소비한 뒤 사라진다.
+// 본문에 나올 일이 없는 제어문자를 쓴다.
+const HEAD = '\u0001';
+
 // pdfjs 가 CJK CMap · 표준 폰트를 찾을 위치. 없으면 한글이 추출되지 않는다.
 function assetUrls() {
   let root;
@@ -157,14 +161,34 @@ async function fromPdf(file) {
         prevEnd = it.x + it.w;
         prevH = it.h;
       }
-      return out.replace(/[ \t]+$/, '');
+      return { text: out.replace(/[ \t]+$/, ''), h: Math.max(...r.items.map(it => it.h)) };
     });
 
-    pages.push(lines.join('\n'));
+    pages.push(lines);
     page.cleanup();
   }
   await task.destroy();
-  return pages.join('\n\n');
+
+  // 본문 글자 크기를 기준으로 큰 줄을 제목으로 표시한다.
+  // 이래야 "AI 시장 공략 전략" 처럼 우리가 모르는 제목에서도 구역이 끊긴다.
+  const all = pages.flat();
+  const body = median(all.map(l => l.h));
+  return pages
+    .map(lines => lines.map(l => (isBigHeading(l, body) ? HEAD + l.text : l.text)).join('\n'))
+    .join('\n\n');
+}
+
+function median(xs) {
+  if (!xs.length) return 10;
+  const s = [...xs].sort((a, b) => a - b);
+  return s[Math.floor(s.length / 2)];
+}
+
+function isBigHeading(line, bodyH) {
+  const t = line.text.trim();
+  if (!t || t.length > 40) return false;
+  if (/^[-–—•▪○*·‧]/.test(t)) return false;         // 글머리표는 제목이 아니다
+  return line.h >= bodyH * 1.18;
 }
 
 async function fromDocx(file) {
@@ -177,6 +201,7 @@ async function fromDocx(file) {
     .replace(/<\/p>\s*(?=<\/t[dh]>)/gi, '')
     .replace(/<\/t[dh]>\s*<t[dh][^>]*>\s*<p[^>]*>/gi, '\t')
     .replace(/<\/t[dh]>\s*<t[dh][^>]*>/gi, '\t')
+    .replace(/<h[1-6][^>]*>/gi, '\n' + HEAD)
     .replace(/<\/(p|h[1-6]|tr|li|div)>/gi, '\n')
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<li[^>]*>/gi, '- ')
@@ -189,6 +214,9 @@ function tidy(t) {
   return t
     .replace(/\r\n?/g, '\n')
     .replace(/ /g, ' ')
+    // 아이콘 폰트를 쓴 PDF 는 전화·메일 기호가 사용자 정의 영역(PUA) 글자로 나온다.
+    // 뜻이 없는 글자라 그대로 두면 학교명이나 이름에 섞여 들어간다.
+    .replace(/[\uE000-\uF8FF\u303F\uFFFD]/g, ' ')
     .split('\n').map(l => l.replace(/[ \t]+$/, '')).join('\n')
     // PDF 에서 "10-2018-\n0079123" 처럼 잘린 번호를 다시 붙인다
     .replace(/(\d)-\n(\d)/g, '$1-$2')
@@ -196,12 +224,16 @@ function tidy(t) {
     .trim();
 }
 
-/** 파일 하나에서 평문을 뽑는다. 지원: .pdf .docx .txt .md */
+const SUPPORTED = ['.pdf', '.docx', '.hwpx', '.hwp', '.txt', '.md'];
+
+/** 파일 하나에서 평문을 뽑는다. 지원: .pdf .docx .hwpx .hwp .txt .md */
 async function extractText(file) {
   const ext = path.extname(file).toLowerCase();
   let raw;
   if (ext === '.pdf') raw = await fromPdf(file);
   else if (ext === '.docx') raw = await fromDocx(file);
+  else if (ext === '.hwpx') raw = await require('./hwp').fromHwpx(file);
+  else if (ext === '.hwp') raw = await require('./hwp').fromHwp(file);
   else if (ext === '.txt' || ext === '.md') raw = fs.readFileSync(file, 'utf8');
   else if (ext === '.doc') {
     throw new Error('.doc(구버전 워드)는 지원하지 않습니다. .docx 나 PDF 로 변환해서 넣어주세요.');
@@ -221,4 +253,4 @@ async function extractText(file) {
   return text;
 }
 
-module.exports = { extractText, tidy };
+module.exports = { extractText, tidy, HEAD, SUPPORTED };

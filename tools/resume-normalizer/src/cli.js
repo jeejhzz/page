@@ -14,13 +14,13 @@
 
 const fs = require('fs');
 const path = require('path');
-const { extractText } = require('./extract');
+const { extractText, SUPPORTED } = require('./extract');
 const { parseWithRules } = require('./parse-rules');
 const { normalize, audit, blind: makeBlind } = require('./schema');
 const { renderHtml } = require('./render');
 const pdf = require('./pdf');
 
-const EXT = new Set(['.pdf', '.docx', '.txt', '.md']);
+const EXT = new Set(SUPPORTED);
 
 function parseArgs(argv) {
   const o = { inputs: [], out: 'out', engine: 'auto', model: '', blind: false, onlyBlind: false, pdf: true, concurrency: 3 };
@@ -127,7 +127,7 @@ async function main() {
   }
 
   const files = collect(opt.inputs);
-  if (!files.length) { console.error('처리할 파일이 없습니다. (.pdf .docx .txt .md)'); process.exit(1); }
+  if (!files.length) { console.error('처리할 파일이 없습니다. (' + SUPPORTED.join(' ') + ')'); process.exit(1); }
 
   const useLLM = opt.engine === 'llm' || (opt.engine === 'auto' && process.env.ANTHROPIC_API_KEY);
   console.log(`이력서 ${files.length}건 · 엔진 ${useLLM ? (opt.model || 'claude-sonnet-5') : '규칙 기반'} · 출력 ${opt.out}`);

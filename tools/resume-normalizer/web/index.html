@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이력서 표준화</title>
+<style>
+:root{
+  --navy:#0d1b2a; --ink:#15202b; --line:#dde3ea; --soft:#f5f7fa;
+  --muted:#6b7787; --accent:#c2410c; --ok:#15803d; --warn:#b45309;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  color:var(--ink);background:#eef1f5;font-size:14px;line-height:1.55;word-break:keep-all}
+header{background:var(--navy);color:#fff;padding:14px 22px;display:flex;align-items:baseline;gap:14px}
+header h1{font-size:16px;font-weight:800;letter-spacing:-.01em}
+header .meta{font-size:12px;color:#9fb0c4}
+header .meta b{color:#ffb877;font-weight:700}
+main{display:grid;grid-template-columns:340px 1fr;gap:0;height:calc(100vh - 51px)}
+@media(max-width:900px){main{grid-template-columns:1fr;height:auto}}
+
+.left{border-right:1px solid var(--line);background:#fff;overflow:auto;padding:16px}
+.drop{display:block;border:2px dashed #c3ccd8;border-radius:12px;padding:26px 16px;text-align:center;
+  background:var(--soft);cursor:pointer;transition:.15s}
+.drop:hover,.drop.over{border-color:var(--accent);background:#fff7f2}
+.drop strong{display:block;font-size:14px;font-weight:800;margin-bottom:5px}
+.drop span{font-size:12px;color:var(--muted)}
+.drop input{display:none}
+
+.acts{display:flex;gap:8px;margin:12px 0 6px}
+.acts button{flex:1;padding:8px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer}
+.acts button:hover:not(:disabled){background:var(--soft)}
+.acts button:disabled{opacity:.45;cursor:default}
+
+ul.list{list-style:none;margin-top:10px}
+ul.list li{border:1px solid var(--line);border-radius:9px;padding:10px 11px;margin-bottom:7px;cursor:pointer;background:#fff}
+ul.list li:hover{border-color:#a9b6c6}
+ul.list li.sel{border-color:var(--navy);box-shadow:0 0 0 2px rgba(13,27,42,.10)}
+ul.list li.err{border-color:#f3b7b7;background:#fff7f7;cursor:default}
+li .nm{font-weight:800}
+li .src{font-size:11.5px;color:var(--muted);margin-top:2px;word-break:break-all}
+li .tag{display:inline-block;margin-top:5px;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px}
+li .tag.ok{background:#e7f5ec;color:var(--ok)}
+li .tag.warn{background:#fdf3e3;color:var(--warn)}
+li .tag.err{background:#fdeaea;color:#b91c1c}
+li .msg{font-size:11.5px;color:#b91c1c;margin-top:4px}
+
+.right{overflow:auto;padding:16px 18px}
+.empty{display:grid;place-items:center;height:100%;color:var(--muted);text-align:center;padding:40px}
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.bar h2{font-size:16px;font-weight:800}
+.bar .sp{flex:1}
+.bar a,.bar button{padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  font-size:12.5px;font-weight:700;color:var(--ink);text-decoration:none;cursor:pointer}
+.bar a:hover,.bar button:hover{background:var(--soft)}
+.bar button.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+
+.warnbox{border:1px solid #e6c07b;background:#fdf8ee;border-radius:9px;padding:10px 12px;margin-bottom:12px;font-size:12.5px;color:#8a5a12}
+.warnbox b{font-weight:800}
+.warnbox ul{margin:4px 0 0 16px}
+
+.panes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:14px}
+@media(max-width:1200px){.panes{grid-template-columns:1fr}}
+iframe{width:100%;height:78vh;border:1px solid var(--line);border-radius:10px;background:#fff}
+
+.form{border:1px solid var(--line);border-radius:10px;background:#fff;padding:13px}
+.form h3{font-size:12.5px;font-weight:800;color:var(--muted);letter-spacing:.04em;margin-bottom:9px}
+.form label{display:block;font-size:11.5px;font-weight:700;color:var(--muted);margin:8px 0 3px}
+.form input,.form textarea{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:7px;
+  font:inherit;font-size:13px;background:#fff}
+.form textarea{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.5;min-height:230px}
+.form .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.form .f label{margin-top:8px}
+.form .row .f label{margin-top:0}
+.form details{margin-top:12px}
+.form details summary{font-size:12px;font-weight:700;color:var(--muted);cursor:pointer}
+.form .save{margin-top:12px;width:100%;padding:9px;border:0;border-radius:8px;background:var(--navy);color:#fff;
+  font-weight:800;font-size:13px;cursor:pointer}
+.form .save:disabled{opacity:.5}
+.hint{font-size:11.5px;color:var(--muted);margin-top:7px;line-height:1.6}
+.count{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>이력서 표준화</h1>
+  <div class="meta">자유 양식 → A4 규격 이력서 · 파싱 엔진 <b id="engine">-</b></div>
+  <div style="flex:1"></div>
+  <div class="meta" id="supported"></div>
+</header>
+
+<main>
+  <div class="left">
+    <label class="drop" id="drop">
+      <strong>파일을 끌어다 놓으세요</strong>
+      <span id="dropHint">PDF · 워드(docx) · 한글(hwpx, hwp) · 텍스트</span>
+      <input type="file" id="picker" multiple>
+    </label>
+
+    <div class="acts">
+      <button id="btnCsv" disabled>요약표 CSV</button>
+      <button id="btnZip" disabled>전체 ZIP</button>
+    </div>
+    <div class="count" id="count"></div>
+    <ul class="list" id="list"></ul>
+  </div>
+
+  <div class="right" id="right">
+    <div class="empty">
+      <div>
+        <div style="font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px">아직 올린 파일이 없습니다</div>
+        <div>왼쪽에 이력서를 올리면 표준 A4 이력서를 만들어 드립니다.<br>
+        여러 개를 한 번에 올려도 됩니다.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const state = { batch: null, items: [], sel: null, busy: 0 };
+const $ = s => document.querySelector(s);
+
+async function boot() {
+  const cfg = await (await fetch('/api/config')).json();
+  state.batch = cfg.batch;
+  $('#engine').textContent = cfg.engine === 'llm' ? 'Claude' : '규칙 기반';
+  $('#supported').textContent = '지원 형식 ' + cfg.supported.join(' ');
+  $('#dropHint').textContent = cfg.supported.join(' ');
+}
+boot();
+
+const drop = $('#drop');
+['dragenter','dragover'].forEach(e => drop.addEventListener(e, ev => {
+  ev.preventDefault(); drop.classList.add('over');
+}));
+['dragleave','drop'].forEach(e => drop.addEventListener(e, ev => {
+  ev.preventDefault(); drop.classList.remove('over');
+}));
+drop.addEventListener('drop', ev => send([...ev.dataTransfer.files]));
+$('#picker').addEventListener('change', ev => { send([...ev.target.files]); ev.target.value = ''; });
+
+async function send(files) {
+  for (const f of files) {
+    const row = { pending: true, file: f.name };
+    state.items.push(row); render();
+    state.busy++;
+    try {
+      const res = await fetch('/api/convert?batch=' + state.batch, {
+        method: 'POST',
+        headers: { 'x-filename': encodeURIComponent(f.name) },
+        body: f,
+      });
+      const out = await res.json();
+      Object.assign(row, { pending: false }, out.ok ? out.item : { error: out.error });
+      if (out.ok && !state.sel) state.sel = row.id;
+    } catch (e) {
+      Object.assign(row, { pending: false, error: e.message });
+    }
+    state.busy--;
+    render();
+  }
+}
+
+function render() {
+  const done = state.items.filter(i => i.id);
+  $('#btnCsv').disabled = $('#btnZip').disabled = !done.length;
+  $('#count').textContent = state.items.length
+    ? `${done.length}건 완료${state.busy ? ' · 변환 중…' : ''}${state.items.filter(i => i.error).length ? ' · 실패 ' + state.items.filter(i => i.error).length + '건' : ''}`
+    : '';
+
+  $('#list').innerHTML = state.items.map((it, i) => {
+    if (it.pending) return `<li><div class="nm">${esc(it.file)}</div><div class="src">변환 중…</div></li>`;
+    if (it.error) return `<li class="err"><div class="nm">${esc(it.file)}</div>
+      <span class="tag err">실패</span><div class="msg">${esc(it.error)}</div></li>`;
+    const w = (it.data._meta.warnings || []).length;
+    return `<li data-i="${i}" class="${state.sel === it.id ? 'sel' : ''}">
+      <div class="nm">${esc(it.data.name || '(이름 미확인)')}</div>
+      <div class="src">${esc(it.file)}</div>
+      ${w ? `<span class="tag warn">검토 ${w}건</span>` : '<span class="tag ok">확인</span>'}
+    </li>`;
+  }).join('');
+
+  [...document.querySelectorAll('#list li[data-i]')].forEach(li => {
+    li.onclick = () => { state.sel = state.items[+li.dataset.i].id; render(); };
+  });
+
+  const it = state.items.find(i => i.id === state.sel);
+  $('#right').innerHTML = it ? detail(it) : $('#right').innerHTML;
+  if (it) bindDetail(it);
+}
+
+function detail(it) {
+  const d = it.data;
+  const w = d._meta.warnings || [];
+  const url = f => `/out/${state.batch}/${encodeURIComponent(f)}`;
+  return `
+  <div class="bar">
+    <h2>${esc(d.name || '(이름 미확인)')}</h2>
+    <span class="count">${esc(it.file)}</span>
+    <div class="sp"></div>
+    <a href="${url(it.files.pdf)}?dl=1">PDF</a>
+    <a href="${url(it.files.blindPdf)}?dl=1">블라인드 PDF</a>
+    <a href="${url(it.files.json)}?dl=1">JSON</a>
+  </div>
+  ${w.length ? `<div class="warnbox"><b>검토 필요</b> — 자동 변환에서 확인이 필요한 항목입니다.
+     <ul>${w.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+  <div class="panes">
+    <iframe src="${url(it.files.html)}" title="미리보기"></iframe>
+    <div class="form">
+      <h3>기본 정보 수정</h3>
+      ${field('name', '이름', d.name)}
+      ${field('nameEn', '영문 이름', d.nameEn)}
+      <div class="row">${field('birth', '생년월일', d.birth)}${field('gender', '성별', d.gender)}</div>
+      <div class="row">${field('phone', '연락처', d.phone)}${field('email', '이메일', d.email)}</div>
+      ${field('address', '주소', d.address)}
+      ${field('targetRole', '지원 직무', d.targetRole)}
+      <details>
+        <summary>학력·경력 등 전체 데이터 (JSON)</summary>
+        <textarea id="fJson">${esc(JSON.stringify(pick(d), null, 2))}</textarea>
+        <div class="hint">여기서 고친 내용이 그대로 이력서에 반영됩니다. 형식이 깨지면 저장되지 않습니다.</div>
+      </details>
+      <button class="save" id="btnSave">고쳐서 다시 만들기</button>
+      <div class="hint" id="saveMsg"></div>
+    </div>
+  </div>`;
+}
+
+const FIELDS = ['name','nameEn','birth','gender','phone','email','address','targetRole'];
+const pick = d => {
+  const o = JSON.parse(JSON.stringify(d));
+  FIELDS.forEach(f => delete o[f]);
+  delete o._meta;
+  return o;
+};
+const field = (k, label, v) =>
+  `<div class="f"><label>${label}</label><input id="f_${k}" value="${esc(v || '')}"></div>`;
+
+function bindDetail(it) {
+  const btn = $('#btnSave'), msg = $('#saveMsg');
+  btn.onclick = async () => {
+    let rest;
+    try { rest = JSON.parse($('#fJson').value); }
+    catch (e) { msg.textContent = 'JSON 형식이 올바르지 않습니다: ' + e.message; return; }
+    const data = { ...rest, ...it.data._meta ? {} : {} };
+    FIELDS.forEach(f => { data[f] = $('#f_' + f).value; });
+    btn.disabled = true; msg.textContent = '다시 만드는 중…';
+    const res = await fetch('/api/update', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ batch: state.batch, id: it.id, data }),
+    });
+    const out = await res.json();
+    btn.disabled = false;
+    if (!out.ok) { msg.textContent = out.error || '저장 실패'; return; }
+    Object.assign(it, out.item);
+    render();
+  };
+}
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+$('#btnCsv').onclick = () => { location.href = '/api/summary?batch=' + state.batch; };
+$('#btnZip').onclick = () => { location.href = '/api/zip?batch=' + state.batch; };
+</script>
+</body>
+</html>
