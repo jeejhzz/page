@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>이력서 표준화 데모</title>
+<style>
+:root{--navy:#0d1b2a;--ink:#15202b;--line:#dde3ea;--soft:#f5f7fa;--muted:#6b7787;--ok:#15803d;--warn:#b45309}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  color:var(--ink);background:#eef1f5;font-size:14px;line-height:1.55;word-break:keep-all}
+header{background:var(--navy);color:#fff;padding:13px 20px;display:flex;align-items:baseline;gap:13px;flex-wrap:wrap}
+header h1{font-size:15px;font-weight:800}
+header .meta{font-size:12px;color:#9fb0c4}
+header .meta b{color:#ffb877}
+.banner{background:#fdf8ee;border-bottom:1px solid #e6c07b;padding:9px 20px;font-size:12.5px;color:#8a5a12}
+.banner b{font-weight:800}
+main{display:grid;grid-template-columns:330px 1fr}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.left{border-right:1px solid var(--line);background:#fff;padding:15px;min-height:calc(100vh - 90px)}
+.drop{display:block;border:2px dashed #c3ccd8;border-radius:12px;padding:24px 14px;text-align:center;
+  background:var(--soft);cursor:pointer}
+.drop:hover,.drop.over{border-color:#c2410c;background:#fff7f2}
+.drop strong{display:block;font-size:14px;font-weight:800;margin-bottom:4px}
+.drop span{font-size:12px;color:var(--muted)}
+.drop input{display:none}
+.try{margin-top:10px;display:flex;gap:7px;flex-wrap:wrap}
+.try button{flex:1;min-width:130px;padding:7px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  font-size:12px;font-weight:700;cursor:pointer;color:var(--ink)}
+.try button:hover{background:var(--soft)}
+.count{font-size:12px;color:var(--muted);margin-top:10px}
+ul{list-style:none;margin-top:8px}
+li{border:1px solid var(--line);border-radius:9px;padding:9px 10px;margin-bottom:6px;cursor:pointer;background:#fff}
+li:hover{border-color:#a9b6c6}
+li.sel{border-color:var(--navy);box-shadow:0 0 0 2px rgba(13,27,42,.1)}
+li.err{border-color:#f3b7b7;background:#fff7f7;cursor:default}
+.nm{font-weight:800}
+.src{font-size:11.5px;color:var(--muted);margin-top:2px;word-break:break-all}
+.tag{display:inline-block;margin-top:5px;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px}
+.tag.ok{background:#e7f5ec;color:var(--ok)}
+.tag.warn{background:#fdf3e3;color:var(--warn)}
+.tag.err{background:#fdeaea;color:#b91c1c}
+.msg{font-size:11.5px;color:#b91c1c;margin-top:4px}
+.right{padding:15px 17px;min-width:0}
+.empty{display:grid;place-items:center;min-height:60vh;color:var(--muted);text-align:center;padding:30px}
+.bar{display:flex;align-items:center;gap:9px;margin-bottom:11px;flex-wrap:wrap}
+.bar h2{font-size:16px;font-weight:800}
+.bar .sp{flex:1}
+.bar button{padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  font-size:12.5px;font-weight:700;cursor:pointer;color:var(--ink)}
+.bar button:hover{background:var(--soft)}
+.warnbox{border:1px solid #e6c07b;background:#fdf8ee;border-radius:9px;padding:10px 12px;margin-bottom:11px;
+  font-size:12.5px;color:#8a5a12}
+.warnbox b{font-weight:800}
+.warnbox ul{margin:4px 0 0 16px;list-style:disc}
+.warnbox li{all:unset;display:list-item;margin-left:2px}
+.panes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,320px);gap:13px}
+@media(max-width:1150px){.panes{grid-template-columns:1fr}}
+iframe{width:100%;height:76vh;border:1px solid var(--line);border-radius:10px;background:#fff}
+.form{border:1px solid var(--line);border-radius:10px;background:#fff;padding:12px;height:fit-content}
+.form h3{font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:8px}
+.form label{display:block;font-size:11.5px;font-weight:700;color:var(--muted);margin:8px 0 3px}
+.form input,.form textarea{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:7px;
+  font:inherit;font-size:13px;background:#fff}
+.form textarea{font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.5;min-height:200px}
+.form .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.form .row .f label{margin-top:0}
+.form details{margin-top:11px}
+.form details summary{font-size:12px;font-weight:700;color:var(--muted);cursor:pointer}
+.form .save{margin-top:11px;width:100%;padding:9px;border:0;border-radius:8px;background:var(--navy);
+  color:#fff;font-weight:800;font-size:13px;cursor:pointer}
+.hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.6}
+</style>
+</head>
+<body>
+<header>
+  <h1>이력서 표준화 — 브라우저 데모</h1>
+  <div class="meta">자유 양식 → A4 규격 이력서 · 파싱 엔진 <b>규칙 기반</b></div>
+  <div style="flex:1"></div>
+  <div class="meta" id="supported">.pdf .docx .hwpx .txt .md</div>
+</header>
+<div class="banner">
+  <b>여기 올린 파일은 브라우저 밖으로 나가지 않습니다.</b>
+  판독·변환·조판이 전부 이 페이지 안에서 일어납니다. 서버로 전송하지 않습니다.
+  다만 데모라 <b>PDF 내려받기는 막혀 있어</b>, 화면 미리보기와 인쇄까지만 됩니다.
+  실제 시스템(<code>npm start</code>)은 PDF·CSV·ZIP을 파일로 내려받습니다.
+</div>
+
+<main>
+  <div class="left">
+    <label class="drop" id="drop">
+      <strong>이력서를 끌어다 놓으세요</strong>
+      <span>PDF · 워드(docx) · 한글(hwpx) · 텍스트</span>
+      <input type="file" id="picker" multiple accept=".pdf,.docx,.hwpx,.txt,.md">
+    </label>
+    <div class="try">
+      <button id="s1">예시 — 라벨형 이력서</button>
+      <button id="s2">예시 — 서술형 이력서</button>
+    </div>
+    <div class="count" id="count"></div>
+    <ul id="list"></ul>
+  </div>
+  <div class="right" id="right">
+    <div class="empty"><div>
+      <div style="font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px">아직 올린 파일이 없습니다</div>
+      <div>손에 이력서 파일이 없으면 왼쪽 <b>예시</b> 버튼을 눌러 보세요.</div>
+    </div></div>
+  </div>
+</main>
+
+<!-- 한글 CMap (한국어 PDF 판독에 필요) -->
+<script>/*__CMAPS__*/</script>
+<!-- 라이브러리 -->
+<script>/*__FFLATE__*/</script>
+<script>/*__MAMMOTH__*/</script>
+<script type="module">/*__PDFWORKER__*/</script>
+<script type="module">/*__PDFLIB__*/</script>
+<!-- 파싱 코어 (서버와 같은 소스) -->
+<script>/*__SHIM__*/</script>
+
+<script>
+const core = require('extract-core');
+const { parseWithRules } = require('parse-rules');
+const { normalize, audit, blind: makeBlind } = require('schema');
+const { renderHtml } = require('render');
+
+// pdf.js 는 CMap 을 fetch 로 가져온다. 네트워크가 막힌 환경이라
+// 우리 sentinel URL 로 오는 요청만 가로채 내장 데이터를 돌려준다.
+const CMAP_BASE = 'https://cmap.local/';
+const realFetch = window.fetch.bind(window);
+window.fetch = function (input, init) {
+  const u = typeof input === 'string' ? input : (input && input.url) || '';
+  if (u.startsWith(CMAP_BASE)) {
+    const name = decodeURIComponent(u.slice(CMAP_BASE.length));
+    const b64 = CMAPS[name];
+    if (!b64) return Promise.resolve(new Response(null, { status: 404 }));
+    const bin = atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return Promise.resolve(new Response(arr, { status: 200 }));
+  }
+  return realFetch(input, init);
+};
+
+async function pdfToText(buf) {
+  const lib = globalThis.pdfjsLib;
+  lib.GlobalWorkerOptions.workerSrc = 'about:blank';   // 워커 생성이 막히면 메인 스레드로 내려간다
+  const task = lib.getDocument({
+    data: new Uint8Array(buf),
+    cMapUrl: CMAP_BASE, cMapPacked: true,
+    useWorkerFetch: false, isEvalSupported: false, useSystemFonts: false,
+    disableFontFace: true, verbosity: 0,
+  });
+  const doc = await task.promise;
+  const pages = [];
+  for (let n = 1; n <= doc.numPages; n++) {
+    const page = await doc.getPage(n);
+    const content = await page.getTextContent();
+    const rows = [];
+    for (const it of content.items) {
+      if (!it.str || !it.str.trim()) continue;
+      const x = it.transform[4], y = it.transform[5];
+      const w = it.width || 0, h = Math.abs(it.transform[3]) || 10;
+      let row = rows.find(r => Math.abs(r.y - y) <= core.LINE_TOL);
+      if (!row) { row = { y, items: [] }; rows.push(row); }
+      row.items.push({ x, w, h, s: it.str });
+    }
+    pages.push(core.pageToLines(rows, page.getViewport({ scale: 1 }).width));
+    page.cleanup();
+  }
+  await task.destroy();
+  return core.markHeadings(pages);
+}
+
+async function hwpxToText(buf) {
+  const files = fflate.unzipSync(new Uint8Array(buf));
+  const names = Object.keys(files)
+    .filter(n => /^Contents\/section\d+\.xml$/i.test(n))
+    .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+  if (!names.length) throw new Error('HWPX 안에서 본문(Contents/section*.xml)을 찾지 못했습니다.');
+  const dec = new TextDecoder('utf-8');
+  return names.map(n => core.hwpxXmlToText(dec.decode(files[n]))).join('\n\n');
+}
+
+async function toText(file) {
+  const ext = '.' + (file.name.split('.').pop() || '').toLowerCase();
+  const buf = await file.arrayBuffer();
+  let raw;
+  if (ext === '.pdf') raw = await pdfToText(buf);
+  else if (ext === '.docx') raw = core.docxHtmlToText((await mammoth.convertToHtml({ arrayBuffer: buf })).value);
+  else if (ext === '.hwpx') raw = await hwpxToText(buf);
+  else if (ext === '.txt' || ext === '.md') raw = new TextDecoder('utf-8').decode(buf);
+  else if (ext === '.hwp') throw new Error('데모에서는 .hwp(바이너리)를 지원하지 않습니다. HWPX 나 PDF 로 저장해서 넣어주세요.');
+  else if (ext === '.doc') throw new Error('.doc(구버전 워드)는 지원하지 않습니다. .docx 나 PDF 로 변환해 주세요.');
+  else throw new Error('지원하지 않는 형식: ' + ext);
+  return core.assertReadable(core.tidy(raw));
+}
+
+const state = { items: [], sel: null, busy: 0 };
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+async function handle(files) {
+  for (const f of files) {
+    const row = { pending: true, file: f.name };
+    state.items.push(row); state.busy++; render();
+    try {
+      const text = await toText(f);
+      const data = normalize(parseWithRules(text), { sourceFile: f.name, engine: 'rules' });
+      data._meta.warnings = [...new Set([...(data._meta.warnings || []), ...audit(data)])];
+      Object.assign(row, { pending: false, id: 'i' + Math.random().toString(36).slice(2), data });
+      if (!state.sel) state.sel = row.id;
+    } catch (e) {
+      Object.assign(row, { pending: false, error: e.message });
+    }
+    state.busy--; render();
+  }
+}
+
+function render() {
+  const done = state.items.filter(i => i.id);
+  $('#count').textContent = state.items.length
+    ? `${done.length}건 완료${state.busy ? ' · 변환 중…' : ''}` +
+      (state.items.filter(i => i.error).length ? ` · 실패 ${state.items.filter(i => i.error).length}건` : '')
+    : '';
+  $('#list').innerHTML = state.items.map((it, i) => {
+    if (it.pending) return `<li><div class="nm">${esc(it.file)}</div><div class="src">변환 중…</div></li>`;
+    if (it.error) return `<li class="err"><div class="nm">${esc(it.file)}</div>
+      <span class="tag err">실패</span><div class="msg">${esc(it.error)}</div></li>`;
+    const w = (it.data._meta.warnings || []).length;
+    return `<li data-i="${i}" class="${state.sel === it.id ? 'sel' : ''}">
+      <div class="nm">${esc(it.data.name || '(이름 미확인)')}</div>
+      <div class="src">${esc(it.file)}</div>
+      ${w ? `<span class="tag warn">검토 ${w}건</span>` : '<span class="tag ok">확인</span>'}</li>`;
+  }).join('');
+  [...document.querySelectorAll('#list li[data-i]')].forEach(li => {
+    li.onclick = () => { state.sel = state.items[+li.dataset.i].id; render(); };
+  });
+  const it = state.items.find(i => i.id === state.sel);
+  if (it) { $('#right').innerHTML = detail(it); bind(it); }
+}
+
+const FIELDS = ['name', 'nameEn', 'birth', 'gender', 'phone', 'email', 'address', 'targetRole'];
+const field = (k, label, v) =>
+  `<div class="f"><label>${label}</label><input id="f_${k}" value="${esc(v || '')}"></div>`;
+const rest = d => { const o = JSON.parse(JSON.stringify(d)); FIELDS.forEach(f => delete o[f]); delete o._meta; return o; };
+
+function detail(it) {
+  const d = it.data, w = d._meta.warnings || [];
+  return `
+  <div class="bar">
+    <h2>${esc(d.name || '(이름 미확인)')}</h2>
+    <span class="count">${esc(it.file)}</span>
+    <div class="sp"></div>
+    <button id="btnPrint">인쇄 · PDF로 저장</button>
+    <button id="btnBlind">블라인드본 보기</button>
+  </div>
+  ${w.length ? `<div class="warnbox"><b>검토 필요</b> — 자동 변환이 확인을 요청한 항목입니다.
+    <ul>${w.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+  <div class="panes">
+    <iframe id="prev" title="미리보기"></iframe>
+    <div class="form">
+      <h3>기본 정보 수정</h3>
+      ${field('name', '이름', d.name)}${field('nameEn', '영문 이름', d.nameEn)}
+      <div class="row">${field('birth', '생년월일', d.birth)}${field('gender', '성별', d.gender)}</div>
+      <div class="row">${field('phone', '연락처', d.phone)}${field('email', '이메일', d.email)}</div>
+      ${field('address', '주소', d.address)}${field('targetRole', '지원 직무', d.targetRole)}
+      <details><summary>학력·경력 등 전체 데이터 (JSON)</summary>
+        <textarea id="fJson">${esc(JSON.stringify(rest(d), null, 2))}</textarea>
+        <div class="hint">여기서 고친 내용이 그대로 이력서에 반영됩니다.</div>
+      </details>
+      <button class="save" id="btnSave">고쳐서 다시 만들기</button>
+      <div class="hint" id="saveMsg"></div>
+    </div>
+  </div>`;
+}
+
+function paint(it, blindMode) {
+  const html = renderHtml(blindMode ? makeBlind(it.data) : it.data, { blind: blindMode });
+  const f = $('#prev');
+  f.srcdoc = html;
+  it._blind = blindMode;
+}
+
+function bind(it) {
+  paint(it, false);
+  $('#btnBlind').onclick = () => {
+    const b = !it._blind;
+    paint(it, b);
+    $('#btnBlind').textContent = b ? '원본 보기' : '블라인드본 보기';
+  };
+  $('#btnPrint').onclick = () => {
+    try { $('#prev').contentWindow.print(); }
+    catch (e) { alert('이 화면에서는 인쇄가 막혀 있습니다. 실제 시스템에서는 PDF 파일로 바로 저장됩니다.'); }
+  };
+  $('#btnSave').onclick = () => {
+    const msg = $('#saveMsg');
+    let r;
+    try { r = JSON.parse($('#fJson').value); }
+    catch (e) { msg.textContent = 'JSON 형식이 올바르지 않습니다: ' + e.message; return; }
+    FIELDS.forEach(f => { r[f] = $('#f_' + f).value; });
+    const data = normalize(r, { ...it.data._meta, edited: true });
+    data._meta.warnings = audit(data);
+    it.data = data;
+    render();
+  };
+}
+
+const drop = $('#drop');
+['dragenter', 'dragover'].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', ev => handle([...ev.dataTransfer.files]));
+$('#picker').addEventListener('change', ev => { handle([...ev.target.files]); ev.target.value = ''; });
+
+// 손에 파일이 없어도 눌러 볼 수 있게 가상 이력서 두 장을 넣어 둔다.
+const SAMPLES = {
+  s1: ['예시-라벨형.txt', `이력서
+
+성명: 한지우 (Han Jiwoo)
+생년월일: 1994년 3월 12일
+성별: 여
+주소: 경기도 성남시 분당구 판교로 234
+연락처: 010.2345.6789
+이메일: Jiwoo.Han@Example.com
+지원 직무: SoC Design Verification Engineer
+
+■ 학력사항
+2019.03 ~ 2021.02   한국과학기술원 전기및전자공학부 석사 졸업  GPA 4.1/4.3
+2015.03 ~ 2019.02   부산대학교 전자공학과 학사 졸업  학점: 3.87/4.5
+
+■ 경력사항
+2021.03 ~ 현재  (주)엘디반도체 | SoC검증팀 | 선임연구원
+ - 5nm 모바일 AP 서브시스템 UVM 테스트벤치 설계 및 구축
+ - 기능 커버리지 92% 달성, 회귀 시험 자동화로 검증 주기 3일 → 8시간 단축
+ 기술 스택: SystemVerilog, UVM, Python, Verdi, VCS
+
+2019.07 ~ 2021.02  케이엠테크 | 디지털설계팀 | 연구원
+ - 영상처리 IP 블록 RTL 검증 및 어써션 작성
+
+■ 수상내역
+2020.11  대한전자공학회 학술대회 우수논문상 | 대한전자공학회
+
+■ 특허
+2022.05  저전력 벡터 연산 장치의 검증 방법 및 장치 | 10-2022-0061234 | 출원 | 공동발명자
+
+■ 어학
+2023.05  TOEIC 915
+
+■ 기술 스택
+SystemVerilog, UVM, Verilog, Python, Perl, VCS, Verdi, Git, Jenkins
+`],
+  s2: ['예시-서술형.txt', `경력기술서  임세진
+
+프로필
+공공 부문 소프트웨어 영업을 12년 했습니다. 중앙부처와 지자체를 직접 담당하며
+누적 300여 건을 수주했고, 최근에는 AI 도입 사업으로 영역을 넓히고 있습니다.
+
+연락처
+010-4567-8901 / sejin.lim@example.com
+서울특별시 마포구 월드컵북로 100
+
+경력 사항
+2019.05 ~ 현재 (부장)
+㈜한결소프트
+공공사업팀 부장
+· 중앙부처 정보화 사업 영업 총괄, 연 매출 60억 달성
+· 조달청 나라장터 입찰 전략 수립 및 제안 발표 담당
+· 신입 영업 3명 채용 및 교육
+
+2013.02 ~ 2019.04 (6년)
+대성정보기술
+영업2팀 차장
+· 지자체 전자문서 시스템 신규 고객 28곳 발굴
+· 파트너사 공동 영업 체계 구축
+
+학력 및 기타
+2009.02  중앙대학교 경영학과 학사 졸업
+2021.07  정보처리기사
+
+어학
+2024.02  TOEIC 820
+`],
+};
+for (const key of Object.keys(SAMPLES)) {
+  $('#' + key).onclick = () => {
+    const [name, body] = SAMPLES[key];
+    handle([new File([body], name, { type: 'text/plain' })]);
+  };
+}
+</script>
+</body>
+</html>

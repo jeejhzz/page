@@ -4,33 +4,7 @@
 //  · .hwpx — ZIP + XML(OWPML). 압축을 풀고 문단 태그를 읽으면 된다. 안정적이다.
 //  · .hwp  — 바이너리 복합문서(CFB). hwp.js 로 시도하고, 실패하면 이유를 알려준다.
 const fs = require('fs');
-const { HEAD } = require('./extract');
-
-const decode = s => String(s)
-  .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
-  .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(Number(d)))
-  .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-  .replace(/&quot;/g, '"').replace(/&apos;/g, "'")
-  .replace(/&amp;/g, '&');
-
-// OWPML 문단 하나를 한 줄로. 표는 셀 경계를 탭으로 바꿔 라벨/값이 붙어 있게 한다.
-function paragraphsFromXml(xml) {
-  const lines = [];
-  // <hp:p ...> ... </hp:p> 단위로 자른다
-  const paras = xml.match(/<hp:p\b[\s\S]*?<\/hp:p>/g) || [];
-  for (const p of paras) {
-    // 셀 경계에 탭을 심는다
-    const withTabs = p.replace(/<\/hp:tc>\s*<hp:tc\b/g, '</hp:tc>\t<hp:tc');
-    const parts = [];
-    const re = /<hp:t\b[^>]*>([\s\S]*?)<\/hp:t>|(\t)/g;
-    let m;
-    while ((m = re.exec(withTabs))) parts.push(m[1] != null ? decode(m[1].replace(/<[^>]+>/g, '')) : '\t');
-    const line = parts.join('').replace(/[ \t]+$/, '');
-    if (line.trim()) lines.push(line);
-    else if (lines.length && lines[lines.length - 1] !== '') lines.push('');
-  }
-  return lines;
-}
+const { HEAD, hwpxXmlToText } = require('./extract-core');
 
 async function fromHwpx(file) {
   const AdmZip = require('adm-zip');
@@ -45,7 +19,7 @@ async function fromHwpx(file) {
     throw new Error('HWPX 안에서 본문(Contents/section*.xml)을 찾지 못했습니다.');
   }
   return sections
-    .map(e => paragraphsFromXml(e.getData().toString('utf8')).join('\n'))
+    .map(e => hwpxXmlToText(e.getData().toString('utf8')))
     .join('\n\n');
 }
 
@@ -78,4 +52,4 @@ async function fromHwp(file) {
   return text;
 }
 
-module.exports = { fromHwp, fromHwpx, paragraphsFromXml, HEAD };
+module.exports = { fromHwp, fromHwpx, HEAD };

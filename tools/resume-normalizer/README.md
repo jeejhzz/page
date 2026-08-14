@@ -20,6 +20,17 @@ npm install
 PDF 출력에는 Playwright의 Chromium을 쓴다. 이미 설치돼 있으면 그대로 쓰고,
 없으면 `npm i -D playwright && npx playwright install chromium` 한 번만 해두면 된다.
 
+## 브라우저에서 바로 확인하기
+
+설치 없이 눌러 보려면 데모 한 장을 만들어 브라우저로 열면 된다.
+
+```bash
+node web/build-demo.js out/demo.html      # 2.6MB 짜리 HTML 한 장
+```
+
+파싱 코어와 PDF·워드·한글 판독기를 전부 그 안에 넣어 두어서, 서버 없이 파일 하나로 돈다.
+올린 파일은 브라우저 밖으로 나가지 않는다. 다만 데모라 **PDF 내려받기는 되지 않고** 미리보기와 인쇄까지만 된다.
+
 ## 웹으로 쓰기 (권장)
 
 ```bash
@@ -115,8 +126,10 @@ HTML 화면에는 노란 박스로 뜬다(인쇄하면 나오지 않는다).
 - **내용이 이미지로 들어간 PDF는 못 읽는다.** 스캔본뿐 아니라 발표자료를 이미지로 내보낸 PDF도 해당한다.
   글머리표와 쪽번호만 텍스트로 남고 본문이 빠지므로, 추출된 **글자 수**(한글·영문·숫자)를 세어
   120자 미만이면 실패시킨다. OCR을 거치거나 원본 Word/텍스트를 받아야 한다.
-- **한글 PDF는 CMap이 있어야 읽힌다.** pdfjs에 CJK CMap 경로를 넘기지 않으면 한글이 통째로 사라진다
-  (`src/extract.js` 의 `assetUrls`). `npm install` 로 받은 `pdfjs-dist` 안의 것을 쓴다.
+- **한글 PDF는 CMap이 있어야 읽힌다.** pdfjs에 CJK CMap 경로를 넘기지 않으면 한글이 통째로 사라지고
+  글머리표만 남아 "이미지 PDF"로 오인하게 된다. 함정이 하나 더 있는데, Node에서는 이 경로를
+  **그냥 파일 경로**로 줘야 한다. `pathToFileURL` 로 만든 `file://` URL을 주면 조용히 실패한다
+  (`src/extract.js` 의 `assetPaths`).
 - **`.doc`(구버전 워드)는 지원하지 않는다.** `.docx` 나 PDF로 변환해서 넣어야 한다.
 - **한글 파일은 `.hwpx` 가 안전하다.** HWPX는 ZIP+XML이라 문단·표를 그대로 읽는다.
   `.hwp`(바이너리)는 `hwp.js` 로 시도하지만 문서에 따라 실패할 수 있고, 그때는
@@ -152,7 +165,9 @@ src/
   render.js       표준 데이터 → A4 인쇄용 HTML
   pdf.js          HTML → PDF (Playwright)
   cli.js          배치 처리, 요약표
-web/index.html    업로드 화면
+web/index.html    업로드 화면 (서버용)
+web/demo-ui.html  브라우저 데모 화면 틀
+web/build-demo.js 데모 한 장으로 묶는 빌드 (--artifact 로 조각만 출력)
 samples/          서로 다른 양식의 가상 이력서 4종 + 생성 스크립트
 ```
 

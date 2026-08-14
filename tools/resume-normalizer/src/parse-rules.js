@@ -47,7 +47,7 @@ const LABEL = {
   role: /^(지원\s*(직무|분야|부문|포지션)|희망\s*직무|position|applying\s*for)\s*[:：|\t]?\s*(.+)$/i,
 };
 
-const { HEAD } = require('./extract');
+const { HEAD } = require('./extract-core');
 
 // 문서 고유의 제목("AI 시장 공략 전략" 등)인지, 항목의 머리(회사명 등)인지 가른다.
 // 회사명은 짧고 법인 표기가 붙는 편이고, 구역 제목은 구(句)에 가깝다.
@@ -69,6 +69,9 @@ function splitSections(text) {
     const bare = l
       .replace(/^[■□▶●○◆◇▪•\-–—#*\s]+/, '')
       .replace(/^\d{1,2}\s*[).\]]\s*/, '')
+      // "[경력사항] (총 21년)" 처럼 대괄호로 감싸는 양식도 흔하다
+      .replace(/^[[【<〔]\s*/, '')
+      .replace(/\s*[\]】>〕].*$/, '')
       .replace(/[:：]\s*$/, '').trim();
 
     const hit = isHeading(bare) && SECTION.find(([, re]) => re.test(bare));
@@ -347,8 +350,9 @@ function parseWithRules(text) {
     // 머리 부분에서 사람 이름처럼 생긴 짧은 줄
     for (const line of head.split('\n').slice(0, 12)) {
       const l = line.trim().replace(/^[■□▶●#*\s]+/, '');
-      if (/^[가-힣]{2,4}(\s*\(?[A-Za-z .]{2,30}\)?)?$/.test(l) && !/이력서|resume|경력기술서/i.test(l)) {
-        out.name = l.replace(/\s*\(.*\)\s*/, '').trim();
+      // "이 장 원" 처럼 글자 사이를 띄우는 이력서가 있다
+      if (/^[가-힣](\s?[가-힣]){1,3}(\s*\(?[A-Za-z .]{2,30}\)?)?$/.test(l) && !/이력서|resume|경력기술서/i.test(l)) {
+        out.name = l.replace(/\s*\(.*\)\s*/, '').replace(/(?<=[가-힣])\s+(?=[가-힣])/g, '').trim();
         const en = l.match(/\(([A-Za-z .]{2,30})\)/);
         if (en) out.nameEn = en[1].trim();
         break;
