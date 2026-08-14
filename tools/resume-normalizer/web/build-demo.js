@@ -38,7 +38,7 @@ const cmapData = Object.fromEntries(
   cmaps.map(f => [f, fs.readFileSync(path.join(CMAP_DIR, f)).toString('base64')]));
 
 // ── 우리 모듈: 아주 작은 CommonJS 흉내로 묶는다
-const MODULES = ['extract-core', 'schema', 'parse-rules', 'render'];
+const MODULES = ['extract-core', 'schema', 'parse-rules', 'render', 'report', 'xlsx'];
 const bundle = MODULES.map(name =>
   `__def(${JSON.stringify(name)}, function(module, exports, require, __dirname, __filename){\n${read(path.join(ROOT, 'src', name + '.js'))}\n});`
 ).join('\n');

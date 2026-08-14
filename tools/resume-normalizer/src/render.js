@@ -131,6 +131,9 @@ function spanNote(e) {
 
 function renderHtml(o, opts = {}) {
   const blind = !!opts.blind || !!(o._meta && o._meta.blind);
+  // 기본은 요약본이다. 채용 담당자가 먼저 보는 건 "어디 나와서 어디서 몇 년" 이고,
+  // 성과 목록까지 다 펼치면 한 장에 안 들어가 사람끼리 비교가 안 된다.
+  const brief = opts.full ? false : opts.brief !== false;
   const cells = factCells(o, { blind });
 
   const contact = blind ? '' : [
@@ -145,7 +148,7 @@ function renderHtml(o, opts = {}) {
     (e.major || e.degree || e.status
       ? `<div class="meta">${joinDot(e.major, e.degree, e.status)}</div>` : '') +
     (e.gpa ? `<div class="sub">학점 ${esc(e.gpa)}</div>` : '') +
-    (e.note ? `<div class="sub">${esc(e.note)}</div>` : '')
+    (!brief && e.note ? `<div class="sub">${esc(e.note)}</div>` : '')
   )).join('');
 
   const experience = o.experience.map(e => entry(
@@ -153,11 +156,11 @@ function renderHtml(o, opts = {}) {
     `<strong>${esc(e.company)}</strong>` +
     (e.title || e.team || e.location
       ? `<div class="meta">${joinDot(e.title, e.team, e.location)}</div>` : '') +
-    (e.bullets.length ? `<ul>${e.bullets.map(b => `<li>${esc(b)}</li>`).join('')}</ul>` : '') +
-    (e.stack.length ? `<div class="tags">${e.stack.map(s => `<i>${esc(s)}</i>`).join('')}</div>` : '')
+    (brief || !e.bullets.length ? '' : `<ul>${e.bullets.map(b => `<li>${esc(b)}</li>`).join('')}</ul>`) +
+    (brief || !e.stack.length ? '' : `<div class="tags">${e.stack.map(s => `<i>${esc(s)}</i>`).join('')}</div>`)
   )).join('');
 
-  const projects = o.projects.map(e => entry(
+  const projects = brief ? '' : o.projects.map(e => entry(
     period(e.start, e.end),
     `<strong>${esc(e.company)}</strong>` +
     (e.title || e.team ? `<div class="meta">${joinDot(e.title, e.team)}</div>` : '') +
@@ -218,7 +221,7 @@ function renderHtml(o, opts = {}) {
   ${cells.length ? `<div class="facts${cells.length <= 2 ? ' wide' : ''}">${
     cells.map(([k, v, cls]) => `<div${cls ? ` class="${cls}"` : ''}><span>${esc(k)}</span>${v}</div>`).join('')}</div>` : ''}
 
-  ${o.summary ? `<div class="sum">${esc(o.summary)}</div>` : ''}
+  ${!brief && o.summary ? `<div class="sum">${esc(o.summary)}</div>` : ''}
 
   ${section('학력', 'EDUCATION', education)}
   ${section('경력', 'EXPERIENCE', experience)}
@@ -233,7 +236,7 @@ function renderHtml(o, opts = {}) {
   ${warnBox}
 
   <div class="foot">
-    <span>디노티시아 표준 이력서${blind ? ' · 블라인드' : ''}</span>
+    <span>디노티시아 표준 이력서${brief ? ' · 요약' : ''}${blind ? ' · 블라인드' : ''}</span>
     <span>원본 ${esc(o._meta.sourceFile || '-')} · 변환 ${esc((o._meta.extractedAt || '').slice(0, 10))}</span>
   </div>
 </div></body></html>`;

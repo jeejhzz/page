@@ -14,7 +14,9 @@ const crypto = require('crypto');
 
 const { extractText, SUPPORTED } = require('./extract');
 const { parseWithRules } = require('./parse-rules');
-const { normalize, audit, blind: makeBlind, careerMonths, humanMonths } = require('./schema');
+const { normalize, audit, blind: makeBlind } = require('./schema');
+const { toCsv } = require('./report');
+const { xlsxBuffer } = require('./xlsx');
 const { renderHtml } = require('./render');
 const pdf = require('./pdf');
 
@@ -56,14 +58,20 @@ function readBody(req, limit = MAX_BYTES) {
 async function writeOutputs(batchDir, base, data) {
   fs.mkdirSync(batchDir, { recursive: true });
   const files = {};
-  for (const [suffix, d] of [['', data], ['_blind', makeBlind(data)]]) {
-    const html = renderHtml(d, { blind: !!suffix });
+  // 요약본이 기본, 상세본과 블라인드본을 함께 만들어 둔다
+  const variants = [
+    ['', 'html', 'pdf', { brief: true }, data],
+    ['_상세', 'fullHtml', 'fullPdf', { full: true }, data],
+    ['_blind', 'blindHtml', 'blindPdf', { brief: true, blind: true }, makeBlind(data)],
+  ];
+  for (const [suffix, hk, pk, opt, d] of variants) {
+    const html = renderHtml(d, opt);
     const hp = path.join(batchDir, `${base}${suffix}.html`);
     fs.writeFileSync(hp, html);
-    files[suffix ? 'blindHtml' : 'html'] = path.basename(hp);
+    files[hk] = path.basename(hp);
     const pp = path.join(batchDir, `${base}${suffix}.pdf`);
     await pdf.htmlToPdf(html, pp);
-    files[suffix ? 'blindPdf' : 'pdf'] = path.basename(pp);
+    files[pk] = path.basename(pp);
   }
   const jp = path.join(batchDir, `${base}.json`);
   fs.writeFileSync(jp, JSON.stringify(data, null, 2));
@@ -107,21 +115,6 @@ async function convert(buf, filename, batchId) {
   } finally {
     fs.unlink(tmp, () => {});
   }
-}
-
-const csvCell = v => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
-function summaryCsv(items) {
-  const head = ['원본파일', '이름', '생년월일', '성별', '연락처', '이메일', '지원직무',
-    '최종학력', '총경력', '총경력(개월)', '경력수', '프로젝트수', '수상수', '특허수', '검토필요'];
-  const rows = items.map(r => {
-    const d = r.data, e = d.education[0] || {};
-    return [r.file, d.name, d.birth, d.gender, d.phone, d.email, d.targetRole,
-      [e.school, e.major, e.degree].filter(Boolean).join(' '),
-      humanMonths(careerMonths(d.experience).months), careerMonths(d.experience).months,
-      d.experience.length, d.projects.length, d.awards.length, d.patents.length,
-      (d._meta.warnings || []).join(' / ')];
-  });
-  return '﻿' + [head, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
 }
 
 const MIME = {
@@ -180,12 +173,33 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'GET' && p === '/api/summary') {
       const list = batches.get(url.searchParams.get('batch')) || [];
-      const buf = Buffer.from(summaryCsv(list), 'utf8');
+      const buf = Buffer.from(toCsv(list), 'utf8');
       res.writeHead(200, {
         'content-type': MIME['.csv'],
         'content-disposition': 'attachment; filename="summary.csv"',
       });
       return res.end(buf);
+    }
+
+    if (req.method === 'GET' && p === '/api/xlsx') {
+      const list = batches.get(url.searchParams.get('batch')) || [];
+      const buf = xlsxBuffer(list);
+      res.writeHead(200, {
+        'content-type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'content-disposition': `attachment; filename*=UTF-8''${encodeURIComponent('지원자요약.xlsx')}`,
+        'content-length': buf.length,
+      });
+      return res.end(buf);
+    }
+
+    // 올린 목록과 만들어 둔 파일을 지운다
+    if (req.method === 'POST' && p === '/api/reset') {
+      const batchId = url.searchParams.get('batch');
+      if (batchId && /^[a-f0-9]{16}$/.test(batchId)) {
+        batches.delete(batchId);
+        fs.rm(path.join(WORK, batchId), { recursive: true, force: true }, () => {});
+      }
+      return json(res, 200, { ok: true, batch: uid() });
     }
 
     if (req.method === 'GET' && p === '/api/zip') {
@@ -201,7 +215,7 @@ const server = http.createServer(async (req, res) => {
           if (fs.existsSync(full)) zip.addLocalFile(full);
         }
       }
-      zip.addFile('summary.csv', Buffer.from(summaryCsv(list), 'utf8'));
+      zip.addFile('summary.csv', Buffer.from(toCsv(list), 'utf8'));
       const buf = zip.toBuffer();
       res.writeHead(200, {
         'content-type': MIME['.zip'],

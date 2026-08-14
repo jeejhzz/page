@@ -32,6 +32,10 @@ main{display:grid;grid-template-columns:340px 1fr;gap:0;height:calc(100vh - 51px
   font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer}
 .acts button:hover:not(:disabled){background:var(--soft)}
 .acts button:disabled{opacity:.45;cursor:default}
+.acts button.go{background:var(--navy);border-color:var(--navy);color:#fff}
+.acts button.go:hover:not(:disabled){background:#16283c}
+.acts button#btnReset{color:#b91c1c;border-color:#f0cccc}
+.acts button#btnReset:hover{background:#fff5f5}
 
 ul.list{list-style:none;margin-top:10px}
 ul.list li{border:1px solid var(--line);border-radius:9px;padding:10px 11px;margin-bottom:7px;cursor:pointer;background:#fff}
@@ -99,8 +103,12 @@ iframe{width:100%;height:78vh;border:1px solid var(--line);border-radius:10px;ba
     </label>
 
     <div class="acts">
-      <button id="btnCsv" disabled>요약표 CSV</button>
+      <button id="btnXlsx" class="go" disabled>엑셀로 받기</button>
       <button id="btnZip" disabled>전체 ZIP</button>
+    </div>
+    <div class="acts">
+      <button id="btnCsv" disabled>CSV</button>
+      <button id="btnReset">초기화</button>
     </div>
     <div class="count" id="count"></div>
     <ul class="list" id="list"></ul>
@@ -120,6 +128,7 @@ iframe{width:100%;height:78vh;border:1px solid var(--line);border-radius:10px;ba
 <script>
 const state = { batch: null, items: [], sel: null, busy: 0 };
 const $ = s => document.querySelector(s);
+const EMPTY_RIGHT = document.querySelector('#right').innerHTML;
 
 async function boot() {
   const cfg = await (await fetch('/api/config')).json();
@@ -164,7 +173,7 @@ async function send(files) {
 
 function render() {
   const done = state.items.filter(i => i.id);
-  $('#btnCsv').disabled = $('#btnZip').disabled = !done.length;
+  $('#btnCsv').disabled = $('#btnZip').disabled = $('#btnXlsx').disabled = !done.length;
   $('#count').textContent = state.items.length
     ? `${done.length}건 완료${state.busy ? ' · 변환 중…' : ''}${state.items.filter(i => i.error).length ? ' · 실패 ' + state.items.filter(i => i.error).length + '건' : ''}`
     : '';
@@ -199,14 +208,16 @@ function detail(it) {
     <h2>${esc(d.name || '(이름 미확인)')}</h2>
     <span class="count">${esc(it.file)}</span>
     <div class="sp"></div>
-    <a href="${url(it.files.pdf)}?dl=1">PDF</a>
+    <button id="btnToggle">${it._full ? '요약본 보기' : '상세본 보기'}</button>
+    <a href="${url(it.files.pdf)}?dl=1">요약 PDF</a>
+    <a href="${url(it.files.fullPdf)}?dl=1">상세 PDF</a>
     <a href="${url(it.files.blindPdf)}?dl=1">블라인드 PDF</a>
     <a href="${url(it.files.json)}?dl=1">JSON</a>
   </div>
   ${w.length ? `<div class="warnbox"><b>검토 필요</b> — 자동 변환에서 확인이 필요한 항목입니다.
      <ul>${w.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
   <div class="panes">
-    <iframe src="${url(it.files.html)}" title="미리보기"></iframe>
+    <iframe src="${url(it._full ? it.files.fullHtml : it.files.html)}" title="미리보기"></iframe>
     <div class="form">
       <h3>기본 정보 수정</h3>
       ${field('name', '이름', d.name)}
@@ -237,6 +248,7 @@ const field = (k, label, v) =>
   `<div class="f"><label>${label}</label><input id="f_${k}" value="${esc(v || '')}"></div>`;
 
 function bindDetail(it) {
+  $('#btnToggle').onclick = () => { it._full = !it._full; render(); };
   const btn = $('#btnSave'), msg = $('#saveMsg');
   btn.onclick = async () => {
     let rest;
@@ -263,7 +275,15 @@ function esc(s) {
 }
 
 $('#btnCsv').onclick = () => { location.href = '/api/summary?batch=' + state.batch; };
+$('#btnXlsx').onclick = () => { location.href = '/api/xlsx?batch=' + state.batch; };
 $('#btnZip').onclick = () => { location.href = '/api/zip?batch=' + state.batch; };
+$('#btnReset').onclick = async () => {
+  if (state.items.length && !confirm('올린 이력서와 만들어 둔 파일을 모두 지웁니다. 계속할까요?')) return;
+  const out = await (await fetch('/api/reset?batch=' + state.batch, { method: 'POST' })).json();
+  state.batch = out.batch; state.items = []; state.sel = null;
+  $('#right').innerHTML = EMPTY_RIGHT;
+  render();
+};
 </script>
 </body>
 </html>

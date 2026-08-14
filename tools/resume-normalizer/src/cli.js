@@ -7,6 +7,7 @@
 //   -o, --out <dir>     결과 폴더 (기본 out)
 //       --engine <e>    auto | llm | rules   (기본 auto — 키가 있으면 llm)
 //       --model <name>  LLM 모델 (기본 claude-sonnet-5)
+//       --full          성과 목록까지 담은 상세본도 함께 생성 (기본은 요약본만)
 //       --blind         이름·생년월일·성별·주소·연락처를 지운 블라인드본도 함께 생성
 //       --only-blind    블라인드본만 생성
 //       --no-pdf        PDF 없이 HTML/JSON 만
@@ -16,7 +17,9 @@ const fs = require('fs');
 const path = require('path');
 const { extractText, SUPPORTED } = require('./extract');
 const { parseWithRules } = require('./parse-rules');
-const { normalize, audit, blind: makeBlind, careerMonths, humanMonths } = require('./schema');
+const { normalize, audit, blind: makeBlind } = require('./schema');
+const { toCsv } = require('./report');
+const { xlsxBuffer } = require('./xlsx');
 const { renderHtml } = require('./render');
 const pdf = require('./pdf');
 
@@ -29,6 +32,7 @@ function parseArgs(argv) {
     if (a === '-o' || a === '--out') o.out = argv[++i];
     else if (a === '--engine') o.engine = argv[++i];
     else if (a === '--model') o.model = argv[++i];
+    else if (a === '--full') o.full = true;
     else if (a === '--blind') o.blind = true;
     else if (a === '--only-blind') { o.blind = true; o.onlyBlind = true; }
     else if (a === '--no-pdf') o.pdf = false;
@@ -82,11 +86,12 @@ async function processOne(file, opt) {
   const base = slug(data.name || path.basename(file, path.extname(file)));
   const outs = [];
   const variants = [];
-  if (!opt.onlyBlind) variants.push(['', data]);
-  if (opt.blind) variants.push(['_blind', makeBlind(data)]);
+  if (!opt.onlyBlind) variants.push(['', data, { brief: true }]);
+  if (opt.full && !opt.onlyBlind) variants.push(['_상세', data, { full: true }]);
+  if (opt.blind) variants.push(['_blind', makeBlind(data), { brief: true, blind: true }]);
 
-  for (const [suffix, d] of variants) {
-    const html = renderHtml(d, { blind: !!suffix });
+  for (const [suffix, d, ropt] of variants) {
+    const html = renderHtml(d, ropt);
     const htmlPath = path.join(opt.out, `${base}${suffix}.html`);
     fs.mkdirSync(opt.out, { recursive: true });
     fs.writeFileSync(htmlPath, html);
@@ -99,31 +104,10 @@ async function processOne(file, opt) {
   return { file: rel, data, outs };
 }
 
-const csvCell = v => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
-
-function writeSummary(results, outDir) {
-  const head = ['원본파일', '이름', '생년월일', '성별', '연락처', '이메일', '지원직무',
-    '최종학력', '총경력', '총경력(개월)', '경력수', '수상수', '특허수', '검토필요'];
-  const rows = results.map(r => {
-    const d = r.data, e = d.education[0] || {};
-    return [
-      r.file, d.name, d.birth, d.gender, d.phone, d.email, d.targetRole,
-      [e.school, e.major, e.degree].filter(Boolean).join(' '),
-      humanMonths(careerMonths(d.experience).months), careerMonths(d.experience).months,
-      d.experience.length, d.awards.length, d.patents.length,
-      (d._meta.warnings || []).join(' / '),
-    ];
-  });
-  const csv = [head, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
-  const p = path.join(outDir, 'summary.csv');
-  fs.writeFileSync(p, '﻿' + csv);       // 엑셀에서 한글이 깨지지 않도록 BOM
-  return p;
-}
-
 async function main() {
   const opt = parseArgs(process.argv.slice(2));
   if (opt.help || !opt.inputs.length) {
-    console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 17).map(l => l.replace(/^\/\/ ?/, '')).join('\n'));
+    console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 18).map(l => l.replace(/^\/\/ ?/, '')).join('\n'));
     process.exit(opt.help ? 0 : 1);
   }
 
@@ -157,9 +141,13 @@ async function main() {
   await pdf.close();
 
   if (results.length) {
-    const s = writeSummary(results, opt.out);
+    const csvPath = path.join(opt.out, 'summary.csv');
+    const xlsxPath = path.join(opt.out, '지원자요약.xlsx');
+    fs.writeFileSync(csvPath, toCsv(results));
+    fs.writeFileSync(xlsxPath, xlsxBuffer(results));
     console.log(`\n완료 ${results.length}건${failed.length ? ` · 실패 ${failed.length}건` : ''}`);
-    console.log(`  요약표 ${s}`);
+    console.log(`  엑셀   ${xlsxPath}`);
+    console.log(`  요약표 ${csvPath}`);
     const needs = results.filter(r => r.data._meta.warnings.length);
     if (needs.length) {
       console.log(`  검토 필요 ${needs.length}건 — ${needs.map(r => r.data.name || r.file).join(', ')}`);

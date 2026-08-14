@@ -26,7 +26,12 @@ main{display:grid;grid-template-columns:330px 1fr}
 .try{margin-top:10px;display:flex;gap:7px;flex-wrap:wrap}
 .try button{flex:1;min-width:130px;padding:7px;border:1px solid var(--line);border-radius:8px;background:#fff;
   font-size:12px;font-weight:700;cursor:pointer;color:var(--ink)}
-.try button:hover{background:var(--soft)}
+.try button:hover:not(:disabled){background:var(--soft)}
+.try button:disabled{opacity:.45;cursor:default}
+.try button.go{background:var(--navy);border-color:var(--navy);color:#fff}
+.try button.go:hover:not(:disabled){background:#16283c}
+.try button#btnReset{color:#b91c1c;border-color:#f0cccc}
+.try button#btnReset:hover{background:#fff5f5}
 .count{font-size:12px;color:var(--muted);margin-top:10px}
 ul{list-style:none;margin-top:8px}
 li{border:1px solid var(--line);border-radius:9px;padding:9px 10px;margin-bottom:6px;cursor:pointer;background:#fff}
@@ -81,8 +86,8 @@ iframe{width:100%;height:76vh;border:1px solid var(--line);border-radius:10px;ba
 <div class="banner">
   <b>여기 올린 파일은 브라우저 밖으로 나가지 않습니다.</b>
   판독·변환·조판이 전부 이 페이지 안에서 일어납니다. 서버로 전송하지 않습니다.
-  다만 데모라 <b>PDF 내려받기는 막혀 있어</b>, 화면 미리보기와 인쇄까지만 됩니다.
-  실제 시스템(<code>npm start</code>)은 PDF·CSV·ZIP을 파일로 내려받습니다.
+  <b>엑셀로 받기</b>를 누르면 저장할지 묻는 창이 뜹니다 — 허용하면 요약표가 파일로 저장됩니다.
+  실제 시스템(<code>npm start</code>)은 엑셀·PDF·CSV·ZIP을 모두 파일로 내려받습니다.
 </div>
 
 <main>
@@ -92,6 +97,11 @@ iframe{width:100%;height:76vh;border:1px solid var(--line);border-radius:10px;ba
       <span>PDF · 워드(docx) · 한글(hwpx) · 텍스트</span>
       <input type="file" id="picker" multiple accept=".pdf,.docx,.hwpx,.txt,.md">
     </label>
+    <div class="try">
+      <button id="btnXlsx" class="go" disabled>엑셀로 받기</button>
+      <button id="btnReset">초기화</button>
+    </div>
+    <div class="count" id="dlMsg"></div>
     <div class="try">
       <button id="s1">예시 — 라벨형 이력서</button>
       <button id="s2">예시 — 서술형 이력서</button>
@@ -197,6 +207,7 @@ async function toText(file) {
 
 const state = { items: [], sel: null, busy: 0 };
 const $ = s => document.querySelector(s);
+const EMPTY_RIGHT = document.querySelector('#right').innerHTML;
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -219,6 +230,7 @@ async function handle(files) {
 
 function render() {
   const done = state.items.filter(i => i.id);
+  $('#btnXlsx').disabled = !done.length;
   $('#count').textContent = state.items.length
     ? `${done.length}건 완료${state.busy ? ' · 변환 중…' : ''}` +
       (state.items.filter(i => i.error).length ? ` · 실패 ${state.items.filter(i => i.error).length}건` : '')
@@ -252,8 +264,9 @@ function detail(it) {
     <h2>${esc(d.name || '(이름 미확인)')}</h2>
     <span class="count">${esc(it.file)}</span>
     <div class="sp"></div>
-    <button id="btnPrint">인쇄 · PDF로 저장</button>
+    <button id="btnFull">${it._full ? '요약본 보기' : '상세본 보기'}</button>
     <button id="btnBlind">블라인드본 보기</button>
+    <button id="btnPrint">인쇄 · PDF로 저장</button>
   </div>
   ${w.length ? `<div class="warnbox"><b>검토 필요</b> — 자동 변환이 확인을 요청한 항목입니다.
     <ul>${w.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
@@ -275,20 +288,19 @@ function detail(it) {
   </div>`;
 }
 
-function paint(it, blindMode) {
-  const html = renderHtml(blindMode ? makeBlind(it.data) : it.data, { blind: blindMode });
-  const f = $('#prev');
-  f.srcdoc = html;
-  it._blind = blindMode;
+function paint(it) {
+  const d = it._blind ? makeBlind(it.data) : it.data;
+  $('#prev').srcdoc = renderHtml(d, it._full ? { full: true, blind: it._blind } : { brief: true, blind: it._blind });
 }
 
 function bind(it) {
-  paint(it, false);
+  paint(it);
   $('#btnBlind').onclick = () => {
-    const b = !it._blind;
-    paint(it, b);
-    $('#btnBlind').textContent = b ? '원본 보기' : '블라인드본 보기';
+    it._blind = !it._blind;
+    paint(it);
+    $('#btnBlind').textContent = it._blind ? '원본 보기' : '블라인드본 보기';
   };
+  $('#btnFull').onclick = () => { it._full = !it._full; render(); };
   $('#btnPrint').onclick = () => {
     try { $('#prev').contentWindow.print(); }
     catch (e) { alert('이 화면에서는 인쇄가 막혀 있습니다. 실제 시스템에서는 PDF 파일로 바로 저장됩니다.'); }
@@ -381,6 +393,94 @@ SystemVerilog, UVM, Verilog, Python, Perl, VCS, Verdi, Git, Jenkins
 2024.02  TOEIC 820
 `],
 };
+const { xlsxParts } = require('xlsx');
+const { toCsv } = require('report');
+
+function save(name, bytes, mime) {
+  const blob = new Blob([bytes], { type: mime });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+
+const XLSX_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+function xlsxBytes(items) {
+  const enc = new TextEncoder();
+  const zipInput = {};
+  for (const [name, content] of Object.entries(xlsxParts(items))) zipInput[name] = enc.encode(content);
+  return fflate.zipSync(zipInput, { level: 6 });
+}
+
+// 아티팩트 화면에서는 페이지가 직접 파일을 내려받을 수 없다. 보는 사람에게 물어보고
+// 저장해 주는 통로가 따로 있어서, 그게 있으면 그쪽으로 넘긴다. 없으면(=파일을 브라우저로
+// 직접 연 경우) 원래대로 링크를 만들어 받는다.
+let _dl;
+async function downloader() {
+  if (_dl === undefined) {
+    try {
+      _dl = (typeof claude !== 'undefined' && claude && claude.use) ? await claude.use('downloads') : null;
+    } catch (_) { _dl = null; }
+  }
+  return _dl;
+}
+
+const dlMsg = t => { $('#dlMsg').textContent = t || ''; };
+
+// 통로가 허용하는 확장자가 정해져 있다. 엑셀이 막히면 CSV, 그것도 막히면 텍스트로
+// 물러난다 — 어느 쪽이든 엑셀에서 열린다.
+async function offer(dl, items) {
+  const csv = () => toCsv(items);
+  const tries = [
+    ['지원자요약.xlsx', () => xlsxBytes(items), ''],
+    ['지원자요약.csv', csv, '엑셀 형식이 막혀 CSV로 저장했습니다. 엑셀에서 그대로 열립니다.'],
+    ['지원자요약.txt', csv, '엑셀·CSV가 막혀 텍스트(쉼표 구분)로 저장했습니다.'],
+  ];
+  let last;
+  for (const [filename, data, note] of tries) {
+    try {
+      await dl.save({ filename, data: data() });
+      dlMsg(note);
+      return;
+    } catch (e) {
+      const code = e && e.code;
+      if (code === 'rejected_extension' || code === 'extension_not_enabled') { last = e; continue; }
+      if (code === 'declined') { dlMsg(''); return; }
+      if (code === 'rate_limited') { dlMsg('저장 창이 이미 열려 있습니다. 잠시 후 다시 눌러주세요.'); return; }
+      throw e;
+    }
+  }
+  throw last;
+}
+
+$('#btnXlsx').onclick = async () => {
+  const items = state.items.filter(i => i.id).map(i => ({ file: i.file, data: i.data }));
+  if (!items.length) return;
+  const btn = $('#btnXlsx');
+  btn.disabled = true;
+  dlMsg('');
+  try {
+    const dl = await downloader();
+    if (dl) await offer(dl, items);
+    else save('지원자요약.xlsx', xlsxBytes(items), XLSX_MIME);
+  } catch (e) {
+    dlMsg('내려받기에 실패했습니다: ' + (e && e.message ? e.message : e));
+  } finally {
+    btn.disabled = false;
+  }
+};
+
+$('#btnReset').onclick = () => {
+  if (state.items.length && !confirm('올린 이력서를 모두 지웁니다. 계속할까요?')) return;
+  state.items = []; state.sel = null;
+  $('#right').innerHTML = EMPTY_RIGHT;
+  dlMsg('');
+  render();
+};
+
 for (const key of Object.keys(SAMPLES)) {
   $('#' + key).onclick = () => {
     const [name, body] = SAMPLES[key];
