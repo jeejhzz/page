@@ -6,6 +6,24 @@
 const fs = require('fs');
 const path = require('path');
 
+const { pathToFileURL } = require('url');
+
+// pdfjs 가 CJK CMap · 표준 폰트를 찾을 위치. 없으면 한글이 추출되지 않는다.
+function assetUrls() {
+  let root;
+  try { root = path.dirname(require.resolve('pdfjs-dist/package.json')); }
+  catch (_) { return {}; }
+  const dir = sub => {
+    const p = path.join(root, sub);
+    return fs.existsSync(p) ? pathToFileURL(p).href + '/' : undefined;
+  };
+  return {
+    cMapUrl: dir('cmaps'), cMapPacked: true,
+    standardFontDataUrl: dir('standard_fonts'),
+    wasmUrl: dir('wasm'),
+  };
+}
+
 const LINE_TOL = 3.0;      // 같은 줄로 볼 y 오차 (pt)
 const GAP_RATIO = 0.8;     // 이 배수 이상 벌어지면 칸 구분(공백)으로 본다
 
@@ -88,7 +106,13 @@ function sliceRows(rows, x0, x1) {
 async function fromPdf(file) {
   const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
   const data = new Uint8Array(fs.readFileSync(file));
-  const task = pdfjs.getDocument({ data, useSystemFonts: true });
+  // 한글 PDF 는 CID 폰트를 쓰는 경우가 많아, CMap 을 못 찾으면 본문이 통째로 사라진다.
+  // (증상: 글머리표만 남고 텍스트가 빈다)
+  const task = pdfjs.getDocument({
+    data,
+    useSystemFonts: true,
+    ...assetUrls(),
+  });
   const doc = await task.promise;
   const pages = [];
 
@@ -185,8 +209,14 @@ async function extractText(file) {
     throw new Error(`지원하지 않는 형식: ${ext || '(확장자 없음)'}`);
   }
   const text = tidy(raw);
-  if (text.replace(/\s/g, '').length < 40) {
-    throw new Error('텍스트가 거의 추출되지 않았습니다. 스캔 이미지 PDF 일 수 있습니다(OCR 필요).');
+  // 글머리표(•, o)나 쪽번호만 남고 본문이 빠지는 경우가 있다.
+  // 슬라이드를 이미지로 내보낸 PDF 가 대표적이다. 그래서 공백이 아닌 글자가 아니라
+  // "실제 글자"(한글·영문·숫자)만 세서 판단한다.
+  const letters = (text.match(/[가-힣a-zA-Z0-9]/g) || []).length;
+  if (letters < 120) {
+    throw new Error(
+      `본문 텍스트가 거의 없습니다(글자 ${letters}자). ` +
+      '내용이 이미지로 들어간 PDF 로 보입니다. OCR 을 거치거나 원본 Word/텍스트를 받아야 합니다.');
   }
   return text;
 }

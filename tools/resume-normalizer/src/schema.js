@@ -88,7 +88,9 @@ function normalize(raw, meta = {}) {
   // "홍길동 (Hong Gildong)" 처럼 한 칸에 같이 적어 내는 경우가 많다
   o.name = str(r.name);
   o.nameEn = str(r.nameEn || r.name_en);
-  const paren = o.name.match(/^(.+?)\s*[(（]\s*([A-Za-z][A-Za-z .'-]{1,40})\s*[)）]\s*$/);
+  // "홍길동 (Hong Gildong)" 또는 괄호 없이 "홍길동 HONG GILDONG"
+  const paren = o.name.match(/^(.+?)\s*[(（]\s*([A-Za-z][A-Za-z .'-]{1,40})\s*[)）]\s*$/)
+    || o.name.match(/^([가-힣]{2,5})\s+([A-Za-z][A-Za-z .'-]{2,40})$/);
   if (paren) {
     o.name = paren[1].trim();
     if (!o.nameEn) o.nameEn = paren[2].trim();

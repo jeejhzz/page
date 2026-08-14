@@ -6,15 +6,20 @@
 
 const SECTION = [
   ['education', /^(학\s*력(\s*사항)?|education(al background)?|academic)/i],
-  ['experience', /^(경\s*력(\s*사항)?|업무\s*경험|직무\s*경험|work\s*experience|experience|employment|career)/i],
+  // "경력기술서"·"경력서"는 문서 제목이지 섹션 제목이 아니다. 걸리면 첫 줄을 통째로 삼킨다.
+  ['experience', /^(경\s*력(?!\s*(기술)?서)(\s*사항)?|업무\s*경험|직무\s*경험|work\s*experience|experience|employment|career)/i],
   ['projects', /^(프로젝트(\s*경험)?|주요\s*프로젝트|projects?)/i],
   ['awards', /^(수\s*상(\s*내역|\s*경력)?|awards?|honors?)/i],
   ['patents', /^(특\s*허(\s*내역)?|지식재산|patents?)/i],
   ['publications', /^(논\s*문|학술\s*활동|publications?|papers?)/i],
   ['certificates', /^(자\s*격(\s*증)?(\s*사항)?|certificat|licen[cs]e)/i],
   ['languages', /^(어\s*학(\s*능력|\s*성적)?|외국어|languages?)/i],
-  ['skills', /^(기술\s*스\s*택|보유\s*기술|주요\s*기술|사용\s*(기술|도구)|다루는\s*것|개발\s*환경|기술|skills?|tech\s*stack|technical)/i],
-  ['summary', /^(자기\s*소개|소\s*개|요\s*약|about\s*me|summary|profile|introduction)/i],
+  // 홑단어 "기술"/"Skills" 는 끝까지 일치할 때만 제목으로 본다.
+  // 안 그러면 "기술 경력서 김보경" 같은 표지 줄을 제목으로 오인한다.
+  ['skills', /^(기술\s*스\s*택|보유\s*기술|주요\s*기술|핵심\s*역량|보유\s*역량|사용\s*(?:기술|도구)|다루는\s*것|개발\s*환경|tech\s*stack|technical\s*skills?)|^(기술|역량|skills?)$/i],
+  // 알아보지만 표준 이력서에는 옮기지 않는 구역. 앞 섹션이 여기까지 흘러드는 것을 막는다.
+  ['_ignore', /^(포트폴리오|첨부|참고\s*자료|기타\s*사항|취미|특기|레퍼런스|reference|portfolio|appendix)/i],
+  ['summary', /^(자기\s*소개|소\s*개|요\s*약|프로필(\s*요약)?|지원\s*동기|about\s*me|summary|profile|introduction)/i],
   ['military', /^(병\s*역(\s*사항)?|military)/i],
   ['personal', /^(인적\s*사항|기본\s*정보|개인\s*정보|personal)/i],
 ];
@@ -25,7 +30,7 @@ const RE = {
   url: /https?:\/\/[^\s)>,]+/g,
   // 기간: 2019.03 ~ 2022.12 / 2019.3-현재 / 2019년 3월 ~ 2022년 12월 / 2011. 3. ~ 2013. 2.
   // 월 뒤에 마침표를 찍는 표기("2011. 3. ~")가 흔해서 끝의 점까지 흡수한다.
-  range: /((?:19|20)\d{2}\s*[.\-/년]\s*\d{1,2}\s*[.월]?)\s*(?:~|-|–|—|부터|to)\s*((?:19|20)\d{2}\s*[.\-/년]\s*\d{1,2}\s*[.월]?|현\s*재|재직\s*중|재학\s*중|present|current)/i,
+  range: /((?:19|20)\d{2}\s*[.\-/년]\s*\d{1,2}\s*[.월]?)\s*(?:~|-|–|—|부터|to)\s*((?:19|20)\d{2}\s*[.\-/년]\s*\d{1,2}\s*[.월]?|현\s*재|재직(?:\s*중)?|재학(?:\s*중)?|present|current)/i,
   yearOnly: /((?:19|20)\d{2})\s*[.\-/년]?\s*(\d{1,2})?/,
   rrn: /\b\d{6}\s*[-—]\s*[1-4]\d{6}\b/,     // 주민등록번호 — 저장하지 않고 경고만 남긴다
   degree: /(학사|석사|박사|전문학사|고등학교|고졸|B\.?S|M\.?S|Ph\.?D|Bachelor|Master|Doctor)/i,
@@ -52,7 +57,11 @@ function splitSections(text) {
   for (const raw of lines) {
     const l = raw.trim();
     if (!l) { (out[cur] = out[cur] || []).push(''); continue; }
-    const bare = l.replace(/^[■□▶●○◆◇▪•\-–—#*\s]+/, '').replace(/[:：]\s*$/, '').trim();
+    // "4)경력", "3. 보유기술", "■ 학력" 처럼 앞에 붙는 기호·번호를 걷어낸 뒤 제목인지 본다
+    const bare = l
+      .replace(/^[■□▶●○◆◇▪•\-–—#*\s]+/, '')
+      .replace(/^\d{1,2}\s*[).\]]\s*/, '')
+      .replace(/[:：]\s*$/, '').trim();
     const hit = isHeading(bare) && SECTION.find(([, re]) => re.test(bare));
     if (hit) { cur = hit[0]; out[cur] = out[cur] || []; continue; }
     (out[cur] = out[cur] || []).push(l);
@@ -74,27 +83,41 @@ function parseRange(line) {
   return { start: '', end: '', rest: line };
 }
 
+const BULLET = /^[-–—•▪○*·‧]\s+/;
+
 // 항목(엔트리) 단위로 자른다. 기간이 있는 줄을 새 항목의 시작으로 본다.
+// body 는 글머리표 여부를 함께 들고 간다 — 기간 다음 줄에 회사명을 적는 양식에서
+// "글머리표가 붙지 않은 앞쪽 줄"이 회사·직책이기 때문이다.
 function chunk(block) {
   const items = [];
   let cur = null;
   for (const raw of String(block || '').split('\n')) {
     const l = raw.trim();
     if (!l) continue;
-    const bullet = /^[-–—•▪○*]\s+/.test(l);
+    const bullet = BULLET.test(l);
     const hasDate = RE.range.test(l) || /\b(19|20)\d{2}\s*[.\-/년]/.test(l);
-    if (!bullet && (hasDate || !cur)) {
-      cur = { head: l, body: [] };
-      items.push(cur);
-    } else {
-      cur.body.push(l.replace(/^[-–—•▪○*]\s+/, ''));
+
+    // 회사명 다음 줄에 "(2025.06 ~ 재직)" 처럼 기간만 따로 적는 양식이 흔하다.
+    // 새 항목을 열지 말고 앞 항목의 머리에 붙인다.
+    const dateOnly = /^\(?\s*(?:19|20)\d{2}\s*[.\-/년][^()]{0,24}\)?$/.test(l);
+    if (cur && dateOnly && !RE.range.test(cur.head) && !/\b(19|20)\d{2}/.test(cur.head)) {
+      cur.head += ' ' + l.replace(/^\(|\)$/g, '');
+      continue;
     }
+
+    // 섹션이 글머리표로 바로 시작하는 이력서도 있다. 그때는 머리 없는 항목을 연다.
+    if (!cur || (!bullet && hasDate)) {
+      cur = { head: bullet ? '' : l, body: [] };
+      items.push(cur);
+      if (!bullet) continue;
+    }
+    cur.body.push({ t: l.replace(BULLET, '').trim(), bullet });
   }
-  return items;
+  return items.map(i => ({ ...i, lines: i.body.map(b => b.t) }));
 }
 
 function parseEducation(block) {
-  return chunk(block).map(({ head, body }) => {
+  return chunk(block).map(({ head, lines }) => {
     const { start, end, rest: raw } = parseRange(head);
     // 학점·학위·상태는 따로 뽑아 쓰므로 본문에서 걷어내야 전공에 섞이지 않는다
     const gm = raw.match(/(?:GPA|학점|평점)\s*[:：]?\s*([\d.]+\s*\/\s*[\d.]+|[\d.]+)/i);
@@ -109,45 +132,62 @@ function parseEducation(block) {
       || c.find(x => x !== school) || '';
     return {
       school, major, degree: dm ? dm[1] : '', status: sm ? sm[1] : '',
-      start, end, gpa: gm ? gm[1].replace(/\s/g, '') : '', note: body.join(' '),
+      start, end, gpa: gm ? gm[1].replace(/\s/g, '') : '', note: lines.join(' '),
     };
   });
 }
 
+const TITLE_RE = /(엔지니어|연구원|개발자|매니저|리드|팀장|본부장|실장|이사|상무|전무|부장|차장|과장|대리|주임|선임|책임|수석|사원|인턴|고문|위원|총괄|engineer|developer|researcher|manager|lead|intern|architect|director|consultant)/i;
+const TEAM_RE = /(팀|그룹|본부|실|센터|부서|사업부|team|group|division|department)/i;
+
 function parseExperience(block) {
   return chunk(block).map(({ head, body }) => {
     const { start, end, rest } = parseRange(head);
-    const c = cells(rest);
-    const title = c.find(x => /(엔지니어|연구원|개발자|매니저|리드|팀장|선임|책임|주임|인턴|engineer|developer|researcher|manager|lead|intern|architect)/i.test(x)) || '';
-    const team = c.find(x => x !== title && /(팀|그룹|본부|실|센터|부서|team|group|division)/i.test(x)) || '';
-    const company = c.find(x => x !== title && x !== team) || c[0] || '';
-    const stackLine = body.find(b => /^(기술\s*스택|사용\s*기술|stack|tech)\s*[:：]/i.test(b));
+    let c = cells(rest);
+
+    // "2025.04 ~ 현재 (계약직)" 처럼 기간만 한 줄에 적고
+    // 회사·직책을 다음 줄들에 쓰는 양식이 흔하다. 글머리표 없는 앞쪽 줄을 끌어온다.
+    const firstBullet = body.findIndex(b => b.bullet);
+    const preLines = (firstBullet < 0 ? body : body.slice(0, firstBullet)).map(b => b.t);
+    // 머리줄에 "(계약직)" 같은 괄호 주석 말고 실질적인 낱말이 하나도 없으면 기간만 적힌 줄이다
+    const meaningful = c.filter(x => /[가-힣A-Za-z]{2,}/.test(x) && !/^[(（].*[)）]$/.test(x));
+    const headOnlyDate = meaningful.length === 0;
+    if (headOnlyDate && preLines.length) c = [...preLines.flatMap(cells), ...c];
+
+    const title = c.find(x => TITLE_RE.test(x)) || '';
+    const team = c.find(x => x !== title && TEAM_RE.test(x)) || '';
+    const company = c.find(x => x !== title && x !== team && /[가-힣A-Za-z]/.test(x)) || c[0] || '';
+
+    const rest2 = body.filter(b => !(headOnlyDate && preLines.includes(b.t) && !b.bullet));
+    const stackLine = rest2.find(b => /^(기술\s*스택|사용\s*기술|스택|stack|tech)\s*[:：]/i.test(b.t));
     return {
       company, team, title, start, end, location: '',
-      bullets: body.filter(b => b !== stackLine),
-      stack: stackLine ? stackLine.split(/[:：]/).slice(1).join(':').split(/[,·、/]/).map(s => s.trim()).filter(Boolean) : [],
+      bullets: rest2.filter(b => b !== stackLine).map(b => b.t),
+      stack: stackLine
+        ? stackLine.t.split(/[:：]/).slice(1).join(':').split(/[,·、/]/).map(s => s.trim()).filter(Boolean)
+        : [],
     };
   });
 }
 
 function parseAwards(block) {
-  return chunk(block).map(({ head, body }) => {
+  return chunk(block).map(({ head, lines }) => {
     const { start, rest } = parseRange(head);
     const c = cells(rest);
-    return { title: c[0] || rest, issuer: c[1] || '', date: start, note: [...c.slice(2), ...body].join(' ') };
+    return { title: c[0] || rest, issuer: c[1] || '', date: start, note: [...c.slice(2), ...lines].join(' ') };
   });
 }
 
 function parsePatents(block) {
-  return chunk(block).map(({ head, body }) => {
+  return chunk(block).map(({ head, lines }) => {
     const { start, rest } = parseRange(head);
     const num = rest.match(/(?:제?\s*)?(10-\d{4}-\d{7}|10-\d{7}|US\s?\d[\d,]{5,}|\d{2}-\d{4}-\d{7})/i);
     const st = rest.match(/(등록|출원|공개|granted|filed|pending)/i);
     const c = cells(num ? rest.replace(num[0], ' ') : rest);
     return {
       title: c[0] || rest, number: num ? num[1] : '', status: st ? st[1] : '',
-      date: start, role: /발명자|주\s*발명|inventor/i.test(rest + body.join(' ')) ? '발명자' : '',
-      note: body.join(' '),
+      date: start, role: /발명자|주\s*발명|inventor/i.test(rest + lines.join(' ')) ? '발명자' : '',
+      note: lines.join(' '),
     };
   });
 }
@@ -182,10 +222,10 @@ function parseSkills(block) {
 }
 
 function parsePublications(block) {
-  return chunk(block).map(({ head, body }) => {
+  return chunk(block).map(({ head, lines }) => {
     const { start, rest } = parseRange(head);
     const c = cells(rest);
-    return { title: c[0] || rest, venue: c[1] || '', date: start, authors: body.join(' ') };
+    return { title: c[0] || rest, venue: c[1] || '', date: start, authors: lines.join(' ') };
   });
 }
 
@@ -224,6 +264,14 @@ function parseWithRules(text) {
   if (!out.gender) {
     const m = all.match(/성\s*별[^\n]{0,4}[:：|\t]?\s*(남성?|여성?)/);
     if (m) out.gender = m[1];
+  }
+  if (!out.name) {
+    // "기술 경력서 김보경" / "김보경 이력서" 처럼 문서 제목에 이름을 붙이는 양식
+    const m = head.split('\n').slice(0, 6).map(l => l.trim())
+      .map(l => l.match(/^(?:[가-힣]*\s*(?:이력서|경력(?:기술)?서|résumé|resume|cv)\s*[|·\-–—]?\s*)([가-힣]{2,4})$/i)
+        || l.match(/^([가-힣]{2,4})\s*[|·\-–—]?\s*(?:이력서|경력(?:기술)?서|résumé|resume|cv)$/i))
+      .find(Boolean);
+    if (m) out.name = m[1];
   }
   if (!out.name) {
     // 머리 부분에서 사람 이름처럼 생긴 짧은 줄
