@@ -16,7 +16,7 @@ const fs = require('fs');
 const path = require('path');
 const { extractText, SUPPORTED } = require('./extract');
 const { parseWithRules } = require('./parse-rules');
-const { normalize, audit, blind: makeBlind } = require('./schema');
+const { normalize, audit, blind: makeBlind, careerMonths, humanMonths } = require('./schema');
 const { renderHtml } = require('./render');
 const pdf = require('./pdf');
 
@@ -103,12 +103,13 @@ const csvCell = v => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
 
 function writeSummary(results, outDir) {
   const head = ['원본파일', '이름', '생년월일', '성별', '연락처', '이메일', '지원직무',
-    '최종학력', '경력수', '수상수', '특허수', '검토필요'];
+    '최종학력', '총경력', '총경력(개월)', '경력수', '수상수', '특허수', '검토필요'];
   const rows = results.map(r => {
     const d = r.data, e = d.education[0] || {};
     return [
       r.file, d.name, d.birth, d.gender, d.phone, d.email, d.targetRole,
       [e.school, e.major, e.degree].filter(Boolean).join(' '),
+      humanMonths(careerMonths(d.experience).months), careerMonths(d.experience).months,
       d.experience.length, d.awards.length, d.patents.length,
       (d._meta.warnings || []).join(' / '),
     ];

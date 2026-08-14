@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { age } = require('./schema');
+const { age, careerMonths, humanMonths, monthIndex } = require('./schema');
 
 const FONT_DIR = path.join(__dirname, '..', 'node_modules', 'pretendard', 'dist', 'web', 'static', 'woff2');
 const WEIGHTS = [[400, 'Regular'], [500, 'Medium'], [600, 'SemiBold'], [700, 'Bold'], [800, 'ExtraBold']];
@@ -48,6 +48,7 @@ body{font-family:'Pretendard',-apple-system,'Malgun Gothic',sans-serif;color:#15
 .facts div{padding:2.2mm 3mm;border-right:0.6pt solid #e6ebf1;font-size:9pt}
 .facts div:last-child{border-right:0}
 .facts div.w{grid-column:1/-1;border-right:0;border-top:0.6pt solid #e6ebf1}
+.facts b{font-weight:800}
 .facts span{display:block;font-size:7.4pt;font-weight:700;letter-spacing:.06em;color:#7b8798;margin-bottom:.6mm}
 .facts.wide{grid-template-columns:1fr}
 
@@ -64,6 +65,7 @@ section{break-inside:auto}
   break-inside:avoid;page-break-inside:avoid}
 .e + .e{border-top:0.5pt dotted #dde3ea}
 .e .when{font-size:8.6pt;font-weight:600;color:#5b6a7d;padding-top:.4mm;font-variant-numeric:tabular-nums}
+.e .when .dur{font-size:7.8pt;font-weight:600;color:#94a1b2;margin-top:.4mm}
 .e .what strong{font-size:10.2pt;font-weight:700}
 .e .what .meta{font-size:9pt;color:#44536a;margin-top:.4mm}
 .e .what .sub{font-size:8.8pt;color:#6b7787;margin-top:.4mm}
@@ -101,6 +103,13 @@ function factCells(o, opts) {
     if (o.email) cells.push(['이메일', esc(o.email)]);
     if (o.address) cells.push(['주소', esc(o.address), 'w']);   // 주소는 한 줄을 다 쓴다
   }
+  // 총 경력은 개인정보가 아니라서 블라인드본에도 남긴다. 오히려 여기서 가장 많이 본다.
+  const c = careerMonths(o.experience);
+  if (c.months) {
+    cells.push(['총 경력', `<b>${esc(humanMonths(c.months))}</b>` +
+      (c.spans > 1 ? ` <span class="sep">· ${c.spans}개 구간</span>` : '') +
+      (c.skipped ? ` <span class="sep">· ${c.skipped}건 제외</span>` : '')]);
+  }
   if (o.military) cells.push(['병역', esc(o.military)]);
   return cells;
 }
@@ -111,6 +120,14 @@ function section(title, en, body) {
 }
 
 const entry = (when, what) => `<div class="e"><div class="when">${when || ''}</div><div class="what">${what}</div></div>`;
+
+// 기간 아래에 그 자리에서 일한 길이를 적는다. 여러 명을 넘겨볼 때 눈으로 재지 않아도 된다.
+function spanNote(e) {
+  const a = monthIndex(e.start), b = monthIndex(e.end);
+  if (a == null || b == null) return '';
+  const n = Math.abs(b - a) + 1;
+  return n > 1 ? `<div class="dur">${esc(humanMonths(n))}</div>` : '';
+}
 
 function renderHtml(o, opts = {}) {
   const blind = !!opts.blind || !!(o._meta && o._meta.blind);
@@ -132,7 +149,7 @@ function renderHtml(o, opts = {}) {
   )).join('');
 
   const experience = o.experience.map(e => entry(
-    period(e.start, e.end),
+    period(e.start, e.end) + spanNote(e),
     `<strong>${esc(e.company)}</strong>` +
     (e.title || e.team || e.location
       ? `<div class="meta">${joinDot(e.title, e.team, e.location)}</div>` : '') +

@@ -77,6 +77,53 @@ function age(birth) {
   return a > 0 && a < 120 ? String(a) : '';
 }
 
+// 'YYYY.MM' → 월 일련번호. '현재' 는 이번 달.
+function monthIndex(v, now = new Date()) {
+  const s = String(v || '').trim();
+  if (!s) return null;
+  if (s === '현재') return now.getFullYear() * 12 + now.getMonth();
+  const m = s.match(/^(\d{4})(?:\.(\d{1,2}))?/);
+  if (!m) return null;
+  const y = Number(m[1]);
+  if (y < 1950 || y > now.getFullYear() + 1) return null;
+  return y * 12 + (m[2] ? Number(m[2]) - 1 : 0);
+}
+
+/**
+ * 총 경력 개월 수.
+ *
+ * 그냥 더하면 안 된다. 같은 시기에 두 자리를 겸했거나 이력서가 한 회사를 승진 단위로
+ * 쪼개 적으면 같은 기간을 두 번 세게 된다. 그래서 구간을 겹치는 대로 합친 뒤 길이를 잰다.
+ * 시작이나 종료가 없는 항목은 셀 수 없으니 빼고, 몇 건을 뺐는지 함께 돌려준다.
+ */
+function careerMonths(list, now = new Date()) {
+  const spans = [];
+  let skipped = 0;
+  for (const e of arr(list)) {
+    const a = monthIndex(e.start, now), b = monthIndex(e.end, now);
+    if (a == null || b == null) { skipped++; continue; }
+    spans.push(a <= b ? [a, b] : [b, a]);
+  }
+  spans.sort((x, y) => x[0] - y[0]);
+
+  const merged = [];
+  for (const s of spans) {
+    const last = merged[merged.length - 1];
+    // 한 달 차이로 이어지는 것도 끊긴 경력으로 보지 않는다 (2025.03 종료 → 2025.04 입사)
+    if (last && s[0] <= last[1] + 1) last[1] = Math.max(last[1], s[1]);
+    else merged.push([...s]);
+  }
+  const months = merged.reduce((n, [a, b]) => n + (b - a + 1), 0);
+  return { months, skipped, spans: merged.length };
+}
+
+/** 18 → "1년 6개월" */
+function humanMonths(n) {
+  if (!n) return '';
+  const y = Math.floor(n / 12), m = n % 12;
+  return [y ? `${y}년` : '', m ? `${m}개월` : ''].filter(Boolean).join(' ');
+}
+
 const arr = v => (Array.isArray(v) ? v : v ? [v] : []);
 // 값에 남는 빈 괄호·중복 공백·끝의 구분자를 털어낸다.
 // 자동 추출 결과에는 "한양대학교 사학과 ( ) — 학" 같은 찌꺼기가 붙기 쉽다.
@@ -85,6 +132,25 @@ const str = v => (v == null ? '' : String(v)
   .replace(/\s{2,}/g, ' ')
   .replace(/[\s,|/·\-–—]+$/, '')
   .trim());
+
+/**
+ * 같은 재직 기간이 두 번 적힌 항목을 합친다.
+ *
+ * 요약표를 앞에 두고 뒤에 상세를 다시 쓰는 이력서가 흔하다. 그러면 한 회사가 두 번 잡히고,
+ * 목록도 길어지고 "경력 N건" 도 부풀려진다. 시작·종료가 똑같으면 같은 자리로 보고 합친다.
+ * (총 경력 합계는 구간을 병합해 계산하므로 여기서 합치지 않아도 이중으로 세지는 않는다)
+ */
+function mergeSameSpan(list) {
+  const out = [];
+  for (const e of list) {
+    const hit = e.start && e.end && out.find(o => o.start === e.start && o.end === e.end);
+    if (!hit) { out.push(e); continue; }
+    for (const k of ['company', 'team', 'title', 'location']) if (!hit[k] && e[k]) hit[k] = e[k];
+    hit.bullets = [...new Set([...hit.bullets, ...e.bullets])];
+    hit.stack = [...new Set([...hit.stack, ...e.stack])];
+  }
+  return out;
+}
 
 /** 어떤 모양으로 들어오든 표준 스키마로 강제한다. */
 function normalize(raw, meta = {}) {
@@ -129,8 +195,8 @@ function normalize(raw, meta = {}) {
     stack: arr(e.stack).map(str).filter(Boolean),
   });
   const keepExp = e => e.company || e.title;
-  o.experience = arr(r.experience).map(asExp).filter(keepExp);
-  o.projects = arr(r.projects).map(asExp).filter(keepExp);
+  o.experience = mergeSameSpan(arr(r.experience).map(asExp).filter(keepExp));
+  o.projects = mergeSameSpan(arr(r.projects).map(asExp).filter(keepExp));
 
   o.awards = arr(r.awards).map(a => ({
     title: str(a.title), issuer: str(a.issuer), date: normMonth(a.date), note: str(a.note),
@@ -183,6 +249,8 @@ function audit(o) {
   for (const e of o.experience) {
     if (!e.start) w.push(`경력 기간 누락: ${e.company || e.title}`);
   }
+  const c = careerMonths(o.experience);
+  if (c.skipped) w.push(`기간이 불완전해 총 경력 합산에서 제외한 경력 ${c.skipped}건`);
   return w;
 }
 
@@ -197,4 +265,4 @@ function blind(o) {
   return b;
 }
 
-module.exports = { EMPTY, normalize, audit, blind, age, normPhone, normEmail, normMonth, normBirth, normGender, PII_FIELDS };
+module.exports = { EMPTY, normalize, audit, blind, age, careerMonths, humanMonths, monthIndex, normPhone, normEmail, normMonth, normBirth, normGender, PII_FIELDS };
