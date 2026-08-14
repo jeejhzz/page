@@ -2,8 +2,10 @@
 // 이력서 표준화 — 로컬 웹 시스템
 //
 //   node src/server.js [--port 7000] [--host 127.0.0.1] [--engine auto|llm|rules] [--work <dir>]
+//                      [--db <파일>] [--no-db] [--retain-days 180]
 //
-// 파일을 끌어다 놓으면 표준 A4 이력서를 만들어 준다.
+// 파일을 끌어다 놓으면 표준 A4 이력서를 만들어 준다. 결과는 보관함(SQLite)에 쌓여
+// 나중에 이름·학교·회사로 다시 찾을 수 있다.
 // 기본은 127.0.0.1 바인딩이다. 지원자 개인정보를 다루므로 외부에 열지 말 것.
 
 const http = require('http');
@@ -27,8 +29,14 @@ const PORT = Number(arg('--port', 7000));
 const HOST = arg('--host', '127.0.0.1');
 const ENGINE = arg('--engine', 'auto');
 const WORK = arg('--work', path.join(os.tmpdir(), 'resume-normalizer'));
+const RETAIN = Number(arg('--retain-days', process.env.RESUME_RETAIN_DAYS || 180));
 
 fs.mkdirSync(WORK, { recursive: true });
+
+// 보관함 — 변환한 사람을 SQLite 파일 하나에 쌓아 둔다. --no-db 면 이번 실행만 기억한다.
+const store = args.includes('--no-db')
+  ? null
+  : require('./db').open({ file: arg('--db', process.env.RESUME_DB), retainDays: RETAIN });
 
 /** batchId → { id, file, data, base }[] */
 const batches = new Map();
@@ -111,7 +119,13 @@ async function convert(buf, filename, batchId) {
 
     const base = slug(data.name || path.basename(filename, ext));
     const files = await writeOutputs(batchDir, base, data);
-    return { id: uid(), file: filename, base, data, files };
+    // 보관함에 원본과 함께 남긴다. 여기서 실패해도 변환 결과는 돌려준다.
+    let dbId = null;
+    if (store) {
+      try { dbId = store.save(data, { file: filename, buf }).id; }
+      catch (e) { console.error('보관함 저장 실패:', e.message); }
+    }
+    return { id: uid(), file: filename, base, data, files, dbId };
   } finally {
     fs.unlink(tmp, () => {});
   }
@@ -136,7 +150,10 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'GET' && p === '/api/config') {
       const useLLM = ENGINE === 'llm' || (ENGINE === 'auto' && process.env.ANTHROPIC_API_KEY);
-      return json(res, 200, { engine: useLLM ? 'llm' : 'rules', supported: SUPPORTED, batch: uid() });
+      return json(res, 200, {
+        engine: useLLM ? 'llm' : 'rules', supported: SUPPORTED, batch: uid(),
+        db: !!store, retainDays: RETAIN,
+      });
     }
 
     // 파일 하나씩 올린다. 멀티파트 대신 본문에 그대로 실어 파싱 실수를 없앤다.
@@ -151,7 +168,7 @@ const server = http.createServer(async (req, res) => {
         const item = await convert(buf, filename, batchId);
         const list = batches.get(batchId) || [];
         list.push(item); batches.set(batchId, list);
-        return json(res, 200, { ok: true, item: { id: item.id, file: item.file, base: item.base, data: item.data, files: item.files } });
+        return json(res, 200, { ok: true, item: { id: item.id, file: item.file, base: item.base, data: item.data, files: item.files, dbId: item.dbId } });
       } catch (e) {
         return json(res, 200, { ok: false, file: filename, error: e.message });
       }
@@ -168,7 +185,11 @@ const server = http.createServer(async (req, res) => {
       item.data = data;
       item.base = slug(data.name || item.base);
       item.files = await writeOutputs(path.join(WORK, body.batch), item.base, data);
-      return json(res, 200, { ok: true, item: { id: item.id, file: item.file, base: item.base, data, files: item.files } });
+      // 고친 내용이 보관함에도 반영되어야 한다
+      if (store && item.dbId) {
+        try { store.save(data, { id: item.dbId, actor: 'web' }); } catch (_) {}
+      }
+      return json(res, 200, { ok: true, item: { id: item.id, file: item.file, base: item.base, data, files: item.files, dbId: item.dbId } });
     }
 
     if (req.method === 'GET' && p === '/api/summary') {
@@ -225,6 +246,110 @@ const server = http.createServer(async (req, res) => {
       return res.end(buf);
     }
 
+    // ── 보관함 ──────────────────────────────────────────────
+    if (p.startsWith('/api/db/')) {
+      if (!store) return json(res, 503, { error: '보관함이 꺼져 있습니다(--no-db).' });
+      const q = url.searchParams;
+      const years = Number(q.get('minYears')) || 0;
+      const query = {
+        q: q.get('q') || '',
+        minMonths: years * 12,
+        sort: q.get('sort') || 'recent',
+        limit: Number(q.get('limit')) || 200,
+        offset: Number(q.get('offset')) || 0,
+      };
+
+      if (req.method === 'GET' && p === '/api/db/list') {
+        return json(res, 200, { ...store.search(query), stats: store.stats(), retainDays: RETAIN });
+      }
+
+      if (req.method === 'GET' && p === '/api/db/item') {
+        const r = store.get(q.get('id'));
+        if (!r) return json(res, 404, { error: '없는 항목입니다' });
+        return json(res, 200, {
+          ok: true,
+          id: r.id, file: r.source_name, data: r.data,
+          hasSource: !!r.source_path,
+          createdAt: r.created_at, updatedAt: r.updated_at, retainUntil: r.retain_until,
+          history: store.history(r.id, 20),
+        });
+      }
+
+      // 미리보기와 PDF 는 저장해 두지 않고 그때그때 만든다
+      if (req.method === 'GET' && (p === '/api/db/html' || p === '/api/db/pdf')) {
+        const r = store.get(q.get('id'), { log: p === '/api/db/pdf' });
+        if (!r) return json(res, 404, { error: '없는 항목입니다' });
+        const v = q.get('v') || 'brief';
+        const opt = v === 'full' ? { full: true } : { brief: true, blind: v === 'blind' };
+        const html = renderHtml(v === 'blind' ? makeBlind(r.data) : r.data, opt);
+        if (p === '/api/db/html') {
+          res.writeHead(200, { 'content-type': MIME['.html'] });
+          return res.end(html);
+        }
+        const tmp = path.join(WORK, `db_${r.id}_${v}_${uid()}.pdf`);
+        await pdf.htmlToPdf(html, tmp);
+        const buf = fs.readFileSync(tmp);
+        fs.unlink(tmp, () => {});
+        const nm = `${slug(r.name || 'resume')}${v === 'full' ? '_상세' : v === 'blind' ? '_blind' : ''}.pdf`;
+        res.writeHead(200, {
+          'content-type': MIME['.pdf'],
+          'content-disposition': `attachment; filename*=UTF-8''${encodeURIComponent(nm)}`,
+          'content-length': buf.length,
+        });
+        return res.end(buf);
+      }
+
+      if (req.method === 'GET' && p === '/api/db/source') {
+        const f = store.sourceFile(q.get('id'));
+        if (!f) return json(res, 404, { error: '원본 파일이 없습니다' });
+        res.writeHead(200, {
+          'content-type': 'application/octet-stream',
+          'content-disposition': `attachment; filename*=UTF-8''${encodeURIComponent(f.name || 'source')}`,
+          'content-length': fs.statSync(f.path).size,
+        });
+        return fs.createReadStream(f.path).pipe(res);
+      }
+
+      if (req.method === 'GET' && p === '/api/db/xlsx') {
+        const items = store.items(query);
+        if (!items.length) return json(res, 404, { error: '내보낼 사람이 없습니다' });
+        store.log(null, 'export', 'web', `${items.length}명`);
+        const buf = xlsxBuffer(items);
+        res.writeHead(200, {
+          'content-type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'content-disposition': `attachment; filename*=UTF-8''${encodeURIComponent('지원자보관함.xlsx')}`,
+          'content-length': buf.length,
+        });
+        return res.end(buf);
+      }
+
+      // 보관함에 있는 사람을 그 자리에서 고친다
+      if (req.method === 'POST' && p === '/api/db/update') {
+        const body = JSON.parse((await readBody(req, 4 * 1024 * 1024)).toString('utf8'));
+        const cur = store.get(body.id, { log: false });
+        if (!cur) return json(res, 404, { error: '없는 항목입니다' });
+        const data = normalize(body.data, { ...cur.data._meta, edited: true });
+        data._meta.warnings = audit(data);
+        store.save(data, { id: cur.id, actor: 'web' });
+        return json(res, 200, { ok: true, id: cur.id, data });
+      }
+
+      if (req.method === 'POST' && p === '/api/db/delete') {
+        return json(res, 200, { ok: store.remove(q.get('id'), 'web') });
+      }
+
+      if (req.method === 'POST' && p === '/api/db/extend') {
+        const until = store.extend(q.get('id'), Number(q.get('days')) || RETAIN, 'web');
+        return json(res, until ? 200 : 404, until ? { ok: true, retainUntil: until } : { error: '없는 항목입니다' });
+      }
+
+      if (req.method === 'POST' && p === '/api/db/purge') {
+        return json(res, 200, { ok: true, ...store.purge({ actor: 'web' }) });
+      }
+
+      return json(res, 404, { error: 'not found' });
+    }
+
     // /out/<batch>/<file>
     if (req.method === 'GET' && p.startsWith('/out/')) {
       const [, , batchId, file] = p.split('/');
@@ -253,10 +378,18 @@ server.listen(PORT, HOST, () => {
   console.log(`이력서 표준화 시스템  http://${HOST}:${PORT}`);
   console.log(`  파싱 엔진  ${useLLM ? 'Claude' : '규칙 기반 (ANTHROPIC_API_KEY 없음)'}`);
   console.log(`  지원 형식  ${SUPPORTED.join(' ')}`);
-  console.log(`  작업 폴더  ${WORK}   ← 지원자 개인정보가 저장됩니다. 다 쓰면 지우세요.`);
+  console.log(`  작업 폴더  ${WORK}   ← 만들어 낸 PDF 가 쌓입니다. 다 쓰면 지우세요.`);
+  if (store) {
+    const s = store.stats();
+    console.log(`  보관함    ${s.file}  (${s.count}명, 보관기한 ${RETAIN}일` +
+      `${s.expired ? `, 기한 지난 ${s.expired}명` : ''})`);
+  } else {
+    const why = require('./db').open.lastError;
+    console.log(`  보관함    꺼짐${why ? ' — ' + why.message : ' (--no-db)'}`);
+  }
   if (HOST !== '127.0.0.1' && HOST !== 'localhost') {
     console.log('  ! 외부에 열려 있습니다. 개인정보를 다루므로 사내망 밖으로 노출하지 마세요.');
   }
 });
 
-process.on('SIGINT', async () => { await pdf.close(); process.exit(0); });
+process.on('SIGINT', async () => { await pdf.close(); if (store) store.close(); process.exit(0); });

@@ -6,7 +6,8 @@
     "start": "node src/server.js",
     "serve": "node src/server.js",
     "samples": "node samples/make-samples.js",
-    "demo": "node samples/make-samples.js && node src/cli.js samples -o out --blind"
+    "demo": "node samples/make-samples.js && node src/cli.js samples -o out --blind",
+    "db": "node src/db-cli.js"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,10 @@
   },
   "private": true,
   "bin": {
-    "resume-normalizer": "src/cli.js"
+    "resume-normalizer": "src/cli.js",
+    "resume-db": "src/db-cli.js"
+  },
+  "engines": {
+    "node": ">=22.5"
   }
 }

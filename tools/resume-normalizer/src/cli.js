@@ -8,6 +8,7 @@
 //       --engine <e>    auto | llm | rules   (기본 auto — 키가 있으면 llm)
 //       --model <name>  LLM 모델 (기본 claude-sonnet-5)
 //       --full          성과 목록까지 담은 상세본도 함께 생성 (기본은 요약본만)
+//       --save          결과를 보관함(SQLite)에도 저장 (--db 로 파일 지정)
 //       --blind         이름·생년월일·성별·주소·연락처를 지운 블라인드본도 함께 생성
 //       --only-blind    블라인드본만 생성
 //       --no-pdf        PDF 없이 HTML/JSON 만
@@ -33,6 +34,8 @@ function parseArgs(argv) {
     else if (a === '--engine') o.engine = argv[++i];
     else if (a === '--model') o.model = argv[++i];
     else if (a === '--full') o.full = true;
+    else if (a === '--save') o.save = true;
+    else if (a === '--db') { o.db = argv[++i]; o.save = true; }
     else if (a === '--blind') o.blind = true;
     else if (a === '--only-blind') { o.blind = true; o.onlyBlind = true; }
     else if (a === '--no-pdf') o.pdf = false;
@@ -101,18 +104,29 @@ async function processOne(file, opt) {
   fs.writeFileSync(path.join(opt.out, `${base}.json`), JSON.stringify(data, null, 2));
   outs.push(path.join(opt.out, `${base}.json`));
 
+  if (opt.store) {
+    try { opt.store.save(data, { file: rel, buf: fs.readFileSync(file), actor: 'cli' }); }
+    catch (e) { console.error(`  ! 보관함 저장 실패 (${rel}): ${e.message}`); }
+  }
   return { file: rel, data, outs };
 }
 
 async function main() {
   const opt = parseArgs(process.argv.slice(2));
   if (opt.help || !opt.inputs.length) {
-    console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 18).map(l => l.replace(/^\/\/ ?/, '')).join('\n'));
+    const head = fs.readFileSync(__filename, 'utf8').split('\n').slice(1);
+    console.log(head.slice(0, head.findIndex(l => !l.startsWith('//')))
+      .map(l => l.replace(/^\/\/ ?/, '')).join('\n'));
     process.exit(opt.help ? 0 : 1);
   }
 
   const files = collect(opt.inputs);
   if (!files.length) { console.error('처리할 파일이 없습니다. (' + SUPPORTED.join(' ') + ')'); process.exit(1); }
+
+  if (opt.save) {
+    opt.store = require('./db').open({ file: opt.db || process.env.RESUME_DB });
+    if (!opt.store) { console.error(require('./db').open.lastError.message); process.exit(1); }
+  }
 
   const useLLM = opt.engine === 'llm' || (opt.engine === 'auto' && process.env.ANTHROPIC_API_KEY);
   console.log(`이력서 ${files.length}건 · 엔진 ${useLLM ? (opt.model || 'claude-sonnet-5') : '규칙 기반'} · 출력 ${opt.out}`);
@@ -148,6 +162,10 @@ async function main() {
     console.log(`\n완료 ${results.length}건${failed.length ? ` · 실패 ${failed.length}건` : ''}`);
     console.log(`  엑셀   ${xlsxPath}`);
     console.log(`  요약표 ${csvPath}`);
+    if (opt.store) {
+      console.log(`  보관함 ${opt.store.file} (${opt.store.stats().count}명)`);
+      opt.store.close();
+    }
     const needs = results.filter(r => r.data._meta.warnings.length);
     if (needs.length) {
       console.log(`  검토 필요 ${needs.length}건 — ${needs.map(r => r.data.name || r.file).join(', ')}`);

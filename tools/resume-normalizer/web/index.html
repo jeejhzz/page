@@ -84,6 +84,25 @@ iframe{width:100%;height:78vh;border:1px solid var(--line);border-radius:10px;ba
 .form .save:disabled{opacity:.5}
 .hint{font-size:11.5px;color:var(--muted);margin-top:7px;line-height:1.6}
 .count{font-size:12px;color:var(--muted)}
+
+.tabs{display:flex;gap:6px;margin-bottom:13px;border-bottom:1px solid var(--line)}
+.tabs button{flex:1;padding:9px 6px;border:0;background:none;font:inherit;font-size:13px;font-weight:800;
+  color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--navy);border-bottom-color:var(--navy)}
+.tabs button .n{font-size:11px;font-weight:700;color:var(--muted)}
+
+.search{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:13px}
+.search:focus{outline:none;border-color:var(--navy)}
+.filters{display:flex;gap:8px;margin:9px 0}
+.filters select{flex:1;padding:7px 8px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:12.5px;background:#fff}
+li .meta{font-size:11.5px;color:var(--muted);margin-top:3px}
+li .meta b{color:var(--ink);font-weight:700}
+li .exp{display:inline-block;font-size:11px;font-weight:800;color:var(--accent);
+  background:#fff1e8;border-radius:99px;padding:1px 7px;margin-top:5px}
+.due{color:#b91c1c;font-weight:700}
+.dbfoot{margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.7}
+.dbfoot button{padding:5px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;
+  font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;color:#b91c1c;border-color:#f0cccc}
 </style>
 </head>
 <body>
@@ -96,22 +115,54 @@ iframe{width:100%;height:78vh;border:1px solid var(--line);border-radius:10px;ba
 
 <main>
   <div class="left">
-    <label class="drop" id="drop">
-      <strong>파일을 끌어다 놓으세요</strong>
-      <span id="dropHint">PDF · 워드(docx) · 한글(hwpx, hwp) · 텍스트</span>
-      <input type="file" id="picker" multiple>
-    </label>
+    <div class="tabs">
+      <button id="tabNew" class="on">새 변환</button>
+      <button id="tabDb">보관함 <span class="n" id="dbCount"></span></button>
+    </div>
 
-    <div class="acts">
-      <button id="btnXlsx" class="go" disabled>엑셀로 받기</button>
-      <button id="btnZip" disabled>전체 ZIP</button>
+    <div id="paneNew">
+      <label class="drop" id="drop">
+        <strong>파일을 끌어다 놓으세요</strong>
+        <span id="dropHint">PDF · 워드(docx) · 한글(hwpx, hwp) · 텍스트</span>
+        <input type="file" id="picker" multiple>
+      </label>
+
+      <div class="acts">
+        <button id="btnXlsx" class="go" disabled>엑셀로 받기</button>
+        <button id="btnZip" disabled>전체 ZIP</button>
+      </div>
+      <div class="acts">
+        <button id="btnCsv" disabled>CSV</button>
+        <button id="btnReset">초기화</button>
+      </div>
+      <div class="count" id="count"></div>
+      <ul class="list" id="list"></ul>
     </div>
-    <div class="acts">
-      <button id="btnCsv" disabled>CSV</button>
-      <button id="btnReset">초기화</button>
+
+    <div id="paneDb" hidden>
+      <input class="search" id="dbQ" placeholder="이름 · 학교 · 회사 · 기술로 찾기">
+      <div class="filters">
+        <select id="dbMin">
+          <option value="0">경력 무관</option>
+          <option value="1">1년 이상</option>
+          <option value="3">3년 이상</option>
+          <option value="5">5년 이상</option>
+          <option value="10">10년 이상</option>
+        </select>
+        <select id="dbSort">
+          <option value="recent">최근 저장순</option>
+          <option value="career">경력 많은순</option>
+          <option value="name">이름순</option>
+          <option value="oldest">오래된순</option>
+        </select>
+      </div>
+      <div class="acts">
+        <button id="dbXlsx" class="go">검색 결과 엑셀</button>
+      </div>
+      <div class="count" id="dbInfo"></div>
+      <ul class="list" id="dbList"></ul>
+      <div class="dbfoot" id="dbFoot"></div>
     </div>
-    <div class="count" id="count"></div>
-    <ul class="list" id="list"></ul>
   </div>
 
   <div class="right" id="right">
@@ -126,16 +177,25 @@ iframe{width:100%;height:78vh;border:1px solid var(--line);border-radius:10px;ba
 </main>
 
 <script>
-const state = { batch: null, items: [], sel: null, busy: 0 };
+const state = { batch: null, items: [], sel: null, busy: 0, tab: 'new', db: null, dbSel: null };
 const $ = s => document.querySelector(s);
 const EMPTY_RIGHT = document.querySelector('#right').innerHTML;
+const EMPTY_DB = `<div class="empty"><div>
+  <div style="font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px">보관함</div>
+  <div>왼쪽 목록에서 사람을 고르면 이력서를 다시 볼 수 있습니다.<br>
+  이름 · 학교 · 회사 · 기술로 찾을 수 있습니다.</div>
+</div></div>`;
 
 async function boot() {
   const cfg = await (await fetch('/api/config')).json();
   state.batch = cfg.batch;
+  state.dbOn = cfg.db;
+  state.retainDays = cfg.retainDays;
   $('#engine').textContent = cfg.engine === 'llm' ? 'Claude' : '규칙 기반';
   $('#supported').textContent = '지원 형식 ' + cfg.supported.join(' ');
   $('#dropHint').textContent = cfg.supported.join(' ');
+  if (!cfg.db) { $('#tabDb').hidden = true; return; }
+  dbRefresh();
 }
 boot();
 
@@ -169,6 +229,7 @@ async function send(files) {
     state.busy--;
     render();
   }
+  if (state.dbOn) dbRefresh();
 }
 
 function render() {
@@ -195,6 +256,7 @@ function render() {
   });
 
   const it = state.items.find(i => i.id === state.sel);
+  if (state.tab !== 'new') return;
   $('#right').innerHTML = it ? detail(it) : $('#right').innerHTML;
   if (it) bindDetail(it);
 }
@@ -274,11 +336,178 @@ function esc(s) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+// ── 보관함 ─────────────────────────────────────────────────
+function showTab(t) {
+  state.tab = t;
+  $('#tabNew').classList.toggle('on', t === 'new');
+  $('#tabDb').classList.toggle('on', t === 'db');
+  $('#paneNew').hidden = t !== 'new';
+  $('#paneDb').hidden = t !== 'db';
+  // 탭마다 보던 사람을 기억한다 — 오가며 다시 찾지 않도록
+  $('#right').innerHTML = t === 'new' ? EMPTY_RIGHT : EMPTY_DB;
+  if (t === 'new') render();
+  else { if (state.dbItem) dbDetail(); dbRefresh(); }
+}
+$('#tabNew').onclick = () => showTab('new');
+$('#tabDb').onclick = () => showTab('db');
+
+const dbQuery = () =>
+  `q=${encodeURIComponent($('#dbQ').value.trim())}&minYears=${$('#dbMin').value}&sort=${$('#dbSort').value}`;
+
+let dbTimer;
+const dbSoon = () => { clearTimeout(dbTimer); dbTimer = setTimeout(dbRefresh, 220); };
+$('#dbQ').oninput = dbSoon;
+$('#dbMin').onchange = $('#dbSort').onchange = dbRefresh;
+
+async function dbRefresh() {
+  if (!state.dbOn) return;
+  const out = await (await fetch('/api/db/list?' + dbQuery())).json();
+  state.db = out;
+  $('#dbCount').textContent = out.stats.count ? out.stats.count + '명' : '';
+  if (state.tab !== 'db') return;
+
+  const q = $('#dbQ').value.trim() || Number($('#dbMin').value);
+  $('#dbInfo').textContent = out.total
+    ? `${out.total}명${q ? ' 검색됨' : ' 보관 중'}${out.total > out.rows.length ? ` · ${out.rows.length}명 표시` : ''}`
+    : (q ? '조건에 맞는 사람이 없습니다' : '아직 보관된 이력서가 없습니다');
+
+  $('#dbList').innerHTML = out.rows.map(r => `
+    <li data-id="${r.id}" class="${state.dbSel === r.id ? 'sel' : ''}">
+      <div class="nm">${esc(r.name || '(이름 미확인)')}${r.gender ? ` <span class="count">${esc(r.gender)}</span>` : ''}</div>
+      <div class="meta">${esc(r.edu_top || '학력 미확인')}</div>
+      <div class="meta">${esc(r.companies || '경력 없음')}</div>
+      <span class="exp">${esc(r.career || '경력 미확인')}</span>
+      ${r.warnings ? `<span class="tag warn">검토 ${r.warnings}건</span>` : ''}
+      <div class="meta">보관기한 <span class="${r.retain_until <= todayStr() ? 'due' : ''}">${esc(r.retain_until)}</span></div>
+    </li>`).join('');
+  [...document.querySelectorAll('#dbList li')].forEach(li => {
+    li.onclick = () => dbOpen(Number(li.dataset.id));
+  });
+
+  const s = out.stats;
+  $('#dbFoot').innerHTML = `보관 파일 <b>${esc(s.file)}</b><br>
+    ${s.count}명 · ${(s.bytes / 1024).toFixed(0)}KB · 보관기한 ${out.retainDays}일
+    ${s.expiringIn30 ? ` · 30일 내 만료 ${s.expiringIn30}명` : ''}
+    ${s.expired ? `<br><span class="due">보관기한이 지난 ${s.expired}명이 있습니다.</span>
+      <button id="dbPurge">지금 파기</button>` : ''}`;
+  if ($('#dbPurge')) $('#dbPurge').onclick = dbPurge;
+}
+
+const todayStr = () => new Date().toISOString().slice(0, 10);
+
+async function dbPurge() {
+  if (!confirm('보관기한이 지난 사람을 원본 파일까지 완전히 지웁니다. 되돌릴 수 없습니다. 계속할까요?')) return;
+  const out = await (await fetch('/api/db/purge', { method: 'POST' })).json();
+  state.dbSel = null;
+  $('#right').innerHTML = EMPTY_DB;
+  alert(`${out.removed}명을 파기했습니다.`);
+  dbRefresh();
+}
+
+$('#dbXlsx').onclick = () => { location.href = '/api/db/xlsx?' + dbQuery(); };
+
+async function dbOpen(id) {
+  state.dbSel = id;
+  const out = await (await fetch('/api/db/item?id=' + id)).json();
+  if (!out.ok) { alert(out.error || '열 수 없습니다'); return; }
+  state.dbItem = out;
+  dbDetail();
+  dbRefresh();
+}
+
+function dbDetail() {
+  const it = state.dbItem, d = it.data, w = d._meta.warnings || [];
+  const v = it._view || 'brief';
+  const due = it.retainUntil <= todayStr();
+  $('#right').innerHTML = `
+  <div class="bar">
+    <h2>${esc(d.name || '(이름 미확인)')}</h2>
+    <span class="count">${esc(it.file || '')}</span>
+    <div class="sp"></div>
+    <button id="vBrief" class="${v === 'brief' ? 'primary' : ''}">요약</button>
+    <button id="vFull" class="${v === 'full' ? 'primary' : ''}">상세</button>
+    <button id="vBlind" class="${v === 'blind' ? 'primary' : ''}">블라인드</button>
+    <a href="/api/db/pdf?id=${it.id}&v=${v}">PDF 받기</a>
+    ${it.hasSource ? `<a href="/api/db/source?id=${it.id}">원본 파일</a>` : ''}
+  </div>
+  ${w.length ? `<div class="warnbox"><b>검토 필요</b> — 자동 변환에서 확인이 필요한 항목입니다.
+     <ul>${w.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+  <div class="panes">
+    <iframe src="/api/db/html?id=${it.id}&v=${v}" title="미리보기"></iframe>
+    <div class="form">
+      <h3>기본 정보 수정</h3>
+      ${field('name', '이름', d.name)}
+      ${field('nameEn', '영문 이름', d.nameEn)}
+      <div class="row">${field('birth', '생년월일', d.birth)}${field('gender', '성별', d.gender)}</div>
+      <div class="row">${field('phone', '연락처', d.phone)}${field('email', '이메일', d.email)}</div>
+      ${field('address', '주소', d.address)}
+      ${field('targetRole', '지원 직무', d.targetRole)}
+      <details>
+        <summary>학력·경력 등 전체 데이터 (JSON)</summary>
+        <textarea id="fJson">${esc(JSON.stringify(pick(d), null, 2))}</textarea>
+      </details>
+      <button class="save" id="dbSave">고쳐서 보관함에 반영</button>
+      <div class="hint" id="dbMsg"></div>
+
+      <h3 style="margin-top:16px">보관 정보</h3>
+      <div class="hint">
+        처음 저장 ${esc((it.createdAt || '').slice(0, 10))} ·
+        마지막 수정 ${esc((it.updatedAt || '').slice(0, 10))}<br>
+        보관기한 <b class="${due ? 'due' : ''}">${esc(it.retainUntil)}</b>${due ? ' (지남)' : ''}
+      </div>
+      <div class="acts">
+        <button id="dbExtend">보관기한 ${state.retainDays}일 연장</button>
+        <button id="dbDel" style="color:#b91c1c;border-color:#f0cccc">삭제</button>
+      </div>
+      <details style="margin-top:10px">
+        <summary>열람·수정 기록 ${it.history.length}건</summary>
+        <div class="hint">${it.history.map(h =>
+          `${esc(h.at.slice(0, 16).replace('T', ' '))} · ${esc(h.action)}${h.note ? ' · ' + esc(h.note) : ''}`
+        ).join('<br>')}</div>
+      </details>
+    </div>
+  </div>`;
+
+  const view = k => () => { it._view = k; dbDetail(); };
+  $('#vBrief').onclick = view('brief');
+  $('#vFull').onclick = view('full');
+  $('#vBlind').onclick = view('blind');
+
+  $('#dbSave').onclick = async () => {
+    const msg = $('#dbMsg');
+    let rest;
+    try { rest = JSON.parse($('#fJson').value); }
+    catch (e) { msg.textContent = 'JSON 형식이 올바르지 않습니다: ' + e.message; return; }
+    const data = { ...rest };
+    FIELDS.forEach(f => { data[f] = $('#f_' + f).value; });
+    msg.textContent = '반영하는 중…';
+    const out = await (await fetch('/api/db/update', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id: it.id, data }),
+    })).json();
+    if (!out.ok) { msg.textContent = out.error || '저장 실패'; return; }
+    await dbOpen(it.id);
+  };
+
+  $('#dbExtend').onclick = async () => {
+    const out = await (await fetch(`/api/db/extend?id=${it.id}&days=${state.retainDays}`, { method: 'POST' })).json();
+    if (out.ok) { it.retainUntil = out.retainUntil; dbDetail(); dbRefresh(); }
+  };
+
+  $('#dbDel').onclick = async () => {
+    if (!confirm(`${d.name || '이 사람'}의 이력서를 보관함에서 지웁니다. 원본 파일도 함께 지워집니다. 계속할까요?`)) return;
+    await fetch('/api/db/delete?id=' + it.id, { method: 'POST' });
+    state.dbSel = null; state.dbItem = null;
+    $('#right').innerHTML = EMPTY_DB;
+    dbRefresh();
+  };
+}
+
 $('#btnCsv').onclick = () => { location.href = '/api/summary?batch=' + state.batch; };
 $('#btnXlsx').onclick = () => { location.href = '/api/xlsx?batch=' + state.batch; };
 $('#btnZip').onclick = () => { location.href = '/api/zip?batch=' + state.batch; };
 $('#btnReset').onclick = async () => {
-  if (state.items.length && !confirm('올린 이력서와 만들어 둔 파일을 모두 지웁니다. 계속할까요?')) return;
+  if (state.items.length && !confirm('이번에 올린 목록과 만들어 둔 파일을 비웁니다.\n보관함에 저장된 사람은 그대로 남습니다. 계속할까요?')) return;
   const out = await (await fetch('/api/reset?batch=' + state.batch, { method: 'POST' })).json();
   state.batch = out.batch; state.items = []; state.sel = null;
   $('#right').innerHTML = EMPTY_RIGHT;
