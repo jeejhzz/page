@@ -1,0 +1,25 @@
+{
+  "name": "resume-normalizer",
+  "version": "0.1.0",
+  "description": "자유 양식 이력서를 A4 규격 표준 이력서로 바꾸는 도구",
+  "scripts": {
+    "samples": "node samples/make-samples.js",
+    "demo": "node samples/make-samples.js && node src/cli.js samples -o out --blind"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.117.1",
+    "mammoth": "^1.12.1",
+    "pdfjs-dist": "^6.2.108",
+    "pretendard": "^1.3.9"
+  },
+  "devDependencies": {
+    "docx": "^9.7.1"
+  },
+  "private": true,
+  "bin": {
+    "resume-normalizer": "src/cli.js"
+  }
+}
