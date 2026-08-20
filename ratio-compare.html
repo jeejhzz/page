@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>직무 카드 사진 비율 비교</title>
+<style>
+  :root{--orange:#ff6b00}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#07121f;color:#fff;font-family:'Pretendard',-apple-system,'Malgun Gothic',sans-serif;padding:30px 28px 40px}
+  h1{font-size:14px;font-weight:800;color:#8fa1b8;letter-spacing:.06em;margin-bottom:6px}
+  .sub{font-size:12.5px;color:#5f7189;margin-bottom:22px}
+  section{margin-bottom:34px}
+  section > h2{font-size:13px;font-weight:900;color:var(--orange);letter-spacing:.06em;margin-bottom:4px}
+  section > .note{font-size:12px;color:#7d8ea4;margin-bottom:13px}
+  .row{display:flex;gap:24px}
+
+  .card{width:681px;background:#0f1a2c;border:1px solid rgba(255,255,255,.09);border-radius:20px;overflow:hidden}
+  .ph{position:relative;background:#091527;overflow:hidden}
+  .ph img{width:100%;height:100%;object-fit:cover;display:block;object-position:var(--pos,50% 28%)}
+  .body{padding:22px 26px 26px}
+  .badge{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;color:#ff9c4d;
+    border:1px solid rgba(255,107,0,.26);background:rgba(255,107,0,.09);border-radius:99px;padding:4px 11px}
+  .tt{margin-top:13px;font-size:24px;font-weight:900;letter-spacing:-.025em;line-height:1.28}
+  .nm{margin-top:9px;font-size:13px;font-weight:800;color:#8fa1b8;letter-spacing:.05em}
+  .qt{margin-top:13px;font-size:16px;font-weight:600;line-height:1.6;color:#dbe4ee;word-break:keep-all}
+  .lk{margin-top:16px;font-size:14px;font-weight:800;color:var(--orange)}
+
+  /* A · 상단 배너 */
+  .a .ph{aspect-ratio:16/10}
+  /* B · 상단 정사각 */
+  .b .ph{aspect-ratio:1/1}
+  /* C · 가로형 — 왼쪽 사진 4:5, 오른쪽 글 */
+  .c{display:grid;grid-template-columns:38% 1fr;align-items:stretch}
+  .c .ph{aspect-ratio:4/5;height:100%}
+  .c .body{padding:26px 28px;display:flex;flex-direction:column;justify-content:center}
+  /* D · 가로형 — 왼쪽 사진 1:1 */
+  .d{display:grid;grid-template-columns:34% 1fr;align-items:stretch}
+  .d .ph{aspect-ratio:1/1;height:100%}
+  .d .body{padding:26px 28px;display:flex;flex-direction:column;justify-content:center}
+  .h{font-size:11.5px;color:#6b7b90;margin-top:8px}
+</style></head><body>
+<h1>직무 소개 카드 · 사진 비율 비교 (실제 데스크톱 카드 폭 681px, 2단 배치 기준)</h1>
+<div class="sub">같은 사진 · 같은 글 · 배치와 비율만 다르게. 사진은 전부 원본 3:4 또는 1:1.</div>
+<div id="out"></div>
+<script>
+const P = [
+  { f:'kim-yuchan-vector-library-engineer.png', n:'김유찬', r:'Vector Library Engineer',
+    q:'라이브러리 한 줄이 칩 전체의 성능을 바꾸는 순간이 있습니다.', pos:'50% 24%' },
+  { f:'ham-eunkyung-soc-rtl-design-engineer.png', n:'함은경', r:'SoC RTL Design Engineer',
+    q:'설계한 회로가 실제 칩으로 돌아오는 걸 봅니다.', pos:'50% 22%' },
+];
+const OPTS = [
+  ['a','A · 상단 배너 16:10', '사진 높이 426px → 카드 전체 약 750px. 지금 목업이 쓰던 방식.'],
+  ['b','B · 상단 정사각 1:1', '사진 높이 681px → 카드가 1000px을 넘는다. 2단 카드에는 과하다.'],
+  ['c','C · 가로형 · 왼쪽 4:5', '사진 폭 259px, 높이 324px. 카드 높이 약 370px — 지금 카드 높이에 가깝다.'],
+  ['d','D · 가로형 · 왼쪽 1:1', '사진 폭 232px. 카드가 가장 낮아지고 얼굴은 가장 작아진다.'],
+];
+document.getElementById('out').innerHTML = OPTS.map(([cls,title,note]) => `
+  <section>
+    <h2>${title}</h2>
+    <div class="note">${note}</div>
+    <div class="row">
+      ${P.map(p => `
+        <div class="card ${cls}">
+          <div class="ph"><img src="${p.f}" style="--pos:${p.pos}"></div>
+          <div class="body">
+            <span class="badge">ENGINEERING</span>
+            <div class="tt">${p.r}</div>
+            <div class="nm">${p.n} 님</div>
+            <div class="qt">${p.q}</div>
+            <div class="lk">직무 자세히 보기 →</div>
+          </div>
+        </div>`).join('')}
+    </div>
+  </section>`).join('');
+</script></body></html>
