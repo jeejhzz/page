@@ -341,9 +341,9 @@
         }
         .role-card {
             position: relative;
-            /* flex-basis 가 안쪽 여백까지 포함하도록 — 안 그러면 세 장이 화면에 안 들어온다 */
+            /* flex-basis 가 안쪽 여백까지 포함하도록 — 안 그러면 두 장이 화면에 안 들어온다 */
             box-sizing: border-box;
-            flex: 0 0 calc((100% - 3rem) / 3);
+            flex: 0 0 calc((100% - 1.5rem) / 2);
             scroll-snap-align: start;
             display: flex;
             flex-direction: column;
@@ -422,10 +422,6 @@
         .rc-person strong { color: #8fa1b8; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.06em; }
         .rc-quote { margin-top: 1.05rem; color: #dbe4ee; font-size: 1.06rem; font-weight: 600; line-height: 1.6; word-break: keep-all; }
         .rc-link { margin-top: auto; color: var(--brand-orange); font-size: 0.92rem; font-weight: 800; letter-spacing: 0.01em; }
-        /* 1200px 아래에서는 3장이 좁아지므로 2장씩 */
-        @media (max-width: 1200px) {
-            .role-card { flex: 0 0 calc((100% - 1.5rem) / 2); }
-        }
         .role-card-grid {
             display: flex;
             gap: 1.5rem;
@@ -1503,7 +1499,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="soc" data-interview-id="soc-firmware-engineer" role="button" tabindex="0" aria-label="김영일 SoC Firmware Engineer 인터뷰 보기">
-                    <div class="rc-media is-empty" aria-hidden="true"></div>
+                    <div class="rc-media"><img src="caricature-kim-youngil.png" alt="김영일 SoC Firmware Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
                     <div>
                         <span class="rc-badge">SoC그룹</span>
                         <h3 class="rc-title">SoC Firmware Engineer</h3>
@@ -1513,7 +1509,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="soc" data-interview-id="soc-pkg-board-hardware-engineer" role="button" tabindex="0" aria-label="안우진 SoC PKG / Board HW Engineer 인터뷰 보기">
-                    <div class="rc-media is-empty" aria-hidden="true"></div>
+                    <div class="rc-media"><img src="caricature-ahn-woojin.png" alt="안우진 SoC PKG / Board HW Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
                     <div>
                         <span class="rc-badge">SoC그룹</span>
                         <h3 class="rc-title">SoC PKG / Board HW Engineer</h3>
@@ -1523,7 +1519,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="sw" data-interview-id="firmware-software-engineer" role="button" tabindex="0" aria-label="이종성 Firmware SW Engineer 인터뷰 보기">
-                    <div class="rc-media is-empty" aria-hidden="true"></div>
+                    <div class="rc-media"><img src="caricature-lee-jongsung.png" alt="이종성 Firmware SW Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
                     <div>
                         <span class="rc-badge">SW그룹</span>
                         <h3 class="rc-title">Firmware SW Engineer</h3>
@@ -1533,7 +1529,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="sw" data-interview-id="device-driver-software-engineer" role="button" tabindex="0" aria-label="김성희 Device Driver SW Engineer 인터뷰 보기">
-                    <div class="rc-media is-empty" aria-hidden="true"></div>
+                    <div class="rc-media"><img src="caricature-kim-sunghee.png" alt="김성희 Device Driver SW Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
                     <div>
                         <span class="rc-badge">SW그룹</span>
                         <h3 class="rc-title">Device Driver SW Engineer</h3>
@@ -1543,7 +1539,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="sw" data-interview-id="vector-library-engineer" role="button" tabindex="0" aria-label="김유찬 Vector Library Engineer 인터뷰 보기">
-                    <div class="rc-media is-empty" aria-hidden="true"></div>
+                    <div class="rc-media"><img src="caricature-kim-yuchan.png" alt="김유찬 Vector Library Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
                     <div>
                         <span class="rc-badge">SW그룹</span>
                         <h3 class="rc-title">Vector Library Engineer</h3>
@@ -1553,7 +1549,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="data" data-interview-id="vector-database-engineer" role="button" tabindex="0" aria-label="정주현 Vector Database Engineer 인터뷰 보기">
-                    <div class="rc-media is-empty" aria-hidden="true"></div>
+                    <div class="rc-media"><img src="caricature-jung-juhyun.png" alt="정주현 Vector Database Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
                     <div>
                         <span class="rc-badge">Data그룹</span>
                         <h3 class="rc-title">Vector Database Engineer</h3>
@@ -1563,7 +1559,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="data" data-interview-id="storage-system-software-engineer" role="button" tabindex="0" aria-label="임근우 Storage System SW Engineer 인터뷰 보기">
-                    <div class="rc-media is-empty" aria-hidden="true"></div>
+                    <div class="rc-media"><img src="caricature-lim-geunwoo.png" alt="임근우 Storage System SW Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
                     <div>
                         <span class="rc-badge">Data그룹</span>
                         <h3 class="rc-title">Storage System SW Engineer</h3>
