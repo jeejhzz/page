@@ -341,11 +341,13 @@
         }
         .role-card {
             position: relative;
-            flex: 0 0 calc((100% - 1.5rem) / 2);
+            /* flex-basis 가 안쪽 여백까지 포함하도록 — 안 그러면 세 장이 화면에 안 들어온다 */
+            box-sizing: border-box;
+            flex: 0 0 calc((100% - 3rem) / 3);
             scroll-snap-align: start;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             gap: 1.6rem;
             min-height: 15rem;
             padding: 2.15rem;
@@ -362,6 +364,50 @@
             transform: translateY(-3px);
         }
         .role-card:focus-visible { outline: 2px solid var(--brand-orange); outline-offset: 3px; }
+        /* 카드 위쪽에 캐리커쳐를 원본 비율(정사각) 그대로 얹는다.
+           카드 안쪽 여백만큼 음수 마진을 줘 가장자리까지 꽉 채운다. */
+        .rc-media {
+            position: relative;
+            margin: -2.15rem -2.15rem 0;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #091527;
+            border-radius: 1.25rem 1.25rem 0 0;
+        }
+        .rc-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 50% 0;
+            display: block;
+        }
+        /* 밝은 그림 아래쪽을 카드 색으로 넘겨 경계선이 도드라지지 않게 */
+        .rc-media::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 26%;
+            background: linear-gradient(to bottom, rgba(15, 26, 44, 0), rgba(15, 26, 44, 0.55) 55%, #0f1a2c);
+            pointer-events: none;
+        }
+        /* 아직 캐리커쳐가 없는 직무 — 자리를 같은 크기로 잡아 카드 높이를 맞춘다 */
+        .rc-media.is-empty {
+            background:
+                radial-gradient(circle at 76% 18%, rgba(124, 140, 255, 0.16), transparent 32%),
+                linear-gradient(145deg, #111c30, #071225);
+        }
+        .rc-media.is-empty::before {
+            content: '';
+            position: absolute;
+            inset: 1.15rem;
+            border-radius: 0.85rem;
+            border: 1px dashed rgba(255, 255, 255, 0.13);
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.5;
+        }
         .rc-badge {
             align-self: flex-start;
             display: inline-flex; align-items: center;
@@ -375,7 +421,11 @@
         .rc-person { margin-top: 0.7rem; display: flex; align-items: baseline; gap: 0.55rem; flex-wrap: wrap; }
         .rc-person strong { color: #8fa1b8; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.06em; }
         .rc-quote { margin-top: 1.05rem; color: #dbe4ee; font-size: 1.06rem; font-weight: 600; line-height: 1.6; word-break: keep-all; }
-        .rc-link { color: var(--brand-orange); font-size: 0.92rem; font-weight: 800; letter-spacing: 0.01em; }
+        .rc-link { margin-top: auto; color: var(--brand-orange); font-size: 0.92rem; font-weight: 800; letter-spacing: 0.01em; }
+        /* 1200px 아래에서는 3장이 좁아지므로 2장씩 */
+        @media (max-width: 1200px) {
+            .role-card { flex: 0 0 calc((100% - 1.5rem) / 2); }
+        }
         .role-card-grid {
             display: flex;
             gap: 1.5rem;
@@ -1179,9 +1229,9 @@
             .role-intro { padding: 3.5rem 0 4rem; }
             .role-tabs { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 0.35rem; }
             .role-tab { flex: 0 0 auto; }
-            .role-card { flex-basis: 88vw; }
+            .role-card { flex-basis: 88vw; padding: 1.6rem; }
+            .rc-media { margin: -1.6rem -1.6rem 0; }
             .role-card-controls { justify-content: flex-start; }
-            .role-card-image { aspect-ratio: 3 / 4; }
             .role-card-footer { align-items: flex-start; flex-direction: column; }
             .role-card-name { flex-direction: column; align-items: flex-start; gap: 0.12rem; }
             .interview-modal { padding: 0.75rem; }
@@ -1423,6 +1473,7 @@
 
             <div class="role-card-grid" aria-live="polite">
                 <article class="role-card" data-role-group="soc" data-interview-id="system-architect" role="button" tabindex="0" aria-label="백진환 System Architect 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-baek-jinhwan.png" alt="백진환 System Architect 캐리커쳐" loading="lazy" decoding="async"></div>
                     <div>
                         <span class="rc-badge">SoC그룹</span>
                         <h3 class="rc-title">System Architect</h3>
@@ -1432,6 +1483,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="soc" data-interview-id="soc-rtl-design-engineer" role="button" tabindex="0" aria-label="함은경 SoC / RTL Design Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-ham-eunkyung.png" alt="함은경 SoC / RTL Design Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
                     <div>
                         <span class="rc-badge">SoC그룹</span>
                         <h3 class="rc-title">SoC / RTL Design Engineer</h3>
@@ -1441,6 +1493,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="soc" data-interview-id="design-verification-engineer" role="button" tabindex="0" aria-label="손현욱 SoC Design Verification Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-son-hyunwook.png" alt="손현욱 SoC Design Verification Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
                     <div>
                         <span class="rc-badge">SoC그룹</span>
                         <h3 class="rc-title">SoC Design Verification Engineer</h3>
@@ -1450,6 +1503,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="soc" data-interview-id="soc-firmware-engineer" role="button" tabindex="0" aria-label="김영일 SoC Firmware Engineer 인터뷰 보기">
+                    <div class="rc-media is-empty" aria-hidden="true"></div>
                     <div>
                         <span class="rc-badge">SoC그룹</span>
                         <h3 class="rc-title">SoC Firmware Engineer</h3>
@@ -1459,6 +1513,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="soc" data-interview-id="soc-pkg-board-hardware-engineer" role="button" tabindex="0" aria-label="안우진 SoC PKG / Board HW Engineer 인터뷰 보기">
+                    <div class="rc-media is-empty" aria-hidden="true"></div>
                     <div>
                         <span class="rc-badge">SoC그룹</span>
                         <h3 class="rc-title">SoC PKG / Board HW Engineer</h3>
@@ -1468,6 +1523,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="sw" data-interview-id="firmware-software-engineer" role="button" tabindex="0" aria-label="이종성 Firmware SW Engineer 인터뷰 보기">
+                    <div class="rc-media is-empty" aria-hidden="true"></div>
                     <div>
                         <span class="rc-badge">SW그룹</span>
                         <h3 class="rc-title">Firmware SW Engineer</h3>
@@ -1477,6 +1533,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="sw" data-interview-id="device-driver-software-engineer" role="button" tabindex="0" aria-label="김성희 Device Driver SW Engineer 인터뷰 보기">
+                    <div class="rc-media is-empty" aria-hidden="true"></div>
                     <div>
                         <span class="rc-badge">SW그룹</span>
                         <h3 class="rc-title">Device Driver SW Engineer</h3>
@@ -1486,6 +1543,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="sw" data-interview-id="vector-library-engineer" role="button" tabindex="0" aria-label="김유찬 Vector Library Engineer 인터뷰 보기">
+                    <div class="rc-media is-empty" aria-hidden="true"></div>
                     <div>
                         <span class="rc-badge">SW그룹</span>
                         <h3 class="rc-title">Vector Library Engineer</h3>
@@ -1495,6 +1553,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="data" data-interview-id="vector-database-engineer" role="button" tabindex="0" aria-label="정주현 Vector Database Engineer 인터뷰 보기">
+                    <div class="rc-media is-empty" aria-hidden="true"></div>
                     <div>
                         <span class="rc-badge">Data그룹</span>
                         <h3 class="rc-title">Vector Database Engineer</h3>
@@ -1504,6 +1563,7 @@
                     <span class="rc-link">인터뷰 보기 →</span>
                 </article>
                 <article class="role-card" data-role-group="data" data-interview-id="storage-system-software-engineer" role="button" tabindex="0" aria-label="임근우 Storage System SW Engineer 인터뷰 보기">
+                    <div class="rc-media is-empty" aria-hidden="true"></div>
                     <div>
                         <span class="rc-badge">Data그룹</span>
                         <h3 class="rc-title">Storage System SW Engineer</h3>
