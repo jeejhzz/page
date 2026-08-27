@@ -39,6 +39,36 @@
             scroll-snap-stop: normal;
         }
         .page-shell { max-width: 78rem; }
+
+        /* ── 좌우 여백의 벡터 공간 ──────────────────────────────
+           본문이 차지하지 않는 바깥 여백에만 아주 옅게 깔리는 배경.
+           임베딩 점들과 최근접 이웃을 잇는 선, 그리고 HNSW 의 계층선.
+           본문 쪽으로 갈수록 사라지므로 글을 읽는 데 방해가 없다. */
+        #vector-field {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            --shell: 78rem;                 /* .page-shell 의 max-width 와 같은 값 */
+            -webkit-mask-image: linear-gradient(to right,
+                rgba(0,0,0,1) 0,
+                rgba(0,0,0,0) calc(50% - var(--shell) / 2),
+                rgba(0,0,0,0) calc(50% + var(--shell) / 2),
+                rgba(0,0,0,1) 100%);
+            mask-image: linear-gradient(to right,
+                rgba(0,0,0,1) 0,
+                rgba(0,0,0,0) calc(50% - var(--shell) / 2),
+                rgba(0,0,0,0) calc(50% + var(--shell) / 2),
+                rgba(0,0,0,1) 100%);
+        }
+        /* 여백이 좁은 화면에서는 그릴 자리가 없다 */
+        @media (max-width: 1300px) {
+            #vector-field { display: none; }
+        }
+        .page-shell { position: relative; z-index: 1; }
+
         .text-orange { color: var(--brand-orange); }
         .bg-orange { background-color: var(--brand-orange); }
         
@@ -1241,6 +1271,7 @@
 </head>
 <body class="selection:bg-orange-500/30">
 
+    <canvas id="vector-field" aria-hidden="true"></canvas>
     <div class="page-shell mx-auto px-6 py-12 md:py-24">
         
         <!-- Header Section -->
@@ -1940,6 +1971,74 @@
 
         roleCardGrid.addEventListener('pointerdown', startRoleCarousel);
         startRoleCarousel();
+    </script>
+
+    <script>
+    // 좌우 여백에 벡터 공간을 옅게 그린다.
+    // 점은 임베딩, 선은 최근접 이웃, 가로줄은 HNSW 의 계층이다.
+    // 새로고침할 때마다 달라지지 않도록 난수는 씨앗을 고정해서 쓴다.
+    (function () {
+        const cv = document.getElementById('vector-field');
+        if (!cv || !cv.getContext) return;
+        const ctx = cv.getContext('2d');
+        const SHELL = 78 * 16;          // .page-shell max-width
+        const rand = (seed => () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296)(20260827);
+
+        function band(x0, w, h, out) {
+            const n = Math.round((w * h) / 5200);
+            const pts = [];
+            for (let i = 0; i < n; i++) pts.push({ x: x0 + rand() * w, y: rand() * h, hot: rand() < 0.07 });
+            // 각 점에서 가까운 이웃 둘까지 이어 준다
+            for (const p of pts) {
+                const near = pts.filter(q => q !== p)
+                    .map(q => [Math.hypot(q.x - p.x, q.y - p.y), q])
+                    .filter(([d]) => d < 150).sort((a, b) => a[0] - b[0]).slice(0, 2);
+                for (const [, q] of near) out.edges.push([p, q]);
+            }
+            out.points.push(...pts);
+        }
+
+        function draw() {
+            const w = window.innerWidth, h = window.innerHeight;
+            const gutter = (w - SHELL) / 2;
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            cv.width = w * dpr; cv.height = h * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, w, h);
+            if (gutter < 40) return;
+
+            const out = { points: [], edges: [] };
+            band(0, gutter, h, out);
+            band(w - gutter, gutter, h, out);
+
+            // HNSW 계층선 — 아주 옅은 가로줄
+            ctx.strokeStyle = 'rgba(150, 185, 225, 0.045)';
+            ctx.lineWidth = 1;
+            for (let y = h * 0.12; y < h; y += h * 0.26) {
+                ctx.beginPath();
+                ctx.moveTo(0, Math.round(y) + 0.5); ctx.lineTo(gutter, Math.round(y) + 0.5);
+                ctx.moveTo(w - gutter, Math.round(y) + 0.5); ctx.lineTo(w, Math.round(y) + 0.5);
+                ctx.stroke();
+            }
+
+            ctx.strokeStyle = 'rgba(150, 185, 225, 0.13)';
+            ctx.lineWidth = 0.7;
+            ctx.beginPath();
+            for (const [a, b] of out.edges) { ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); }
+            ctx.stroke();
+
+            for (const p of out.points) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.hot ? 1.7 : 1.1, 0, Math.PI * 2);
+                ctx.fillStyle = p.hot ? 'rgba(255, 107, 0, 0.30)' : 'rgba(170, 202, 235, 0.26)';
+                ctx.fill();
+            }
+        }
+
+        let t;
+        addEventListener('resize', () => { clearTimeout(t); t = setTimeout(draw, 160); });
+        draw();
+    })();
     </script>
 </body>
 </html>
