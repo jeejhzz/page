@@ -52,15 +52,21 @@
             z-index: 0;
             pointer-events: none;
             --shell: 78rem;                 /* .page-shell 의 max-width 와 같은 값 */
+            --edge: calc(50% - var(--shell) / 2);   /* 본문이 시작되는 자리 */
+            --hold: calc(var(--edge) * 0.55);       /* 여기까지는 그대로 두고 */
             -webkit-mask-image: linear-gradient(to right,
                 rgba(0,0,0,1) 0,
-                rgba(0,0,0,0) calc(50% - var(--shell) / 2),
-                rgba(0,0,0,0) calc(50% + var(--shell) / 2),
+                rgba(0,0,0,1) var(--hold),
+                rgba(0,0,0,0) var(--edge),
+                rgba(0,0,0,0) calc(100% - var(--edge)),
+                rgba(0,0,0,1) calc(100% - var(--hold)),
                 rgba(0,0,0,1) 100%);
             mask-image: linear-gradient(to right,
                 rgba(0,0,0,1) 0,
-                rgba(0,0,0,0) calc(50% - var(--shell) / 2),
-                rgba(0,0,0,0) calc(50% + var(--shell) / 2),
+                rgba(0,0,0,1) var(--hold),
+                rgba(0,0,0,0) var(--edge),
+                rgba(0,0,0,0) calc(100% - var(--edge)),
+                rgba(0,0,0,1) calc(100% - var(--hold)),
                 rgba(0,0,0,1) 100%);
         }
         /* 여백이 좁은 화면에서는 그릴 자리가 없다 */
@@ -1974,28 +1980,99 @@
     </script>
 
     <script>
-    // 좌우 여백에 벡터 공간을 옅게 그린다.
-    // 점은 임베딩, 선은 최근접 이웃, 가로줄은 HNSW 의 계층이다.
+    // 좌우 여백에 벡터 공간을 그린다.
+    // 점은 임베딩, 선은 최근접 이웃, 가로줄은 HNSW 의 계층이고,
+    // 주황 점선은 질의가 위층에서 아래로 내려가며 답을 찾아가는 경로다.
     // 새로고침할 때마다 달라지지 않도록 난수는 씨앗을 고정해서 쓴다.
     (function () {
         const cv = document.getElementById('vector-field');
         if (!cv || !cv.getContext) return;
         const ctx = cv.getContext('2d');
-        const SHELL = 78 * 16;          // .page-shell max-width
-        const rand = (seed => () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296)(20260827);
+        const SHELL = 78 * 16;                  // .page-shell max-width
+        let rand;
+        const seed = () => { let x = 20260827; rand = () => (x = (x * 1664525 + 1013904223) % 4294967296) / 4294967296; };
 
-        function band(x0, w, h, out) {
-            const n = Math.round((w * h) / 5200);
+        function field(x0, w, h) {
             const pts = [];
-            for (let i = 0; i < n; i++) pts.push({ x: x0 + rand() * w, y: rand() * h, hot: rand() < 0.07 });
-            // 각 점에서 가까운 이웃 둘까지 이어 준다
+            const n = Math.round((w * h) / 2400);
+            for (let i = 0; i < n; i++) pts.push({ x: x0 + rand() * w, y: rand() * h, hot: rand() < 0.09 });
+
+            const edges = [];
             for (const p of pts) {
                 const near = pts.filter(q => q !== p)
                     .map(q => [Math.hypot(q.x - p.x, q.y - p.y), q])
-                    .filter(([d]) => d < 150).sort((a, b) => a[0] - b[0]).slice(0, 2);
-                for (const [, q] of near) out.edges.push([p, q]);
+                    .filter(([d]) => d < 135).sort((a, b) => a[0] - b[0]).slice(0, 3);
+                for (const [, q] of near) edges.push([p, q]);
             }
-            out.points.push(...pts);
+
+            // 위에서 아래로 내려가는 탐색 경로 — 매번 가장 가까운 아래쪽 점으로
+            const path = [];
+            let cur = pts.filter(p => p.y < h * 0.2).sort((a, b) => a.y - b.y)[0];
+            while (cur && path.length < 9) {
+                path.push(cur);
+                const next = pts.filter(q => q.y > cur.y + 20 && !path.includes(q))
+                    .map(q => [Math.hypot(q.x - cur.x, q.y - cur.y), q])
+                    .sort((a, b) => a[0] - b[0])[0];
+                cur = next && next[0] < 260 ? next[1] : null;
+            }
+            return { pts, edges, path };
+        }
+
+        function paint(f, w, h, gutter, side) {
+            // 바깥쪽에서 안쪽으로 아주 옅게 번지는 빛
+            const g = ctx.createLinearGradient(side === 'l' ? 0 : w, 0, side === 'l' ? gutter : w - gutter, 0);
+            g.addColorStop(0, 'rgba(86, 128, 180, 0.10)');
+            g.addColorStop(1, 'rgba(86, 128, 180, 0)');
+            ctx.fillStyle = g;
+            ctx.fillRect(side === 'l' ? 0 : w - gutter, 0, gutter, h);
+
+            // HNSW 계층선과 눈금
+            ctx.strokeStyle = 'rgba(150, 185, 225, 0.10)';
+            ctx.lineWidth = 1;
+            const x0 = side === 'l' ? 0 : w - gutter;
+            for (let y = h * 0.14; y < h; y += h * 0.24) {
+                const yy = Math.round(y) + 0.5;
+                ctx.beginPath(); ctx.moveTo(x0, yy); ctx.lineTo(x0 + gutter, yy); ctx.stroke();
+                ctx.beginPath();
+                for (let tx = x0 + 12; tx < x0 + gutter; tx += 26) { ctx.moveTo(tx + 0.5, yy - 2.5); ctx.lineTo(tx + 0.5, yy + 2.5); }
+                ctx.strokeStyle = 'rgba(150, 185, 225, 0.07)'; ctx.stroke();
+                ctx.strokeStyle = 'rgba(150, 185, 225, 0.10)';
+            }
+
+            // 이웃을 잇는 선
+            ctx.strokeStyle = 'rgba(154, 190, 230, 0.30)';
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            for (const [a, b] of f.edges) { ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); }
+            ctx.stroke();
+
+            // 탐색 경로
+            if (f.path.length > 2) {
+                ctx.save();
+                ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = 'rgba(255, 122, 26, 0.55)';
+                ctx.lineWidth = 1.4;
+                ctx.beginPath();
+                ctx.moveTo(f.path[0].x, f.path[0].y);
+                for (const p of f.path.slice(1)) ctx.lineTo(p.x, p.y);
+                ctx.stroke();
+                ctx.restore();
+
+                const goal = f.path[f.path.length - 1];
+                ctx.strokeStyle = 'rgba(255, 122, 26, 0.55)';
+                ctx.lineWidth = 1.2;
+                ctx.beginPath(); ctx.arc(goal.x, goal.y, 5.5, 0, Math.PI * 2); ctx.stroke();
+            }
+
+            // 점
+            const onPath = new Set(f.path);
+            for (const p of f.pts) {
+                const orange = p.hot || onPath.has(p);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, orange ? 2.1 : 1.4, 0, Math.PI * 2);
+                ctx.fillStyle = orange ? 'rgba(255, 122, 26, 0.62)' : 'rgba(178, 208, 238, 0.52)';
+                ctx.fill();
+            }
         }
 
         function draw() {
@@ -2006,33 +2083,9 @@
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             ctx.clearRect(0, 0, w, h);
             if (gutter < 40) return;
-
-            const out = { points: [], edges: [] };
-            band(0, gutter, h, out);
-            band(w - gutter, gutter, h, out);
-
-            // HNSW 계층선 — 아주 옅은 가로줄
-            ctx.strokeStyle = 'rgba(150, 185, 225, 0.045)';
-            ctx.lineWidth = 1;
-            for (let y = h * 0.12; y < h; y += h * 0.26) {
-                ctx.beginPath();
-                ctx.moveTo(0, Math.round(y) + 0.5); ctx.lineTo(gutter, Math.round(y) + 0.5);
-                ctx.moveTo(w - gutter, Math.round(y) + 0.5); ctx.lineTo(w, Math.round(y) + 0.5);
-                ctx.stroke();
-            }
-
-            ctx.strokeStyle = 'rgba(150, 185, 225, 0.13)';
-            ctx.lineWidth = 0.7;
-            ctx.beginPath();
-            for (const [a, b] of out.edges) { ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); }
-            ctx.stroke();
-
-            for (const p of out.points) {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.hot ? 1.7 : 1.1, 0, Math.PI * 2);
-                ctx.fillStyle = p.hot ? 'rgba(255, 107, 0, 0.30)' : 'rgba(170, 202, 235, 0.26)';
-                ctx.fill();
-            }
+            seed();
+            paint(field(0, gutter, h), w, h, gutter, 'l');
+            paint(field(w - gutter, gutter, h), w, h, gutter, 'r');
         }
 
         let t;
