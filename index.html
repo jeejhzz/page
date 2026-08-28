@@ -21,29 +21,10 @@
             --brand-orange-light: #FF8533;
             --kakao-yellow: #FEE500;
         }
-        /* 페이지 바탕 — 설계 도면 같은 아주 옅은 격자에,
-           위쪽에서 번지는 빛과 미세한 입자를 얹어 평평함을 덜어낸다.
-           글과 카드는 이 위에 얹히므로 읽는 데 영향이 없을 만큼만 넣는다. */
-        html { background-color: var(--brand-navy); }
         body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
             background-color: var(--brand-navy);
             color: #f8fafc;
-            background-image:
-                /* 입자 */
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),
-                /* 굵은 격자 */
-                linear-gradient(rgba(146, 184, 228, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(146, 184, 228, 0.05) 1px, transparent 1px),
-                /* 잔격자 */
-                linear-gradient(rgba(146, 184, 228, 0.022) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(146, 184, 228, 0.022) 1px, transparent 1px),
-                /* 번지는 빛 */
-                radial-gradient(1200px 760px at 16% 2%, rgba(64, 116, 180, 0.13), transparent 62%),
-                radial-gradient(1000px 680px at 86% 18%, rgba(255, 107, 0, 0.05), transparent 60%);
-            background-size: 160px 160px, 260px 260px, 260px 260px, 52px 52px, 52px 52px, 100% 1400px, 100% 1400px;
-            background-repeat: repeat, repeat, repeat, repeat, repeat, no-repeat, no-repeat;
-            background-blend-mode: overlay, normal, normal, normal, normal, normal, normal;
         }
         html {
             scroll-behavior: smooth;
@@ -58,9 +39,6 @@
             scroll-snap-stop: normal;
         }
         .page-shell { max-width: 78rem; }
-
-        .page-shell { position: relative; z-index: 1; }
-
         .text-orange { color: var(--brand-orange); }
         .bg-orange { background-color: var(--brand-orange); }
         
@@ -1963,7 +1941,6 @@
         roleCardGrid.addEventListener('pointerdown', startRoleCarousel);
         startRoleCarousel();
     </script>
-
 </body>
 </html>
 
