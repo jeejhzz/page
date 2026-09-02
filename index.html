@@ -312,24 +312,68 @@
         }
         .role-card {
             position: relative;
-            overflow: hidden;
-            border-radius: 1rem;
-            background: #0f1a2c;
-            border: 1px solid rgba(255, 255, 255, 0.09);
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+            /* flex-basis 가 안쪽 여백까지 포함하도록 — 안 그러면 두 장이 화면에 안 들어온다 */
+            box-sizing: border-box;
             flex: 0 0 calc((100% - 1.5rem) / 2);
+            scroll-snap-align: start;
             display: flex;
             flex-direction: column;
-            scroll-snap-align: start;
-        }
-        .role-card[data-interview-id] {
+            justify-content: flex-start;
+            gap: 1.6rem;
+            min-height: 15rem;
+            padding: 2.15rem;
+            border-radius: 1.25rem;
+            background: #0f1a2c;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
             cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
         }
-        .role-card[data-interview-id]:hover {
-            border-color: rgba(124, 140, 255, 0.34);
+        .role-card:hover {
+            border-color: rgba(255, 107, 0, 0.34);
+            background: #111f36;
             transform: translateY(-3px);
-            transition: transform 0.2s ease, border-color 0.2s ease;
         }
+        .role-card:focus-visible { outline: 2px solid var(--brand-orange); outline-offset: 3px; }
+        /* 캐리커쳐는 원본이 정사각이라 자르지 않고 카드 위쪽에 그대로 얹는다 */
+        .rc-media {
+            position: relative;
+            margin: -2.15rem -2.15rem 0;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #091527;
+            border-radius: 1.25rem 1.25rem 0 0;
+        }
+        .rc-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 50% 0;
+            display: block;
+        }
+        /* 밝은 그림 아래쪽을 카드 색으로 넘겨 경계선이 도드라지지 않게 */
+        .rc-media::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 26%;
+            background: linear-gradient(to bottom, rgba(15, 26, 44, 0), rgba(15, 26, 44, 0.55) 55%, #0f1a2c);
+            pointer-events: none;
+        }
+        .rc-badge {
+            align-self: flex-start;
+            display: inline-flex; align-items: center;
+            border-radius: 9999px;
+            background: rgba(255, 107, 0, 0.09);
+            border: 1px solid rgba(255, 107, 0, 0.26);
+            color: #ff9c4d; padding: 0.3rem 0.72rem;
+            font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em;
+        }
+        .rc-title { margin-top: 1.15rem; color: #fff; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.025em; line-height: 1.28; word-break: keep-all; }
+        .rc-person { margin-top: 0.7rem; display: flex; align-items: baseline; gap: 0.55rem; flex-wrap: wrap; }
+        .rc-person strong { color: #8fa1b8; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.06em; }
+        .rc-quote { margin-top: 1.05rem; color: #dbe4ee; font-size: 1.06rem; font-weight: 600; line-height: 1.6; word-break: keep-all; }
+        .rc-link { margin-top: auto; color: var(--brand-orange); font-size: 0.92rem; font-weight: 800; letter-spacing: 0.01em; }
         .role-card-grid {
             display: flex;
             gap: 1.5rem;
@@ -366,127 +410,9 @@
             border-color: rgba(255, 107, 0, 0.35);
             background: rgba(255, 107, 0, 0.12);
         }
-        .role-card-image {
-            position: relative;
-            /* 캐리커쳐가 정사각이라 나머지 한 장도 같은 비율로 맞춘다 — 카드 높이가 어긋나지 않게 */
-            aspect-ratio: 1 / 1;
-            min-height: 0;
-            background: #091527;
-        }
-        .role-card-image.is-empty {
-            background:
-                linear-gradient(135deg, rgba(255, 107, 0, 0.08), transparent 34%),
-                radial-gradient(circle at 78% 16%, rgba(124, 140, 255, 0.18), transparent 30%),
-                linear-gradient(145deg, #111c30, #071225);
-        }
-        .role-card-image.is-empty::before {
-            content: '';
-            position: absolute;
-            inset: 1.1rem;
-            border-radius: 0.85rem;
-            border: 1px dashed rgba(255, 255, 255, 0.12);
-            background:
-                linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-            background-size: 32px 32px;
-            opacity: 0.45;
-        }
-        .role-card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 24%;
-            display: block;
-            filter: saturate(0.96) contrast(1.02);
-        }
-        .role-card-image::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(to bottom, rgba(0, 21, 41, 0.04), rgba(0, 21, 41, 0.36) 48%, rgba(0, 21, 41, 0.95)),
-                linear-gradient(to right, rgba(0, 21, 41, 0.42), transparent 44%);
-        }
-        .role-badge {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            z-index: 2;
-            display: inline-flex;
-            align-items: center;
-            border-radius: 0.45rem;
-            background: linear-gradient(135deg, #6856ff, #4936df);
-            color: white;
-            padding: 0.34rem 0.65rem;
-            font-size: 0.72rem;
-            font-weight: 900;
-            letter-spacing: 0.02em;
-            box-shadow: 0 10px 24px rgba(73, 54, 223, 0.28);
-        }
         /* 이름·직무는 그림 위에 겹치지 않고 그림 아래에 놓인다 — 얼굴을 가리지 않도록 */
-        .role-card-copy {
-            position: static;
-        }
-        .role-card-body {
-            padding: 1.15rem 1.5rem 0.15rem;
-        }
-        .role-card-image.is-caricature img {
-            object-position: center 0;
-            filter: none;
-        }
         /* 글이 그림 위로 올라오지 않으니 어둡게 덮을 이유도 없다.
            밝은 그림의 아래쪽만 카드 색으로 부드럽게 넘긴다. */
-        .role-card-image.is-caricature::after {
-            background: linear-gradient(to bottom,
-                rgba(15, 26, 44, 0) 74%, rgba(15, 26, 44, 0.55) 89%, #111c30 100%);
-        }
-        .role-card-title {
-            color: #7c8cff;
-            font-size: 0.88rem;
-            font-weight: 900;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-        .role-card-name {
-            display: flex;
-            align-items: baseline;
-            gap: 0.55rem;
-            margin-top: 0.35rem;
-            flex-wrap: wrap;
-        }
-        .role-card-name strong {
-            color: white;
-            font-size: 1.45rem;
-            font-weight: 900;
-            letter-spacing: -0.03em;
-        }
-        .role-card-name span {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-        .role-card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            min-height: 84px;
-            padding: 1.15rem 1.5rem 1.4rem;
-            background: #111c30;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .role-card-quote {
-            color: #e2e8f0;
-            font-size: 0.95rem;
-            font-weight: 700;
-            line-height: 1.55;
-        }
-        .role-card-link {
-            color: #7c8cff;
-            font-size: 0.86rem;
-            font-weight: 900;
-            white-space: nowrap;
-        }
         .interview-modal {
             position: fixed;
             inset: 0;
@@ -954,10 +880,9 @@
             .role-intro { padding: 3.5rem 0 4rem; }
             .role-tabs { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 0.35rem; }
             .role-tab { flex: 0 0 auto; }
-            .role-card { flex-basis: 88vw; }
+            .role-card { flex-basis: 88vw; padding: 1.6rem; }
+            .rc-media { margin: -1.6rem -1.6rem 0; }
             .role-card-controls { justify-content: flex-start; }
-            .role-card-footer { align-items: flex-start; flex-direction: column; }
-            .role-card-name { flex-direction: column; align-items: flex-start; gap: 0.12rem; }
             .interview-modal { padding: 0.75rem; }
             .interview-header,
             .interview-body { padding: 1.25rem; }
@@ -1028,16 +953,106 @@
             </div>
 
             <div class="role-card-grid" aria-live="polite">
-                <div class="role-card" data-role-group="soc" data-interview-id="design-verification-engineer"><div class="role-card-image is-caricature"><img src="caricature-son-hyunwook.png" alt="Design Verification Engineer 직무 담당자 손현욱님"><span class="role-badge">SoC그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Design Verification Engineer</p><div class="role-card-name"><strong>손현욱</strong><span>SoC Verification</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"복잡한 칩 설계를 끝까지 검증하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="soc" data-interview-id="soc-rtl-design-engineer"><div class="role-card-image is-caricature"><img src="caricature-ham-eunkyung.png" alt="SoC / RTL Design Engineer 직무 담당자 함은경님"><span class="role-badge">SoC그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">SoC / RTL Design Engineer</p><div class="role-card-name"><strong>함은경</strong><span>RTL Design</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI 인프라를 움직이는 하드웨어 구조를 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="soc" data-interview-id="soc-pkg-board-hardware-engineer"><div class="role-card-image is-caricature"><img src="caricature-ahn-woojin.png" alt="SoC PKG / Board Hardware Engineer 직무 담당자 안우진님"><span class="role-badge">SoC그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">SoC PKG / Board Hardware Engineer</p><div class="role-card-name"><strong>안우진</strong><span>Board Hardware</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"실리콘 칩에 생명을 불어넣는 옷과 무대"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="soc" data-interview-id="soc-firmware-engineer"><div class="role-card-image is-caricature"><img src="caricature-kim-youngil.png" alt="SoC Firmware Engineer 직무 담당자 김영일님"><span class="role-badge">SoC그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">SoC Firmware Engineer</p><div class="role-card-name"><strong>김영일</strong><span>Firmware</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"칩과 시스템이 만나는 지점을 설계하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="sw" data-interview-id="device-driver-software-engineer"><div class="role-card-image is-caricature"><img src="caricature-kim-sunghee.png" alt="Device Driver Software Engineer 직무 담당자 김성희님"><span class="role-badge">SW그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Device Driver Software Engineer</p><div class="role-card-name"><strong>김성희</strong><span>System SW</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"하드웨어와 OS 사이의 통로를 여는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="sw" data-interview-id="firmware-software-engineer"><div class="role-card-image is-caricature"><img src="caricature-lee-jongsung.png" alt="Firmware Software Engineer 직무 담당자 이종성님"><span class="role-badge">SW그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Firmware Software Engineer</p><div class="role-card-name"><strong>이종성</strong><span>System SW</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"제한된 공간에서 성능을 끌어내는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="sw" data-interview-id="vector-library-engineer"><div class="role-card-image is-caricature"><img src="caricature-kim-yuchan.png" alt="Vector Library Engineer 직무 담당자 김유찬님"><span class="role-badge">SW그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Vector Library Engineer</p><div class="role-card-name"><strong>김유찬</strong><span>HPC Library</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"수학 연산을 빠른 실행 코드로 바꾸는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="data" data-interview-id="vector-database-engineer"><div class="role-card-image is-caricature"><img src="caricature-jung-juhyun.png" alt="Vector Database Engineer 직무 담당자 정주현님"><span class="role-badge">Data그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Vector Database Engineer</p><div class="role-card-name"><strong>정주현</strong><span>Database</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI의 장기 기억 장치를 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="data" data-interview-id="storage-system-software-engineer"><div class="role-card-image is-caricature"><img src="caricature-lim-geunwoo.png" alt="Storage System Software Engineer 직무 담당자 임근우님"><span class="role-badge">Data그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Storage System Software Engineer</p><div class="role-card-name"><strong>임근우</strong><span>Storage</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"데이터 흐름의 기반을 단단하게 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="core" data-interview-id="system-architect"><div class="role-card-image is-caricature"><img src="caricature-baek-jinhwan.png" alt="System Architect 직무 담당자 백진환님"><span class="role-badge">Core그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">System Architect</p><div class="role-card-name"><strong>백진환</strong><span>System Architect</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI 인프라의 구조를 설계하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <article class="role-card" data-role-group="soc" data-interview-id="design-verification-engineer" role="button" tabindex="0" aria-label="손현욱 Design Verification Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-son-hyunwook.png" alt="손현욱 Design Verification Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
+                    <div>
+                        <span class="rc-badge">SoC그룹</span>
+                        <h3 class="rc-title">Design Verification Engineer</h3>
+                        <div class="rc-person"><strong>손현욱</strong></div>
+                        <p class="rc-quote">"복잡한 칩 설계를 끝까지 검증하는 역할"</p>
+                    </div>
+                    <span class="rc-link">인터뷰 보기 →</span>
+                </article>
+                <article class="role-card" data-role-group="soc" data-interview-id="soc-rtl-design-engineer" role="button" tabindex="0" aria-label="함은경 SoC / RTL Design Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-ham-eunkyung.png" alt="함은경 SoC / RTL Design Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
+                    <div>
+                        <span class="rc-badge">SoC그룹</span>
+                        <h3 class="rc-title">SoC / RTL Design Engineer</h3>
+                        <div class="rc-person"><strong>함은경</strong></div>
+                        <p class="rc-quote">"AI 인프라를 움직이는 하드웨어 구조를 만드는 역할"</p>
+                    </div>
+                    <span class="rc-link">인터뷰 보기 →</span>
+                </article>
+                <article class="role-card" data-role-group="soc" data-interview-id="soc-pkg-board-hardware-engineer" role="button" tabindex="0" aria-label="안우진 SoC PKG / Board Hardware Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-ahn-woojin.png" alt="안우진 SoC PKG / Board Hardware Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
+                    <div>
+                        <span class="rc-badge">SoC그룹</span>
+                        <h3 class="rc-title">SoC PKG / Board Hardware Engineer</h3>
+                        <div class="rc-person"><strong>안우진</strong></div>
+                        <p class="rc-quote">"실리콘 칩에 생명을 불어넣는 옷과 무대"</p>
+                    </div>
+                    <span class="rc-link">인터뷰 보기 →</span>
+                </article>
+                <article class="role-card" data-role-group="soc" data-interview-id="soc-firmware-engineer" role="button" tabindex="0" aria-label="김영일 SoC Firmware Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-kim-youngil.png" alt="김영일 SoC Firmware Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
+                    <div>
+                        <span class="rc-badge">SoC그룹</span>
+                        <h3 class="rc-title">SoC Firmware Engineer</h3>
+                        <div class="rc-person"><strong>김영일</strong></div>
+                        <p class="rc-quote">"칩과 시스템이 만나는 지점을 설계하는 역할"</p>
+                    </div>
+                    <span class="rc-link">인터뷰 보기 →</span>
+                </article>
+                <article class="role-card" data-role-group="sw" data-interview-id="device-driver-software-engineer" role="button" tabindex="0" aria-label="김성희 Device Driver Software Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-kim-sunghee.png" alt="김성희 Device Driver Software Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
+                    <div>
+                        <span class="rc-badge">SW그룹</span>
+                        <h3 class="rc-title">Device Driver Software Engineer</h3>
+                        <div class="rc-person"><strong>김성희</strong></div>
+                        <p class="rc-quote">"하드웨어와 OS 사이의 통로를 여는 역할"</p>
+                    </div>
+                    <span class="rc-link">인터뷰 보기 →</span>
+                </article>
+                <article class="role-card" data-role-group="sw" data-interview-id="firmware-software-engineer" role="button" tabindex="0" aria-label="이종성 Firmware Software Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-lee-jongsung.png" alt="이종성 Firmware Software Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
+                    <div>
+                        <span class="rc-badge">SW그룹</span>
+                        <h3 class="rc-title">Firmware Software Engineer</h3>
+                        <div class="rc-person"><strong>이종성</strong></div>
+                        <p class="rc-quote">"제한된 공간에서 성능을 끌어내는 역할"</p>
+                    </div>
+                    <span class="rc-link">인터뷰 보기 →</span>
+                </article>
+                <article class="role-card" data-role-group="sw" data-interview-id="vector-library-engineer" role="button" tabindex="0" aria-label="김유찬 Vector Library Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-kim-yuchan.png" alt="김유찬 Vector Library Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
+                    <div>
+                        <span class="rc-badge">SW그룹</span>
+                        <h3 class="rc-title">Vector Library Engineer</h3>
+                        <div class="rc-person"><strong>김유찬</strong></div>
+                        <p class="rc-quote">"수학 연산을 빠른 실행 코드로 바꾸는 역할"</p>
+                    </div>
+                    <span class="rc-link">인터뷰 보기 →</span>
+                </article>
+                <article class="role-card" data-role-group="data" data-interview-id="vector-database-engineer" role="button" tabindex="0" aria-label="정주현 Vector Database Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-jung-juhyun.png" alt="정주현 Vector Database Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
+                    <div>
+                        <span class="rc-badge">Data그룹</span>
+                        <h3 class="rc-title">Vector Database Engineer</h3>
+                        <div class="rc-person"><strong>정주현</strong></div>
+                        <p class="rc-quote">"AI의 장기 기억 장치를 만드는 역할"</p>
+                    </div>
+                    <span class="rc-link">인터뷰 보기 →</span>
+                </article>
+                <article class="role-card" data-role-group="data" data-interview-id="storage-system-software-engineer" role="button" tabindex="0" aria-label="임근우 Storage System Software Engineer 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-lim-geunwoo.png" alt="임근우 Storage System Software Engineer 캐리커쳐" loading="lazy" decoding="async"></div>
+                    <div>
+                        <span class="rc-badge">Data그룹</span>
+                        <h3 class="rc-title">Storage System Software Engineer</h3>
+                        <div class="rc-person"><strong>임근우</strong></div>
+                        <p class="rc-quote">"데이터 흐름의 기반을 단단하게 만드는 역할"</p>
+                    </div>
+                    <span class="rc-link">인터뷰 보기 →</span>
+                </article>
+                <article class="role-card" data-role-group="core" data-interview-id="system-architect" role="button" tabindex="0" aria-label="백진환 System Architect 인터뷰 보기">
+                    <div class="rc-media"><img src="caricature-baek-jinhwan.png" alt="백진환 System Architect 캐리커쳐" loading="lazy" decoding="async"></div>
+                    <div>
+                        <span class="rc-badge">Core그룹</span>
+                        <h3 class="rc-title">System Architect</h3>
+                        <div class="rc-person"><strong>백진환</strong></div>
+                        <p class="rc-quote">"AI 인프라의 구조를 설계하는 역할"</p>
+                    </div>
+                    <span class="rc-link">인터뷰 보기 →</span>
+                </article>
             </div>
             <div class="role-empty-message" aria-live="polite">현재 선택한 그룹에는 공개된 직무소개 카드가 없습니다.</div>
         </section>
