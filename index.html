@@ -368,7 +368,8 @@
         }
         .role-card-image {
             position: relative;
-            aspect-ratio: 4 / 3;
+            /* 캐리커쳐가 정사각이라 나머지 한 장도 같은 비율로 맞춘다 — 카드 높이가 어긋나지 않게 */
+            aspect-ratio: 1 / 1;
             min-height: 0;
             background: #091527;
         }
@@ -422,12 +423,22 @@
             letter-spacing: 0.02em;
             box-shadow: 0 10px 24px rgba(73, 54, 223, 0.28);
         }
+        /* 이름·직무는 그림 위에 겹치지 않고 그림 아래에 놓인다 — 얼굴을 가리지 않도록 */
         .role-card-copy {
-            position: absolute;
-            left: 1.25rem;
-            right: 1.25rem;
-            bottom: 1.35rem;
-            z-index: 2;
+            position: static;
+        }
+        .role-card-body {
+            padding: 1.15rem 1.5rem 0.15rem;
+        }
+        .role-card-image.is-caricature img {
+            object-position: center 0;
+            filter: none;
+        }
+        /* 글이 그림 위로 올라오지 않으니 어둡게 덮을 이유도 없다.
+           밝은 그림의 아래쪽만 카드 색으로 부드럽게 넘긴다. */
+        .role-card-image.is-caricature::after {
+            background: linear-gradient(to bottom,
+                rgba(15, 26, 44, 0) 74%, rgba(15, 26, 44, 0.55) 89%, #111c30 100%);
         }
         .role-card-title {
             color: #7c8cff;
@@ -459,8 +470,8 @@
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-            min-height: 118px;
-            padding: 1.4rem 1.5rem;
+            min-height: 84px;
+            padding: 1.15rem 1.5rem 1.4rem;
             background: #111c30;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
@@ -945,7 +956,6 @@
             .role-tab { flex: 0 0 auto; }
             .role-card { flex-basis: 88vw; }
             .role-card-controls { justify-content: flex-start; }
-            .role-card-image { aspect-ratio: 3 / 4; }
             .role-card-footer { align-items: flex-start; flex-direction: column; }
             .role-card-name { flex-direction: column; align-items: flex-start; gap: 0.12rem; }
             .interview-modal { padding: 0.75rem; }
@@ -1018,17 +1028,17 @@
             </div>
 
             <div class="role-card-grid" aria-live="polite">
-                <div class="role-card" data-role-group="soc" data-interview-id="design-verification-engineer"><div class="role-card-image"><img src="son-hyunwook-soc-dv-engineer.png" alt="Design Verification Engineer 직무 담당자 손현욱님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">Design Verification Engineer</p><div class="role-card-name"><strong>손현욱</strong><span>SoC Verification</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"복잡한 칩 설계를 끝까지 검증하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="soc" data-interview-id="soc-rtl-design-engineer"><div class="role-card-image"><img src="ham-eunkyung-soc-rtl-design-engineer.png" alt="SoC / RTL Design Engineer 직무 담당자 함은경님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">SoC / RTL Design Engineer</p><div class="role-card-name"><strong>함은경</strong><span>RTL Design</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI 인프라를 움직이는 하드웨어 구조를 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="soc" data-interview-id="soc-pkg-board-hardware-engineer"><div class="role-card-image"><img src="ahn-woojin-soc-pkg-board-hardware-engineer.png" alt="SoC PKG / Board Hardware Engineer 직무 담당자 안우진님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">SoC PKG / Board Hardware Engineer</p><div class="role-card-name"><strong>안우진</strong><span>Board Hardware</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"실리콘 칩에 생명을 불어넣는 옷과 무대"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="soc" data-interview-id="soc-firmware-engineer"><div class="role-card-image"><img src="kim-youngil-soc-firmware-engineer.png" alt="SoC Firmware Engineer 직무 담당자 김영일님"><span class="role-badge">SoC그룹</span><div class="role-card-copy"><p class="role-card-title">SoC Firmware Engineer</p><div class="role-card-name"><strong>김영일</strong><span>Firmware</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"칩과 시스템이 만나는 지점을 설계하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="sw" data-interview-id="device-driver-software-engineer"><div class="role-card-image"><img src="kim-sunghee-device-driver-software-engineer.png" alt="Device Driver Software Engineer 직무 담당자 김성희님"><span class="role-badge">SW그룹</span><div class="role-card-copy"><p class="role-card-title">Device Driver Software Engineer</p><div class="role-card-name"><strong>김성희</strong><span>System SW</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"하드웨어와 OS 사이의 통로를 여는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="sw" data-interview-id="firmware-software-engineer"><div class="role-card-image"><img src="lee-jongsung-firmware-software-engineer.png" alt="Firmware Software Engineer 직무 담당자 이종성님"><span class="role-badge">SW그룹</span><div class="role-card-copy"><p class="role-card-title">Firmware Software Engineer</p><div class="role-card-name"><strong>이종성</strong><span>System SW</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"제한된 공간에서 성능을 끌어내는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="sw" data-interview-id="vector-library-engineer"><div class="role-card-image"><img src="kim-yuchan-vector-library-engineer.png" alt="Vector Library Engineer 직무 담당자 김유찬님"><span class="role-badge">SW그룹</span><div class="role-card-copy"><p class="role-card-title">Vector Library Engineer</p><div class="role-card-name"><strong>김유찬</strong><span>HPC Library</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"수학 연산을 빠른 실행 코드로 바꾸는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="data" data-interview-id="vector-database-engineer"><div class="role-card-image"><img src="jung-juhyun-vector-database-engineer.png" alt="Vector Database Engineer 직무 담당자 정주현님"><span class="role-badge">Data그룹</span><div class="role-card-copy"><p class="role-card-title">Vector Database Engineer</p><div class="role-card-name"><strong>정주현</strong><span>Database</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI의 장기 기억 장치를 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="data" data-interview-id="storage-system-software-engineer"><div class="role-card-image"><img src="lim-geunwoo-storage-system-software-engineer.png" alt="Storage System Software Engineer 직무 담당자 임근우님"><span class="role-badge">Data그룹</span><div class="role-card-copy"><p class="role-card-title">Storage System Software Engineer</p><div class="role-card-name"><strong>임근우</strong><span>Storage</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"데이터 흐름의 기반을 단단하게 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="core" data-interview-id="optimization-engineer"><div class="role-card-image"><img src="jang-suhyung-optimization-engineer.png" alt="Optimization Engineer 직무 담당자 장수형님"><span class="role-badge">Core그룹</span><div class="role-card-copy"><p class="role-card-title">Optimization Engineer</p><div class="role-card-name"><strong>장수형</strong><span>Optimization</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"모델과 시스템의 성능 한계를 밀어붙이는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
-                <div class="role-card" data-role-group="core" data-interview-id="system-architect"><div class="role-card-image"><img src="baek-jinhwan-system-architect.png" alt="System Architect 직무 담당자 백진환님"><span class="role-badge">Core그룹</span><div class="role-card-copy"><p class="role-card-title">System Architect</p><div class="role-card-name"><strong>백진환</strong><span>System Architect</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI 인프라의 구조를 설계하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="soc" data-interview-id="design-verification-engineer"><div class="role-card-image is-caricature"><img src="caricature-son-hyunwook.png" alt="Design Verification Engineer 직무 담당자 손현욱님"><span class="role-badge">SoC그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Design Verification Engineer</p><div class="role-card-name"><strong>손현욱</strong><span>SoC Verification</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"복잡한 칩 설계를 끝까지 검증하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="soc" data-interview-id="soc-rtl-design-engineer"><div class="role-card-image is-caricature"><img src="caricature-ham-eunkyung.png" alt="SoC / RTL Design Engineer 직무 담당자 함은경님"><span class="role-badge">SoC그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">SoC / RTL Design Engineer</p><div class="role-card-name"><strong>함은경</strong><span>RTL Design</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI 인프라를 움직이는 하드웨어 구조를 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="soc" data-interview-id="soc-pkg-board-hardware-engineer"><div class="role-card-image is-caricature"><img src="caricature-ahn-woojin.png" alt="SoC PKG / Board Hardware Engineer 직무 담당자 안우진님"><span class="role-badge">SoC그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">SoC PKG / Board Hardware Engineer</p><div class="role-card-name"><strong>안우진</strong><span>Board Hardware</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"실리콘 칩에 생명을 불어넣는 옷과 무대"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="soc" data-interview-id="soc-firmware-engineer"><div class="role-card-image is-caricature"><img src="caricature-kim-youngil.png" alt="SoC Firmware Engineer 직무 담당자 김영일님"><span class="role-badge">SoC그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">SoC Firmware Engineer</p><div class="role-card-name"><strong>김영일</strong><span>Firmware</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"칩과 시스템이 만나는 지점을 설계하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="sw" data-interview-id="device-driver-software-engineer"><div class="role-card-image is-caricature"><img src="caricature-kim-sunghee.png" alt="Device Driver Software Engineer 직무 담당자 김성희님"><span class="role-badge">SW그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Device Driver Software Engineer</p><div class="role-card-name"><strong>김성희</strong><span>System SW</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"하드웨어와 OS 사이의 통로를 여는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="sw" data-interview-id="firmware-software-engineer"><div class="role-card-image is-caricature"><img src="caricature-lee-jongsung.png" alt="Firmware Software Engineer 직무 담당자 이종성님"><span class="role-badge">SW그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Firmware Software Engineer</p><div class="role-card-name"><strong>이종성</strong><span>System SW</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"제한된 공간에서 성능을 끌어내는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="sw" data-interview-id="vector-library-engineer"><div class="role-card-image is-caricature"><img src="caricature-kim-yuchan.png" alt="Vector Library Engineer 직무 담당자 김유찬님"><span class="role-badge">SW그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Vector Library Engineer</p><div class="role-card-name"><strong>김유찬</strong><span>HPC Library</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"수학 연산을 빠른 실행 코드로 바꾸는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="data" data-interview-id="vector-database-engineer"><div class="role-card-image is-caricature"><img src="caricature-jung-juhyun.png" alt="Vector Database Engineer 직무 담당자 정주현님"><span class="role-badge">Data그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Vector Database Engineer</p><div class="role-card-name"><strong>정주현</strong><span>Database</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI의 장기 기억 장치를 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="data" data-interview-id="storage-system-software-engineer"><div class="role-card-image is-caricature"><img src="caricature-lim-geunwoo.png" alt="Storage System Software Engineer 직무 담당자 임근우님"><span class="role-badge">Data그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Storage System Software Engineer</p><div class="role-card-name"><strong>임근우</strong><span>Storage</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"데이터 흐름의 기반을 단단하게 만드는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="core" data-interview-id="optimization-engineer"><div class="role-card-image"><img src="jang-suhyung-optimization-engineer.png" alt="Optimization Engineer 직무 담당자 장수형님"><span class="role-badge">Core그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">Optimization Engineer</p><div class="role-card-name"><strong>장수형</strong><span>Optimization</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"모델과 시스템의 성능 한계를 밀어붙이는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
+                <div class="role-card" data-role-group="core" data-interview-id="system-architect"><div class="role-card-image is-caricature"><img src="caricature-baek-jinhwan.png" alt="System Architect 직무 담당자 백진환님"><span class="role-badge">Core그룹</span></div><div class="role-card-body"><div class="role-card-copy"><p class="role-card-title">System Architect</p><div class="role-card-name"><strong>백진환</strong><span>System Architect</span></div></div></div><div class="role-card-footer"><p class="role-card-quote">"AI 인프라의 구조를 설계하는 역할"</p><span class="role-card-link">인터뷰 보기 →</span></div></div>
             </div>
             <div class="role-empty-message" aria-live="polite">현재 선택한 그룹에는 공개된 직무소개 카드가 없습니다.</div>
         </section>
